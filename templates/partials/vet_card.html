@@ -1,0 +1,110 @@
+{# Vet Card Component
+   Usage: {% include 'partials/vet_card.html' with context %}
+   Required: vet (Veterinarian object)
+   Optional: show_description (bool), compact (bool)
+#}
+{% set show_description = show_description | default(false) %}
+{% set compact = compact | default(false) %}
+
+<article class="vet-card {% if compact %}vet-card--compact{% endif %} {% if vet.featured_listing %}vet-card--featured{% endif %}">
+    {% if vet.featured_listing %}
+    <div class="vet-card__badge">Featured</div>
+    {% endif %}
+
+    <div class="vet-card__content">
+        <!-- Header -->
+        <header class="vet-card__header">
+            <h3 class="vet-card__title">
+                <a href="/vet/{{ vet.slug }}/">{{ vet.practice_name }}</a>
+            </h3>
+            {% if vet.location_display %}
+            <p class="vet-card__location">
+                <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1C5.24 1 3 3.24 3 6C3 9.75 8 15 8 15C8 15 13 9.75 13 6C13 3.24 10.76 1 8 1ZM8 8C6.9 8 6 7.1 6 6C6 4.9 6.9 4 8 4C9.1 4 10 4.9 10 6C10 7.1 9.1 8 8 8Z" fill="currentColor"/>
+                </svg>
+                {{ vet.location_display }}
+            </p>
+            {% endif %}
+        </header>
+
+        <!-- Specialties -->
+        {% if vet.specialties %}
+        <div class="vet-card__specialties">
+            {% for specialty in vet.specialties[:4] %}
+            <span class="specialty-tag">{{ specialty }}</span>
+            {% endfor %}
+            {% if vet.specialties | length > 4 %}
+            <span class="specialty-tag specialty-tag--more">+{{ vet.specialties | length - 4 }} more</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Species Treated -->
+        {% if vet.species_treated and not compact %}
+        <div class="vet-card__species">
+            {% for species in vet.species_treated %}
+            <span class="species-icon" title="{{ species }}">
+                {% if species == 'Dogs' %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4c-1.5 0-2.87.81-3.58 2H6c-1.66 0-3 1.34-3 3v2c0 .55.45 1 1 1h1v7c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2h6v2c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-7h1c.55 0 1-.45 1-1V9c0-1.66-1.34-3-3-3h-.42C16.87 4.81 15.5 4 14 4h-4zm4 5c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1z"/></svg>
+                {% elif species == 'Cats' %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9.24 2 7 4.24 7 7v3H5v2h2v8c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2v-8h2v-2h-2V7c0-2.76-2.24-5-5-5zm-2 8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
+                {% elif species == 'Horses' %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-2l-2-4h-3l1 4h-2.5L11 3H8l2 4H8l-2-4H3l2 4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>
+                {% elif species == 'Birds' %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.41 9.41l-2.83-2.83c-.39-.39-.9-.58-1.41-.58H14V3c0-1.1-.9-2-2-2s-2 .9-2 2v3H6.83c-.51 0-1.02.2-1.41.59L2.59 9.41C2.22 9.79 2 10.3 2 10.83V14c0 1.1.9 2 2 2h3v5c0 .55.45 1 1 1h8c.55 0 1-.45 1-1v-5h3c1.1 0 2-.9 2-2v-3.17c0-.53-.21-1.04-.59-1.42z"/></svg>
+                {% elif species == 'Exotic' %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                {% else %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 9.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0M9 5.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0M15 5.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0M19.5 9.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0M17.34 14.86c-.87-1.02-1.6-1.89-2.48-2.91-.46-.54-1.17-1.01-1.86-1.01-.86 0-1.67.38-2.23 1.03-.92 1.07-1.65 1.95-2.53 3-.86 1.02-1.24 2.31-1.24 3.64V20c0 .55.45 1 1 1h10c.55 0 1-.45 1-1v-1.39c0-1.33-.38-2.62-1.24-3.64-.17-.2-.36-.41-.56-.61l1.14-1.5z"/></svg>
+                {% endif %}
+            </span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Description -->
+        {% if show_description and vet.practice_description %}
+        <p class="vet-card__description">
+            {{ vet.practice_description | truncate_words(25) }}
+        </p>
+        {% endif %}
+
+        <!-- Contact Info -->
+        <div class="vet-card__contact">
+            {% if vet.phone %}
+            <a href="tel:{{ vet.phone | replace(' ', '') | replace('(', '') | replace(')', '') | replace('-', '') }}" class="contact-link contact-link--phone">
+                <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M14.67 11.04l-2.62-.57c-.38-.08-.78.05-1.04.36l-1.17 1.4c-2.01-1.02-3.64-2.65-4.66-4.66l1.4-1.17c.31-.26.44-.66.36-1.04l-.57-2.62C6.28 2.31 5.91 2 5.48 2H3C2.45 2 2 2.45 2 3c0 6.08 4.92 11 11 11 .55 0 1-.45 1-1v-2.48c0-.43-.31-.8-.74-.89l.41.41z" fill="currentColor"/>
+                </svg>
+                {{ vet.phone | format_phone }}
+            </a>
+            {% endif %}
+
+            {% if vet.website %}
+            <a href="{{ vet.website }}" target="_blank" rel="noopener noreferrer" class="contact-link contact-link--website">
+                <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1C4.13 1 1 4.13 1 8s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm5.93 6H11.5c-.12-1.61-.49-3.1-1.05-4.34 1.95.87 3.36 2.68 3.48 4.84v-.5zm-7.04-4.72C6.35 3.48 5.88 5.14 5.73 7H3.07c.3-2.05 1.64-3.76 3.82-4.72zM3.07 9h2.66c.15 1.86.62 3.52 1.16 4.72-2.18-.96-3.52-2.67-3.82-4.72zM7 13.93c-.94-1.02-1.63-2.84-1.77-4.93h3.54c-.14 2.09-.83 3.91-1.77 4.93zm1.89-.21c.54-1.22.91-2.71 1.05-4.34H12.43c-.3 2.05-1.53 3.76-3.54 4.34zM7 2.07c.94 1.02 1.63 2.84 1.77 4.93H5.23c.14-2.09.83-3.91 1.77-4.93z" fill="currentColor"/>
+                </svg>
+                Website
+            </a>
+            {% endif %}
+
+            {% if vet.telehealth_available %}
+            <span class="telehealth-badge">
+                <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M14 3H2c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zm-1 8H3V5h10v6z" fill="currentColor"/>
+                </svg>
+                Telehealth
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- View Details Link -->
+    <a href="/vet/{{ vet.slug }}/" class="vet-card__link">
+        View Details
+        <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
+</article>

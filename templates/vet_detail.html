@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-vet-detail{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "VeterinaryCare",
+    "name": "{{ vet.practice_name }}",
+    "description": "{{ vet.practice_description | truncate_words(30) | replace('"', '\\"') }}",
+    {% if vet.address or vet.city %}
+    "address": {
+        "@type": "PostalAddress",
+        {% if vet.address %}"streetAddress": "{{ vet.address }}",{% endif %}
+        {% if vet.city %}"addressLocality": "{{ vet.city }}",{% endif %}
+        {% if vet.state %}"addressRegion": "{{ vet.state }}",{% endif %}
+        {% if vet.zip_code %}"postalCode": "{{ vet.zip_code }}",{% endif %}
+        "addressCountry": "US"
+    },
+    {% endif %}
+    {% if vet.phone %}"telephone": "{{ vet.phone }}",{% endif %}
+    {% if vet.email %}"email": "{{ vet.email }}",{% endif %}
+    {% if vet.website %}"url": "{{ vet.website }}",{% endif %}
+    {% if vet.has_coordinates %}
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": {{ vet.latitude }},
+        "longitude": {{ vet.longitude }}
+    },
+    {% endif %}
+    {% if vet.specialties %}
+    "medicalSpecialty": [{% for spec in vet.specialties %}"{{ spec }}"{% if not loop.last %}, {% endif %}{% endfor %}],
+    {% endif %}
+    "priceRange": "$$"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol class="breadcrumb__list">
+            <li class="breadcrumb__item"><a href="/">Home</a></li>
+            <li class="breadcrumb__item"><a href="/vets/">Find a Vet</a></li>
+            {% if state %}
+            <li class="breadcrumb__item"><a href="/vets/{{ state.slug }}/">{{ state.name }}</a></li>
+            {% endif %}
+            <li class="breadcrumb__item" aria-current="page">{{ vet.practice_name }}</li>
+        </ol>
+    </nav>
+
+    <div class="vet-detail-layout">
+        <!-- Main Content -->
+        <main class="vet-detail-main">
+            <!-- Header -->
+            <header class="vet-detail-header">
+                {% if vet.featured_listing %}
+                <span class="featured-badge">Featured Practice</span>
+                {% endif %}
+
+                <h1 class="vet-detail-header__title">{{ vet.practice_name }}</h1>
+
+                {% if vet.veterinarian_names %}
+                <p class="vet-detail-header__vets">
+                    <strong>Veterinarian{{ 's' if ',' in vet.veterinarian_names else '' }}:</strong>
+                    {{ vet.veterinarian_names }}
+                </p>
+                {% endif %}
+
+                <p class="vet-detail-header__location">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 1C6.13 1 3 4.13 3 8c0 4.5 7 11 7 11s7-6.5 7-11c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+                    </svg>
+                    {{ vet.full_address }}
+                </p>
+            </header>
+
+            <!-- Ad: Top -->
+            {% set slot_type = 'header' %}
+            {% include 'partials/adsense.html' %}
+
+            <!-- Specialties -->
+            {% if vet.specialties %}
+            <section class="vet-section">
+                <h2 class="vet-section__title">Specialties & Services</h2>
+                <div class="specialty-tags">
+                    {% for spec in vet.specialties %}
+                    <a href="/specialty/{{ spec | slugify }}/" class="specialty-tag specialty-tag--large">
+                        {{ spec }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Description -->
+            {% if vet.practice_description %}
+            <section class="vet-section">
+                <h2 class="vet-section__title">About the Practice</h2>
+                <div class="vet-description">
+                    {{ vet.practice_description | replace('\n', '<br>') | safe }}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Specialty Details -->
+            {% if specialty_details %}
+            <section class="vet-section">
+                <h2 class="vet-section__title">About Our Specialties</h2>
+                <div class="specialty-details">
+                    {% for spec in specialty_details %}
+                    <div class="specialty-detail">
+                        <h3>{{ spec.name }}</h3>
+                        <p>{{ spec.description | truncate_words(50) }}</p>
+                        {% if spec.related_conditions %}
+                        <p class="specialty-detail__conditions">
+                            <strong>Commonly treats:</strong> {{ spec.related_conditions }}
+                        </p>
+                        {% endif %}
+                        <a href="/specialty/{{ spec.slug }}/" class="text-link">
+                            Learn more about {{ spec.name }} &rarr;
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Ad: Middle -->
+            {% set slot_type = 'infeed' %}
+            {% include 'partials/adsense.html' %}
+
+            <!-- Species Treated -->
+            {% if vet.species_treated %}
+            <section class="vet-section">
+                <h2 class="vet-section__title">Animals Treated</h2>
+                <div class="species-list">
+                    {% for species in vet.species_treated %}
+                    <span class="species-badge">{{ species }}</span>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Certifications -->
+            {% if vet.certification_bodies %}
+            <section class="vet-section">
+                <h2 class="vet-section__title">Certifications & Memberships</h2>
+                <ul class="certification-list">
+                    {% for cert in vet.certification_bodies %}
+                    <li class="certification-item">
+                        <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M6 8l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        {{ cert }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+            {% endif %}
+
+            <!-- Nearby Vets -->
+            {% if nearby_vets %}
+            <section class="vet-section">
+                <h2 class="vet-section__title">Nearby Holistic Veterinarians</h2>
+                <div class="nearby-vets">
+                    {% for nearby_vet in nearby_vets %}
+                    {% set vet = nearby_vet %}
+                    {% set compact = true %}
+                    {% include 'partials/vet_card.html' %}
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="vet-detail-sidebar">
+            <!-- Contact Card -->
+            <div class="contact-card">
+                <h3 class="contact-card__title">Contact Information</h3>
+
+                {% if vet.address %}
+                <div class="contact-card__item">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 1C6.13 1 3 4.13 3 8c0 4.5 7 11 7 11s7-6.5 7-11c0-3.87-3.13-7-7-7z" fill="currentColor"/>
+                    </svg>
+                    <div>
+                        <p>{{ vet.address }}</p>
+                        <p>{{ vet.city }}, {{ vet.state }} {{ vet.zip_code }}</p>
+                        <a href="{{ vet.maps_url }}" target="_blank" rel="noopener" class="text-link">
+                            Get Directions &rarr;
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if vet.phone %}
+                <div class="contact-card__item">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M18 14.5v2.5a1.5 1.5 0 01-1.5 1.5A15 15 0 011.5 3.5 1.5 1.5 0 013 2h2.5a1.5 1.5 0 011.5 1.5c0 1.1.2 2.1.5 3a1.5 1.5 0 01-.4 1.5L5.5 9.5a12 12 0 005 5l1.5-1.5a1.5 1.5 0 011.5-.4c.9.3 1.9.5 3 .5a1.5 1.5 0 011.5 1.5z" fill="currentColor"/>
+                    </svg>
+                    <div>
+                        <a href="tel:{{ vet.phone | replace(' ', '') | replace('(', '') | replace(')', '') | replace('-', '') }}" class="contact-link">
+                            {{ vet.phone | format_phone }}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if vet.email %}
+                <div class="contact-card__item">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 4h14a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V6a2 2 0 012-2z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M19 6l-9 6-9-6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <div>
+                        <a href="mailto:{{ vet.email }}" class="contact-link">
+                            {{ vet.email }}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if vet.website %}
+                <div class="contact-card__item">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M2 10h16M10 2a13 13 0 014 8 13 13 0 01-4 8 13 13 0 01-4-8 13 13 0 014-8z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <div>
+                        <a href="{{ vet.website }}" target="_blank" rel="noopener" class="contact-link">
+                            Visit Website &rarr;
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if vet.telehealth_available %}
+                <div class="contact-card__badge">
+                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect x="2" y="4" width="16" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Telehealth Available
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Additional Info -->
+            {% if vet.year_established %}
+            <div class="info-card">
+                <h3 class="info-card__title">Established</h3>
+                <p class="info-card__value">{{ vet.year_established }}</p>
+                <p class="info-card__note">{{ now.year - vet.year_established }} years serving the community</p>
+            </div>
+            {% endif %}
+
+            <!-- Map -->
+            {% if vet.has_coordinates and config.enable_maps %}
+            <div class="map-card">
+                <h3 class="map-card__title">Location</h3>
+                <div id="vet-map" class="map-container"
+                     data-lat="{{ vet.latitude }}"
+                     data-lng="{{ vet.longitude }}"
+                     data-name="{{ vet.practice_name }}">
+                </div>
+                <a href="{{ vet.maps_url }}" target="_blank" rel="noopener" class="btn btn--outline btn--block">
+                    Open in Google Maps
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Sidebar Ad -->
+            {% set slot_type = 'sidebar' %}
+            {% include 'partials/adsense.html' %}
+        </aside>
+    </div>
+</div>
+
+<!-- Ad: Footer -->
+{% set slot_type = 'footer' %}
+{% include 'partials/adsense.html' %}
+{% endblock %}
+
+{% block extra_js %}
+{% if vet.has_coordinates and config.enable_maps and config.google_maps_api_key %}
+<script>
+function initMap() {
+    const mapEl = document.getElementById('vet-map');
+    if (!mapEl) return;
+
+    const lat = parseFloat(mapEl.dataset.lat);
+    const lng = parseFloat(mapEl.dataset.lng);
+    const name = mapEl.dataset.name;
+
+    const map = new google.maps.Map(mapEl, {
+        center: { lat, lng },
+        zoom: 15,
+        mapTypeControl: false,
+        streetViewControl: false,
+    });
+
+    new google.maps.Marker({
+        position: { lat, lng },
+        map: map,
+        title: name,
+    });
+}
+</script>
+{% endif %}
+{% endblock %}

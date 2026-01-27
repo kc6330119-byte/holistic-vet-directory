@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-vets-list{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">{{ page_title }}</h1>
+        <p class="page-header__subtitle">
+            Browse {{ total_vets }} holistic and integrative veterinary practices
+        </p>
+    </div>
+</div>
+
+<!-- Ad: Header -->
+{% set slot_type = 'header' %}
+{% include 'partials/adsense.html' %}
+
+<div class="container">
+    <div class="listing-layout">
+        <!-- Sidebar Filters -->
+        <aside class="listing-sidebar">
+            <div class="filter-section">
+                <h3 class="filter-section__title">Filter by State</h3>
+                <ul class="filter-list filter-list--scrollable">
+                    {% for state in states %}
+                    {% if state.vet_count > 0 %}
+                    <li>
+                        <a href="/vets/{{ state.slug }}/" class="filter-link">
+                            {{ state.name }}
+                            <span class="filter-count">{{ state.vet_count }}</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="filter-section">
+                <h3 class="filter-section__title">Filter by Specialty</h3>
+                <ul class="filter-list">
+                    {% for specialty in specialties %}
+                    {% if specialty.vet_count > 0 %}
+                    <li>
+                        <a href="/specialty/{{ specialty.slug }}/" class="filter-link">
+                            {{ specialty.name }}
+                            <span class="filter-count">{{ specialty.vet_count }}</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Sidebar Ad -->
+            {% set slot_type = 'sidebar' %}
+            {% include 'partials/adsense.html' %}
+        </aside>
+
+        <!-- Main Content -->
+        <main class="listing-main">
+            <!-- Results Info -->
+            <div class="results-info">
+                <p class="results-info__count">
+                    Showing {{ vets | length }} of {{ total_vets }} veterinarians
+                </p>
+                <div class="results-info__sort">
+                    <label for="sort-select">Sort by:</label>
+                    <select id="sort-select" class="sort-select">
+                        <option value="name">Name (A-Z)</option>
+                        <option value="state">State</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Vet Cards -->
+            <div class="vet-list">
+                {% for vet in vets %}
+                    {% set show_description = true %}
+                    {% include 'partials/vet_card.html' %}
+
+                    {# Insert ad every 6 listings #}
+                    {% if loop.index is divisibleby 6 and not loop.last %}
+                        {% set slot_type = 'infeed' %}
+                        {% include 'partials/adsense.html' %}
+                    {% endif %}
+                {% else %}
+                <div class="empty-state">
+                    <p>No veterinarians found matching your criteria.</p>
+                    <a href="/vets/" class="btn btn--primary">View All Veterinarians</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% include 'partials/pagination.html' %}
+        </main>
+    </div>
+</div>
+
+<!-- Ad: Footer -->
+{% set slot_type = 'footer' %}
+{% include 'partials/adsense.html' %}
+{% endblock %}

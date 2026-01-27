@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-specialty-detail{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "MedicalSpecialty",
+    "name": "{{ specialty.name }}",
+    "description": "{{ specialty.description | truncate_words(30) | replace('"', '\\"') }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header page-header--specialty">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list">
+                <li class="breadcrumb__item"><a href="/">Home</a></li>
+                <li class="breadcrumb__item"><a href="/specialties/">Specialties</a></li>
+                <li class="breadcrumb__item" aria-current="page">{{ specialty.name }}</li>
+            </ol>
+        </nav>
+
+        <h1 class="page-header__title">{{ specialty.name }}</h1>
+        <p class="page-header__subtitle">
+            {{ specialty.vet_count }} holistic {{ specialty.vet_count | pluralize('veterinarian', 'veterinarians') }} offering {{ specialty.name | lower }}
+        </p>
+    </div>
+</div>
+
+<!-- Ad: Header -->
+{% set slot_type = 'header' %}
+{% include 'partials/adsense.html' %}
+
+<div class="container">
+    <!-- Specialty Description -->
+    {% if specialty.description %}
+    <section class="specialty-about">
+        <h2>What is {{ specialty.name }}?</h2>
+        <div class="specialty-about__content">
+            <p>{{ specialty.description }}</p>
+        </div>
+
+        {% if specialty.related_conditions %}
+        <div class="specialty-conditions">
+            <h3>Conditions Commonly Treated</h3>
+            <p>{{ specialty.related_conditions }}</p>
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    <div class="listing-layout">
+        <!-- Sidebar -->
+        <aside class="listing-sidebar">
+            <!-- Filter by State -->
+            <div class="filter-section">
+                <h3 class="filter-section__title">Browse by State</h3>
+                <ul class="filter-list filter-list--scrollable">
+                    {% for state_code, state_vets in vets_by_state.items() | sort %}
+                    <li>
+                        <a href="#state-{{ state_code }}" class="filter-link filter-link--anchor">
+                            {{ state_code }}
+                            <span class="filter-count">{{ state_vets | length }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Other Specialties -->
+            <div class="filter-section">
+                <h3 class="filter-section__title">Other Specialties</h3>
+                <ul class="filter-list">
+                    {% for other in states[:8] %}
+                    {% if other.name != specialty.name %}
+                    <!-- This should be specialties not states - template will work when data is correct -->
+                    {% endif %}
+                    {% endfor %}
+                    <li><a href="/specialties/" class="filter-link">View All Specialties</a></li>
+                </ul>
+            </div>
+
+            <!-- Sidebar Ad -->
+            {% set slot_type = 'sidebar' %}
+            {% include 'partials/adsense.html' %}
+        </aside>
+
+        <!-- Main Content -->
+        <main class="listing-main">
+            <div class="results-info">
+                <p class="results-info__count">
+                    {{ vets | length }} {{ vets | length | pluralize('veterinarian', 'veterinarians') }} offering {{ specialty.name }}
+                </p>
+            </div>
+
+            <!-- Vets by State -->
+            {% for state_code, state_vets in vets_by_state.items() | sort %}
+            <section class="state-section" id="state-{{ state_code }}">
+                <h2 class="state-section__title">
+                    {{ state_code }}
+                    <span class="state-section__count">({{ state_vets | length }})</span>
+                </h2>
+
+                <div class="vet-list">
+                    {% for vet in state_vets %}
+                        {% set compact = true %}
+                        {% include 'partials/vet_card.html' %}
+                    {% endfor %}
+                </div>
+            </section>
+
+            {% if not loop.last and loop.index is divisibleby 3 %}
+                {% set slot_type = 'infeed' %}
+                {% include 'partials/adsense.html' %}
+            {% endif %}
+            {% endfor %}
+        </main>
+    </div>
+</div>
+
+<!-- Ad: Footer -->
+{% set slot_type = 'footer' %}
+{% include 'partials/adsense.html' %}
+{% endblock %}

@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-search{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">{{ page_title }}</h1>
+        <p class="page-header__subtitle">
+            Search {{ total_vets }} holistic veterinarians by location, specialty, or practice name
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="search-page-layout">
+        <!-- Search Form -->
+        <div class="search-page-form">
+            <form id="search-form" class="advanced-search-form">
+                <div class="form-row">
+                    <div class="form-group form-group--large">
+                        <label for="search-query">Location or Practice Name</label>
+                        <input
+                            type="text"
+                            id="search-query"
+                            name="q"
+                            class="form-input"
+                            placeholder="Enter city, state, ZIP, or practice name..."
+                        >
+                    </div>
+                </div>
+
+                <div class="form-row form-row--filters">
+                    <div class="form-group">
+                        <label for="search-state">State</label>
+                        <select id="search-state" name="state" class="form-select">
+                            <option value="">All States</option>
+                            {% for state in states %}
+                            {% if state.vet_count > 0 %}
+                            <option value="{{ state.code }}">{{ state.name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="search-specialty">Specialty</label>
+                        <select id="search-specialty" name="specialty" class="form-select">
+                            <option value="">All Specialties</option>
+                            {% for specialty in specialties %}
+                            {% if specialty.vet_count > 0 %}
+                            <option value="{{ specialty.name }}">{{ specialty.name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group form-group--checkbox">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="search-telehealth" name="telehealth">
+                            <span>Telehealth Available</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn--primary btn--large">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Search
+                    </button>
+                    <button type="reset" class="btn btn--outline" id="clear-search">
+                        Clear Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Area -->
+        <div class="search-results">
+            <!-- Loading State -->
+            <div id="search-loading" class="search-loading" hidden>
+                <div class="spinner"></div>
+                <p>Searching...</p>
+            </div>
+
+            <!-- Results Count -->
+            <div id="search-info" class="search-info" hidden>
+                <p><span id="results-count">0</span> results found</p>
+            </div>
+
+            <!-- Results List -->
+            <div id="search-results-list" class="vet-list">
+                <!-- Results populated by JavaScript -->
+            </div>
+
+            <!-- No Results -->
+            <div id="no-results" class="empty-state" hidden>
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                    <circle cx="28" cy="28" r="20" stroke="currentColor" stroke-width="3"/>
+                    <path d="M44 44L58 58" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M20 28H36M28 20V36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <h3>No Results Found</h3>
+                <p>Try adjusting your search criteria or browse by state below.</p>
+            </div>
+
+            <!-- Initial State / Browse -->
+            <div id="browse-section" class="browse-section">
+                <h2>Browse by State</h2>
+                <div class="state-grid state-grid--compact">
+                    {% for state in states %}
+                    {% if state.vet_count > 0 %}
+                    <a href="/vets/{{ state.slug }}/" class="state-card state-card--small">
+                        <span class="state-card__code">{{ state.code }}</span>
+                        <span class="state-card__count">{{ state.vet_count }}</span>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                <h2>Browse by Specialty</h2>
+                <div class="specialty-list-compact">
+                    {% for specialty in specialties %}
+                    {% if specialty.vet_count > 0 %}
+                    <a href="/specialty/{{ specialty.slug }}/" class="specialty-link">
+                        {{ specialty.name }}
+                        <span class="count">({{ specialty.vet_count }})</span>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ad: Footer -->
+{% set slot_type = 'footer' %}
+{% include 'partials/adsense.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Client-side search functionality
+(function() {
+    let searchData = null;
+    const form = document.getElementById('search-form');
+    const queryInput = document.getElementById('search-query');
+    const stateSelect = document.getElementById('search-state');
+    const specialtySelect = document.getElementById('search-specialty');
+    const telehealthCheck = document.getElementById('search-telehealth');
+    const resultsContainer = document.getElementById('search-results-list');
+    const loadingEl = document.getElementById('search-loading');
+    const infoEl = document.getElementById('search-info');
+    const countEl = document.getElementById('results-count');
+    const noResultsEl = document.getElementById('no-results');
+    const browseSection = document.getElementById('browse-section');
+    const clearBtn = document.getElementById('clear-search');
+
+    // Load search index
+    async function loadSearchData() {
+        try {
+            const response = await fetch('/search-index.json');
+            searchData = await response.json();
+            console.log(`Loaded ${searchData.vets.length} vets for search`);
+        } catch (error) {
+            console.error('Failed to load search index:', error);
+        }
+    }
+
+    // Perform search
+    function search() {
+        if (!searchData) return;
+
+        const query = queryInput.value.toLowerCase().trim();
+        const state = stateSelect.value;
+        const specialty = specialtySelect.value;
+        const telehealth = telehealthCheck.checked;
+
+        // If no filters, show browse section
+        if (!query && !state && !specialty && !telehealth) {
+            browseSection.hidden = false;
+            resultsContainer.innerHTML = '';
+            infoEl.hidden = true;
+            noResultsEl.hidden = true;
+            return;
+        }
+
+        browseSection.hidden = true;
+        loadingEl.hidden = false;
+
+        // Filter vets
+        let results = searchData.vets.filter(vet => {
+            // State filter
+            if (state && vet.state !== state) return false;
+
+            // Specialty filter
+            if (specialty && !vet.specialties.includes(specialty)) return false;
+
+            // Telehealth filter
+            if (telehealth && !vet.telehealth) return false;
+
+            // Query filter
+            if (query) {
+                const searchText = [
+                    vet.name,
+                    vet.vets,
+                    vet.city,
+                    vet.state,
+                    ...vet.specialties,
+                    ...vet.species
+                ].join(' ').toLowerCase();
+
+                if (!searchText.includes(query)) return false;
+            }
+
+            return true;
+        });
+
+        // Display results
+        setTimeout(() => {
+            loadingEl.hidden = true;
+            displayResults(results);
+        }, 200);
+    }
+
+    // Display search results
+    function displayResults(results) {
+        countEl.textContent = results.length;
+        infoEl.hidden = false;
+
+        if (results.length === 0) {
+            noResultsEl.hidden = false;
+            resultsContainer.innerHTML = '';
+            return;
+        }
+
+        noResultsEl.hidden = true;
+
+        const html = results.slice(0, 50).map(vet => `
+            <article class="vet-card vet-card--search">
+                <div class="vet-card__content">
+                    <header class="vet-card__header">
+                        <h3 class="vet-card__title">
+                            <a href="/vet/${vet.slug}/">${escapeHtml(vet.name)}</a>
+                        </h3>
+                        <p class="vet-card__location">
+                            ${escapeHtml(vet.city)}, ${escapeHtml(vet.state)}
+                        </p>
+                    </header>
+                    ${vet.specialties.length > 0 ? `
+                    <div class="vet-card__specialties">
+                        ${vet.specialties.slice(0, 3).map(s => `<span class="specialty-tag">${escapeHtml(s)}</span>`).join('')}
+                        ${vet.specialties.length > 3 ? `<span class="specialty-tag specialty-tag--more">+${vet.specialties.length - 3}</span>` : ''}
+                    </div>
+                    ` : ''}
+                    ${vet.telehealth ? '<span class="telehealth-badge">Telehealth</span>' : ''}
+                </div>
+                <a href="/vet/${vet.slug}/" class="vet-card__link">View Details</a>
+            </article>
+        `).join('');
+
+        resultsContainer.innerHTML = html;
+
+        if (results.length > 50) {
+            resultsContainer.innerHTML += `
+                <p class="results-note">Showing first 50 results. Use filters to narrow your search.</p>
+            `;
+        }
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Event listeners
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        search();
+    });
+
+    // Live search on filter change
+    stateSelect.addEventListener('change', search);
+    specialtySelect.addEventListener('change', search);
+    telehealthCheck.addEventListener('change', search);
+
+    // Debounced search on query input
+    let debounceTimer;
+    queryInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(search, 300);
+    });
+
+    // Clear filters
+    clearBtn.addEventListener('click', () => {
+        queryInput.value = '';
+        stateSelect.value = '';
+        specialtySelect.value = '';
+        telehealthCheck.checked = false;
+        browseSection.hidden = false;
+        resultsContainer.innerHTML = '';
+        infoEl.hidden = true;
+        noResultsEl.hidden = true;
+    });
+
+    // Check URL params on load
+    function checkUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get('q');
+        if (q) {
+            queryInput.value = q;
+            search();
+        }
+    }
+
+    // Initialize
+    loadSearchData().then(checkUrlParams);
+})();
+</script>
+{% endblock %}

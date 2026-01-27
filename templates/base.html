@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{{ page_title }} | {{ config.site_name }}</title>
+    <meta name="description" content="{{ page_description }}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ config.site_url }}{{ request_path | default('/') }}">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:description" content="{{ page_description }}">
+    <meta property="og:site_name" content="{{ config.site_name }}">
+    <meta property="og:url" content="{{ config.site_url }}{{ request_path | default('/') }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ page_title }}">
+    <meta name="twitter:description" content="{{ page_description }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    {% block extra_css %}{% endblock %}
+
+    <!-- Schema.org JSON-LD -->
+    {% block schema %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{ config.site_name }}",
+        "url": "{{ config.site_url }}",
+        "description": "{{ config.site_description }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ config.site_url }}/search/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    {% endblock %}
+
+    {% if config.enable_adsense and config.is_production %}
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ config.adsense_client_id }}" crossorigin="anonymous"></script>
+    {% endif %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    {% include 'partials/header.html' %}
+
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'partials/footer.html' %}
+
+    <!-- Scripts -->
+    <script src="/static/js/main.js" defer></script>
+    {% block extra_js %}{% endblock %}
+
+    {% if config.enable_maps and config.google_maps_api_key %}
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config.google_maps_api_key }}&callback=initMap"></script>
+    {% endif %}
+</body>
+</html>

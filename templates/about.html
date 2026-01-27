@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-about{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">{{ page_title }}</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content-layout">
+        <main class="content-main">
+            <article class="prose">
+                <section>
+                    <h2>Our Mission</h2>
+                    <p>
+                        {{ config.site_name }} was created to help pet owners find qualified holistic and
+                        integrative veterinarians in their area. We believe that every pet deserves access
+                        to compassionate care that considers their complete well-being—physical, emotional,
+                        and environmental.
+                    </p>
+                    <p>
+                        Our directory connects you with veterinary professionals who combine the best of
+                        conventional medicine with natural healing modalities like acupuncture, herbal medicine,
+                        chiropractic care, and nutritional therapy.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>What is Holistic Veterinary Medicine?</h2>
+                    <p>
+                        Holistic veterinary medicine is an approach to animal health care that considers the
+                        whole patient—not just symptoms or diseases. Holistic vets look at the complete picture,
+                        including:
+                    </p>
+                    <ul>
+                        <li>Physical health and symptoms</li>
+                        <li>Diet and nutrition</li>
+                        <li>Environment and lifestyle</li>
+                        <li>Emotional and behavioral well-being</li>
+                        <li>Relationships with owners and other animals</li>
+                    </ul>
+                    <p>
+                        This comprehensive approach often leads to better outcomes, especially for chronic
+                        conditions that may not respond well to conventional treatment alone.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Integrative vs. Alternative</h2>
+                    <p>
+                        Most holistic veterinarians practice "integrative" medicine, meaning they combine
+                        conventional veterinary medicine with complementary therapies. This isn't about
+                        rejecting modern medicine—it's about using the best tools available for each
+                        individual patient.
+                    </p>
+                    <p>
+                        A holistic vet might recommend surgery for a torn ligament while also using
+                        acupuncture for pain management and herbal supplements for healing support.
+                        The goal is always optimal health and quality of life for your pet.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Common Holistic Modalities</h2>
+                    <p>The veterinarians in our directory may offer some or all of these services:</p>
+                    <ul>
+                        <li><strong>Acupuncture:</strong> Fine needle insertion to stimulate healing</li>
+                        <li><strong>Chiropractic:</strong> Spinal adjustments to improve nerve function</li>
+                        <li><strong>Herbal Medicine:</strong> Plant-based treatments for various conditions</li>
+                        <li><strong>Homeopathy:</strong> Dilute remedies to stimulate natural healing</li>
+                        <li><strong>Nutritional Therapy:</strong> Customized diets and supplements</li>
+                        <li><strong>Physical Rehabilitation:</strong> Exercises and therapies for recovery</li>
+                        <li><strong>TCVM:</strong> Traditional Chinese Veterinary Medicine</li>
+                        <li><strong>Laser Therapy:</strong> Light-based treatment for pain and healing</li>
+                    </ul>
+                    <p>
+                        <a href="/specialties/">Learn more about each specialty &rarr;</a>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>How to Use This Directory</h2>
+                    <ol>
+                        <li><strong>Search by location:</strong> Enter your city, state, or ZIP code to find vets near you</li>
+                        <li><strong>Filter by specialty:</strong> Look for practitioners with specific training</li>
+                        <li><strong>Read practice descriptions:</strong> Learn about each vet's approach and philosophy</li>
+                        <li><strong>Contact directly:</strong> Call or visit websites to schedule consultations</li>
+                    </ol>
+                    <p>
+                        We recommend scheduling a consultation before committing to treatment. This gives you
+                        a chance to meet the veterinarian, discuss your pet's needs, and ensure it's a good fit.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Questions?</h2>
+                    <p>
+                        If you have questions about the directory or would like to suggest a veterinarian
+                        for inclusion, please use our <a href="/submit/">submission form</a>.
+                    </p>
+                </section>
+            </article>
+        </main>
+
+        <aside class="content-sidebar">
+            {% set slot_type = 'sidebar' %}
+            {% include 'partials/adsense.html' %}
+
+            <div class="sidebar-card">
+                <h3>Quick Links</h3>
+                <ul class="sidebar-links">
+                    <li><a href="/vets/">Find a Vet</a></li>
+                    <li><a href="/specialties/">Browse Specialties</a></li>
+                    <li><a href="/search/">Advanced Search</a></li>
+                    <li><a href="/submit/">Submit Your Practice</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-card">
+                <h3>Resources</h3>
+                <ul class="sidebar-links">
+                    <li><a href="https://ahvma.org" target="_blank" rel="noopener">AHVMA</a></li>
+                    <li><a href="https://ivas.org" target="_blank" rel="noopener">IVAS</a></li>
+                    <li><a href="https://tcvm.com" target="_blank" rel="noopener">Chi Institute</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

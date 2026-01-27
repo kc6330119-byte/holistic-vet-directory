@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-city-list{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Holistic Veterinarians in {{ city }}, {{ state.code }}",
+    "description": "{{ page_description }}",
+    "numberOfItems": {{ vets | length }},
+    "itemListElement": [
+        {% for vet in vets %}
+        {
+            "@type": "ListItem",
+            "position": {{ loop.index }},
+            "item": {
+                "@type": "VeterinaryCare",
+                "name": "{{ vet.practice_name }}",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "{{ vet.address }}",
+                    "addressLocality": "{{ vet.city }}",
+                    "addressRegion": "{{ vet.state }}",
+                    "postalCode": "{{ vet.zip_code }}"
+                },
+                {% if vet.phone %}"telephone": "{{ vet.phone }}",{% endif %}
+                {% if vet.website %}"url": "{{ vet.website }}",{% endif %}
+                "sameAs": "{{ config.site_url }}/vet/{{ vet.slug }}/"
+            }
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list">
+                <li class="breadcrumb__item"><a href="/">Home</a></li>
+                <li class="breadcrumb__item"><a href="/vets/">Find a Vet</a></li>
+                <li class="breadcrumb__item"><a href="/vets/{{ state.slug }}/">{{ state.name }}</a></li>
+                <li class="breadcrumb__item" aria-current="page">{{ city }}</li>
+            </ol>
+        </nav>
+
+        <h1 class="page-header__title">Holistic Veterinarians in {{ city }}, {{ state.code }}</h1>
+        <p class="page-header__subtitle">
+            {{ vets | length }} holistic and integrative veterinary {{ vets | length | pluralize('practice', 'practices') }} in {{ city }}
+        </p>
+    </div>
+</div>
+
+<!-- Ad: Header -->
+{% set slot_type = 'header' %}
+{% include 'partials/adsense.html' %}
+
+<div class="container">
+    <div class="listing-layout">
+        <!-- Sidebar -->
+        <aside class="listing-sidebar">
+            <!-- Specialties in City -->
+            <div class="filter-section">
+                <h3 class="filter-section__title">Specialties in {{ city }}</h3>
+                <ul class="filter-list">
+                    {% set city_specialties = [] %}
+                    {% for vet in vets %}
+                        {% for spec in vet.specialties %}
+                            {% if spec not in city_specialties %}
+                                {% set _ = city_specialties.append(spec) %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    {% for specialty in specialties %}
+                    {% if specialty.name in city_specialties %}
+                    <li>
+                        <a href="/specialty/{{ specialty.slug }}/" class="filter-link">
+                            {{ specialty.name }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Back to State -->
+            <div class="filter-section">
+                <h3 class="filter-section__title">More in {{ state.name }}</h3>
+                <a href="/vets/{{ state.slug }}/" class="btn btn--outline btn--block">
+                    View All {{ state.name }} Vets
+                </a>
+            </div>
+
+            <!-- Sidebar Ad -->
+            {% set slot_type = 'sidebar' %}
+            {% include 'partials/adsense.html' %}
+        </aside>
+
+        <!-- Main Content -->
+        <main class="listing-main">
+            <div class="results-info">
+                <p class="results-info__count">
+                    {{ vets | length }} {{ vets | length | pluralize('result', 'results') }} in {{ city }}, {{ state.code }}
+                </p>
+            </div>
+
+            <!-- Vet Cards -->
+            <div class="vet-list">
+                {% for vet in vets %}
+                    {% set show_description = true %}
+                    {% include 'partials/vet_card.html' %}
+
+                    {% if loop.index is divisibleby 5 and not loop.last %}
+                        {% set slot_type = 'infeed' %}
+                        {% include 'partials/adsense.html' %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Ad: Footer -->
+{% set slot_type = 'footer' %}
+{% include 'partials/adsense.html' %}
+{% endblock %}

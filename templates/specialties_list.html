@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-specialties{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">{{ page_title }}</h1>
+        <p class="page-header__subtitle">
+            Learn about holistic veterinary modalities and find practitioners who offer them
+        </p>
+    </div>
+</div>
+
+<!-- Ad: Header -->
+{% set slot_type = 'header' %}
+{% include 'partials/adsense.html' %}
+
+<div class="container">
+    <div class="specialties-intro">
+        <p>
+            Holistic veterinary medicine encompasses a wide range of treatment modalities that complement
+            conventional veterinary care. These natural approaches focus on treating the whole animal—body,
+            mind, and spirit—rather than just addressing symptoms. Many pet owners seek holistic care for
+            chronic conditions, pain management, behavioral issues, and preventive wellness.
+        </p>
+    </div>
+
+    <div class="specialties-grid-full">
+        {% for specialty in specialties %}
+        <article class="specialty-card-full">
+            <div class="specialty-card-full__icon">
+                {% if 'Acupuncture' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/><path d="M24 8v32M16 16l16 16M32 16L16 32" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Chiropractic' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 4v40M20 12h8M18 20h12M16 28h16M18 36h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {% elif 'Herbal' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 44V24M24 24c-8-8-16-4-16 4s8 12 16 4M24 24c8-8 16-4 16 4s-8 12-16 4M24 24V4" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Homeopathy' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="2" fill="currentColor"/></svg>
+                {% elif 'Nutrition' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 4c-4 0-8 4-8 12h16c0-8-4-12-8-12zM16 16v4c0 8 4 12 8 20 4-8 8-12 8-20v-4H16z" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Laser' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 4v8M24 36v8M4 24h8M36 24h8M10 10l6 6M32 32l6 6M38 10l-6 6M16 32l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Physical' in specialty.name or 'Rehabilitation' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="10" r="6" stroke="currentColor" stroke-width="2"/><path d="M24 16v12M16 22h16M20 28l-8 16M28 28l8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                {% elif 'Chinese' in specialty.name or 'TCVM' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/><path d="M24 4c0 20-20 20-20 20s20 0 20 20c0-20 20-20 20-20s-20 0-20-20z" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Massage' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M12 20c0-8 5-12 12-12s12 4 12 12c0 12-12 24-12 24S12 32 12 20z" stroke="currentColor" stroke-width="2"/><path d="M20 20c0-2 2-4 4-4s4 2 4 4" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Energy' in specialty.name or 'Reiki' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="6" fill="currentColor"/><circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/></svg>
+                {% elif 'Aromatherapy' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 4v8M16 8l4 8M32 8l-4 8M12 40h24c0-8-4-16-12-20-8 4-12 12-12 20z" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Ozone' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="16" r="8" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="32" r="8" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="8" stroke="currentColor" stroke-width="2"/></svg>
+                {% elif 'Prolotherapy' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 4v20M24 24l-12 12M24 24l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="4" fill="currentColor"/></svg>
+                {% elif 'Naturopathy' in specialty.name %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 44V24M16 28c-8-4-8-12 0-16 4 8 8 8 8 8s4 0 8-8c8 4 8 12 0 16" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="12" r="8" stroke="currentColor" stroke-width="2"/></svg>
+                {% else %}
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 4l6 12 12 2-8 8 2 12-12-6-12 6 2-12-8-8 12-2z" stroke="currentColor" stroke-width="2"/></svg>
+                {% endif %}
+            </div>
+
+            <div class="specialty-card-full__content">
+                <h2 class="specialty-card-full__title">
+                    <a href="/specialty/{{ specialty.slug }}/">{{ specialty.name }}</a>
+                </h2>
+
+                {% if specialty.description %}
+                <p class="specialty-card-full__description">
+                    {{ specialty.description | truncate_words(40) }}
+                </p>
+                {% endif %}
+
+                {% if specialty.related_conditions %}
+                <p class="specialty-card-full__conditions">
+                    <strong>Commonly treats:</strong> {{ specialty.related_conditions | truncate_words(15) }}
+                </p>
+                {% endif %}
+
+                <div class="specialty-card-full__footer">
+                    <span class="specialty-card-full__count">
+                        {{ specialty.vet_count }} {{ specialty.vet_count | pluralize('practitioner', 'practitioners') }}
+                    </span>
+                    <a href="/specialty/{{ specialty.slug }}/" class="btn btn--small">
+                        Find Practitioners &rarr;
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        {% if loop.index is divisibleby 4 and not loop.last %}
+            {% set slot_type = 'infeed' %}
+            {% include 'partials/adsense.html' %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Ad: Footer -->
+{% set slot_type = 'footer' %}
+{% include 'partials/adsense.html' %}
+{% endblock %}

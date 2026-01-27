@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero__content">
+            <h1 class="hero__title">
+                Find Holistic & Integrative<br>
+                <span class="hero__title-accent">Veterinarians Near You</span>
+            </h1>
+            <p class="hero__subtitle">
+                Discover compassionate vets who combine conventional medicine with natural healing
+                modalities for your pet's optimal health
+            </p>
+
+            <!-- Search Form -->
+            <form action="/search/" method="get" class="hero__search">
+                <div class="search-box">
+                    <input
+                        type="search"
+                        name="q"
+                        class="search-box__input"
+                        placeholder="Enter city, state, or ZIP code..."
+                        aria-label="Search location"
+                    >
+                    <button type="submit" class="search-box__button">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Search
+                    </button>
+                </div>
+            </form>
+
+            <!-- Quick Stats -->
+            <div class="hero__stats">
+                <div class="stat">
+                    <span class="stat__number">{{ total_vets }}</span>
+                    <span class="stat__label">Holistic Vets</span>
+                </div>
+                <div class="stat">
+                    <span class="stat__number">{{ total_states }}</span>
+                    <span class="stat__label">States</span>
+                </div>
+                <div class="stat">
+                    <span class="stat__number">{{ featured_specialties | length }}</span>
+                    <span class="stat__label">Specialties</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ad: Below Hero -->
+{% set slot_type = 'header' %}
+{% include 'partials/adsense.html' %}
+
+<!-- Featured Specialties -->
+<section class="section section--specialties">
+    <div class="container">
+        <header class="section__header">
+            <h2 class="section__title">Explore Holistic Modalities</h2>
+            <p class="section__subtitle">
+                Find veterinarians specializing in natural and integrative treatments
+            </p>
+        </header>
+
+        <div class="specialty-grid">
+            {% for specialty in featured_specialties %}
+            <a href="/specialty/{{ specialty.slug }}/" class="specialty-card">
+                <div class="specialty-card__icon">
+                    {% if 'Acupuncture' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/><path d="M24 8v32M16 16l16 16M32 16L16 32" stroke="currentColor" stroke-width="2"/></svg>
+                    {% elif 'Chiropractic' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 4v40M20 12h8M18 20h12M16 28h16M18 36h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    {% elif 'Herbal' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 44V24M24 24c-8-8-16-4-16 4s8 12 16 4M24 24c8-8 16-4 16 4s-8 12-16 4M24 24V4" stroke="currentColor" stroke-width="2"/></svg>
+                    {% elif 'Homeopathy' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="2" fill="currentColor"/></svg>
+                    {% elif 'Nutrition' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 4c-4 0-8 4-8 12h16c0-8-4-12-8-12zM16 16v4c0 8 4 12 8 20 4-8 8-12 8-20v-4H16z" stroke="currentColor" stroke-width="2"/></svg>
+                    {% elif 'Laser' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 4v8M24 36v8M4 24h8M36 24h8M10 10l6 6M32 32l6 6M38 10l-6 6M16 32l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/></svg>
+                    {% elif 'Physical' in specialty.name or 'Rehabilitation' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="10" r="6" stroke="currentColor" stroke-width="2"/><path d="M24 16v12M16 22h16M20 28l-8 16M28 28l8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    {% elif 'Chinese' in specialty.name or 'TCVM' in specialty.name %}
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/><path d="M24 4c0 20-20 20-20 20s20 0 20 20c0-20 20-20 20-20s-20 0-20-20z" stroke="currentColor" stroke-width="2"/></svg>
+                    {% else %}
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 4l6 12 12 2-8 8 2 12-12-6-12 6 2-12-8-8 12-2z" stroke="currentColor" stroke-width="2"/></svg>
+                    {% endif %}
+                </div>
+                <h3 class="specialty-card__title">{{ specialty.name }}</h3>
+                <span class="specialty-card__count">{{ specialty.vet_count }} {{ specialty.vet_count | pluralize('vet', 'vets') }}</span>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="section__footer">
+            <a href="/specialties/" class="btn btn--outline">View All Specialties</a>
+        </div>
+    </div>
+</section>
+
+<!-- Browse by State -->
+<section class="section section--states">
+    <div class="container">
+        <header class="section__header">
+            <h2 class="section__title">Browse by State</h2>
+            <p class="section__subtitle">
+                Find holistic veterinarians in your area
+            </p>
+        </header>
+
+        <div class="state-grid">
+            {% for state in featured_states %}
+            <a href="/vets/{{ state.slug }}/" class="state-card">
+                <span class="state-card__name">{{ state.name }}</span>
+                <span class="state-card__count">{{ state.vet_count }} {{ state.vet_count | pluralize('vet', 'vets') }}</span>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="section__footer">
+            <a href="/vets/" class="btn btn--outline">Browse All Locations</a>
+        </div>
+    </div>
+</section>
+
+<!-- Ad: Middle -->
+{% set slot_type = 'infeed' %}
+{% include 'partials/adsense.html' %}
+
+<!-- Recent Additions -->
+{% if recent_vets %}
+<section class="section section--recent">
+    <div class="container">
+        <header class="section__header">
+            <h2 class="section__title">Recently Added Practices</h2>
+            <p class="section__subtitle">
+                Discover the newest holistic veterinary practices in our directory
+            </p>
+        </header>
+
+        <div class="vet-grid">
+            {% for vet in recent_vets[:6] %}
+                {% include 'partials/vet_card.html' %}
+            {% endfor %}
+        </div>
+
+        <div class="section__footer">
+            <a href="/vets/" class="btn btn--primary">View All Veterinarians</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Why Holistic Section -->
+<section class="section section--why">
+    <div class="container">
+        <header class="section__header">
+            <h2 class="section__title">Why Choose Holistic Veterinary Care?</h2>
+        </header>
+
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-card__icon">
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/><path d="M24 14v10l8 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h3 class="benefit-card__title">Treats the Whole Animal</h3>
+                <p class="benefit-card__text">
+                    Holistic vets consider your pet's physical, emotional, and environmental factors,
+                    not just symptoms.
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-card__icon">
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 4c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20zm0 36c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16z" fill="currentColor"/><path d="M22 22l-6 6 2 2 8-8-8-8-2 2 6 6z" fill="currentColor"/></svg>
+                </div>
+                <h3 class="benefit-card__title">Gentle & Natural</h3>
+                <p class="benefit-card__text">
+                    Many holistic treatments have fewer side effects and work with your pet's
+                    natural healing abilities.
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-card__icon">
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 4L6 14v20l18 10 18-10V14L24 4z" stroke="currentColor" stroke-width="2"/><path d="M24 24v20M6 14l18 10 18-10" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <h3 class="benefit-card__title">Integrative Approach</h3>
+                <p class="benefit-card__text">
+                    Combines the best of conventional veterinary medicine with complementary
+                    therapies for optimal results.
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-card__icon">
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4 4 12.954 4 24s8.954 20 20 20z" stroke="currentColor" stroke-width="2"/><path d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <h3 class="benefit-card__title">Chronic Condition Support</h3>
+                <p class="benefit-card__text">
+                    Particularly effective for managing chronic conditions, pain, anxiety,
+                    and age-related issues.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta">
+    <div class="container">
+        <div class="cta-box">
+            <h2 class="cta-box__title">Are You a Holistic Veterinarian?</h2>
+            <p class="cta-box__text">
+                Join our directory and connect with pet owners seeking integrative care for their animals.
+            </p>
+            <a href="/submit/" class="btn btn--white">Submit Your Practice</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-404{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="container">
+        <div class="error-content">
+            <div class="error-icon">
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                    <circle cx="60" cy="60" r="55" stroke="currentColor" stroke-width="4"/>
+                    <path d="M40 45c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M60 45c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M40 80c5-10 15-15 20-15s15 5 20 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <h1 class="error-title">404</h1>
+            <h2 class="error-subtitle">Page Not Found</h2>
+
+            <p class="error-text">
+                Oops! The page you're looking for seems to have wandered off.
+                Don't worry, even the best pets get lost sometimes.
+            </p>
+
+            <div class="error-actions">
+                <a href="/" class="btn btn--primary">Go Home</a>
+                <a href="/search/" class="btn btn--outline">Search Directory</a>
+            </div>
+
+            <div class="error-suggestions">
+                <h3>Looking for something?</h3>
+                <ul>
+                    <li><a href="/vets/">Browse All Veterinarians</a></li>
+                    <li><a href="/specialties/">Explore Specialties</a></li>
+                    <li><a href="/about/">About Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{# AdSense Component
+   Usage: {% include 'partials/adsense.html' with context %}
+   Required: slot_type (header, sidebar, infeed, footer)
+#}
+{% if config.enable_adsense and config.is_production %}
+<div class="ad-unit ad-unit--{{ slot_type }}" aria-label="Advertisement">
+    {% if slot_type == 'header' and config.adsense_slot_header %}
+    <!-- Header Ad (728x90 leaderboard) -->
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="{{ config.adsense_client_id }}"
+         data-ad-slot="{{ config.adsense_slot_header }}"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+    {% elif slot_type == 'sidebar' and config.adsense_slot_sidebar %}
+    <!-- Sidebar Ad (300x250 or 300x600) -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="{{ config.adsense_client_id }}"
+         data-ad-slot="{{ config.adsense_slot_sidebar }}"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+    {% elif slot_type == 'infeed' and config.adsense_slot_infeed %}
+    <!-- In-feed Ad -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-format="fluid"
+         data-ad-layout-key="-fb+5w+4e-db+86"
+         data-ad-client="{{ config.adsense_client_id }}"
+         data-ad-slot="{{ config.adsense_slot_infeed }}"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+    {% elif slot_type == 'footer' and config.adsense_slot_footer %}
+    <!-- Footer Ad (728x90 leaderboard) -->
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="{{ config.adsense_client_id }}"
+         data-ad-slot="{{ config.adsense_slot_footer }}"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    {% endif %}
+</div>
+{% elif not config.is_production %}
+<!-- Ad placeholder ({{ slot_type }}) - disabled in development -->
+<div class="ad-placeholder ad-placeholder--{{ slot_type }}">
+    <span>Ad: {{ slot_type }}</span>
+</div>
+{% endif %}

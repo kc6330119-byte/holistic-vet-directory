@@ -1,0 +1,51 @@
+State Name,State Code,Region,Featured,Slug
+Alabama,AL,Southeast,FALSE,alabama
+Alaska,AK,West,FALSE,alaska
+Arizona,AZ,Southwest,TRUE,arizona
+Arkansas,AR,Southeast,FALSE,arkansas
+California,CA,West,TRUE,california
+Colorado,CO,West,TRUE,colorado
+Connecticut,CT,Northeast,FALSE,connecticut
+Delaware,DE,Northeast,FALSE,delaware
+Florida,FL,Southeast,TRUE,florida
+Georgia,GA,Southeast,FALSE,georgia
+Hawaii,HI,West,FALSE,hawaii
+Idaho,ID,West,FALSE,idaho
+Illinois,IL,Midwest,FALSE,illinois
+Indiana,IN,Midwest,FALSE,indiana
+Iowa,IA,Midwest,FALSE,iowa
+Kansas,KS,Midwest,FALSE,kansas
+Kentucky,KY,Southeast,FALSE,kentucky
+Louisiana,LA,Southeast,FALSE,louisiana
+Maine,ME,Northeast,FALSE,maine
+Maryland,MD,Northeast,FALSE,maryland
+Massachusetts,MA,Northeast,FALSE,massachusetts
+Michigan,MI,Midwest,FALSE,michigan
+Minnesota,MN,Midwest,FALSE,minnesota
+Mississippi,MS,Southeast,FALSE,mississippi
+Missouri,MO,Midwest,FALSE,missouri
+Montana,MT,West,FALSE,montana
+Nebraska,NE,Midwest,FALSE,nebraska
+Nevada,NV,West,FALSE,nevada
+New Hampshire,NH,Northeast,FALSE,new-hampshire
+New Jersey,NJ,Northeast,FALSE,new-jersey
+New Mexico,NM,Southwest,FALSE,new-mexico
+New York,NY,Northeast,TRUE,new-york
+North Carolina,NC,Southeast,FALSE,north-carolina
+North Dakota,ND,Midwest,FALSE,north-dakota
+Ohio,OH,Midwest,FALSE,ohio
+Oklahoma,OK,Southwest,FALSE,oklahoma
+Oregon,OR,Pacific Northwest,FALSE,oregon
+Pennsylvania,PA,Northeast,FALSE,pennsylvania
+Rhode Island,RI,Northeast,FALSE,rhode-island
+South Carolina,SC,Southeast,FALSE,south-carolina
+South Dakota,SD,Midwest,FALSE,south-dakota
+Tennessee,TN,Southeast,FALSE,tennessee
+Texas,TX,Southwest,TRUE,texas
+Utah,UT,West,FALSE,utah
+Vermont,VT,Northeast,FALSE,vermont
+Virginia,VA,Southeast,FALSE,virginia
+Washington,WA,Pacific Northwest,TRUE,washington
+West Virginia,WV,Southeast,FALSE,west-virginia
+Wisconsin,WI,Midwest,FALSE,wisconsin
+Wyoming,WY,West,FALSE,wyoming
