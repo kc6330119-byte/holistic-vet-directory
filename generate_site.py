@@ -713,6 +713,16 @@ class SiteGenerator:
             'meta_description': 'Terms of service for Holistic Vet Directory.',
         })
         
+        self._render_and_write('contact.html', 'contact/index.html', {
+            'page_title': 'Contact Us',
+            'meta_description': 'Contact us with questions about holistic veterinary care or to suggest a veterinarian.',
+        })
+        
+        self._render_and_write('success.html', 'success/index.html', {
+            'page_title': 'Thank You',
+            'meta_description': 'Your message has been sent successfully.',
+        })
+        
         self._render_and_write('404.html', '404.html', {
             'page_title': 'Page Not Found',
             'meta_description': 'The page you requested could not be found.',
