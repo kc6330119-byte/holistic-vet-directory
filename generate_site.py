@@ -42,6 +42,11 @@ class SiteConfig:
     adsense_slot_footer: str = ""
     google_maps_api_key: str = ""
     
+    @property
+    def is_production(self) -> bool:
+        """Check if running in production environment."""
+        return self.build_env.lower() == 'production'
+    
     @classmethod
     def from_env(cls) -> 'SiteConfig':
         return cls(
@@ -95,7 +100,7 @@ class Veterinarian:
         if self.state:
             parts.append(self.state)
         if self.zip_code:
-            parts.append(self.zip_code)
+            parts.append(str(self.zip_code))
         return ", ".join(filter(None, parts))
     
     @property
@@ -204,10 +209,69 @@ class State:
 class DataLoader:
     """Loads data from CSV files or Airtable."""
     
-    def __init__(self, data_dir: Path):
+    def __init__(self, data_dir: Path, use_airtable: bool = False):
         self.data_dir = data_dir
+        self.use_airtable = use_airtable
+        self._airtable_loader = None
+        
+        if use_airtable:
+            self._init_airtable()
+    
+    def _init_airtable(self):
+        """Initialize Airtable connection."""
+        try:
+            from scripts.airtable_loader import AirtableDataLoader
+            self._airtable_loader = AirtableDataLoader()
+            print("  Connected to Airtable")
+        except ImportError as e:
+            print(f"Warning: Could not import Airtable loader: {e}")
+            print("  Falling back to CSV data")
+            self.use_airtable = False
+        except ValueError as e:
+            print(f"Warning: Airtable configuration error: {e}")
+            print("  Falling back to CSV data")
+            self.use_airtable = False
+        except Exception as e:
+            print(f"Warning: Airtable connection failed: {e}")
+            print("  Falling back to CSV data")
+            self.use_airtable = False
     
     def load_veterinarians(self) -> List[Veterinarian]:
+        if self.use_airtable and self._airtable_loader:
+            return self._load_vets_from_airtable()
+        return self._load_vets_from_csv()
+    
+    def _load_vets_from_airtable(self) -> List[Veterinarian]:
+        """Load veterinarians from Airtable."""
+        airtable_vets = self._airtable_loader.load_veterinarians()
+        vets = []
+        for av in airtable_vets:
+            vet = Veterinarian(
+                practice_name=av.practice_name,
+                veterinarian_names=av.veterinarian_names,
+                specialties=av.specialties,
+                address=av.address,
+                city=av.city,
+                state=av.state,
+                zip_code=av.zip_code,
+                phone=av.phone,
+                email=av.email,
+                website=av.website,
+                certification_bodies=av.certification_bodies,
+                species_treated=av.species_treated,
+                practice_description=av.practice_description,
+                year_established=av.year_established,
+                telehealth_available=av.telehealth_available,
+                featured_listing=av.featured_listing,
+                latitude=av.latitude,
+                longitude=av.longitude,
+                slug=av.slug,
+            )
+            vets.append(vet)
+        return vets
+    
+    def _load_vets_from_csv(self) -> List[Veterinarian]:
+        """Load veterinarians from CSV file."""
         csv_path = self.data_dir / 'veterinarians.csv'
         if not csv_path.exists():
             print(f"Warning: {csv_path} not found")
@@ -223,6 +287,26 @@ class DataLoader:
         return vets
     
     def load_specialties(self) -> List[Specialty]:
+        if self.use_airtable and self._airtable_loader:
+            return self._load_specialties_from_airtable()
+        return self._load_specialties_from_csv()
+    
+    def _load_specialties_from_airtable(self) -> List[Specialty]:
+        """Load specialties from Airtable."""
+        airtable_specs = self._airtable_loader.load_specialties()
+        specialties = []
+        for asp in airtable_specs:
+            spec = Specialty(
+                name=asp.name,
+                description=asp.description,
+                related_conditions=asp.related_conditions,
+                slug=asp.slug,
+            )
+            specialties.append(spec)
+        return specialties
+    
+    def _load_specialties_from_csv(self) -> List[Specialty]:
+        """Load specialties from CSV file."""
         csv_path = self.data_dir / 'specialties.csv'
         if not csv_path.exists():
             print(f"Warning: {csv_path} not found")
@@ -238,6 +322,27 @@ class DataLoader:
         return specialties
     
     def load_states(self) -> List[State]:
+        if self.use_airtable and self._airtable_loader:
+            return self._load_states_from_airtable()
+        return self._load_states_from_csv()
+    
+    def _load_states_from_airtable(self) -> List[State]:
+        """Load states from Airtable."""
+        airtable_states = self._airtable_loader.load_states()
+        states = []
+        for ast in airtable_states:
+            state = State(
+                name=ast.name,
+                code=ast.code,
+                region=ast.region,
+                featured=ast.featured,
+                slug=ast.slug,
+            )
+            states.append(state)
+        return states
+    
+    def _load_states_from_csv(self) -> List[State]:
+        """Load states from CSV file."""
         csv_path = self.data_dir / 'states.csv'
         if not csv_path.exists():
             print(f"Warning: {csv_path} not found")
@@ -688,16 +793,21 @@ def main():
     data_dir = project_dir / 'data'
     output_dir = project_dir / 'dist'
     
+    # Check data source configuration
+    data_source = os.getenv('DATA_SOURCE', 'csv').lower()
+    use_airtable = data_source == 'airtable'
+    
     print(f"Configuration:")
     print(f"  Site: {config.site_name}")
     print(f"  Environment: {config.build_env}")
+    print(f"  Data Source: {'Airtable' if use_airtable else 'CSV files'}")
     print(f"  AdSense: {'Enabled' if config.enable_adsense else 'Disabled'}")
     print(f"  Maps: {'Enabled' if config.enable_maps else 'Disabled'}")
     print()
     
     # Load data
     print("Loading data...")
-    loader = DataLoader(data_dir)
+    loader = DataLoader(data_dir, use_airtable=use_airtable)
     vets = loader.load_veterinarians()
     specialties = loader.load_specialties()
     states = loader.load_states()
