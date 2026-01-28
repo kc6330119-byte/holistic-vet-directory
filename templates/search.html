@@ -165,7 +165,7 @@
         try {
             const response = await fetch('/search-index.json');
             searchData = await response.json();
-            console.log(`Loaded ${searchData.vets.length} vets for search`);
+            console.log(`Loaded ${searchData.length} vets for search`);
         } catch (error) {
             console.error('Failed to load search index:', error);
         }
@@ -193,7 +193,7 @@
         loadingEl.hidden = false;
 
         // Filter vets
-        let results = searchData.vets.filter(vet => {
+        let results = searchData.filter(vet => {
             // State filter
             if (state && vet.state !== state) return false;
 
