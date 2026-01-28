@@ -26,88 +26,163 @@
 
                 <section>
                     <h2>Eligibility Requirements</h2>
-                    <p>To be listed in our directory, you must:</p>
                     <ul>
                         <li>Be a licensed veterinarian (DVM or VMD)</li>
                         <li>Offer one or more holistic/integrative modalities</li>
                         <li>Practice in the United States</li>
-                        <li>Have a physical practice location (telehealth-only practices welcome)</li>
-                    </ul>
-
-                    <h3>Preferred Certifications</h3>
-                    <p>We give priority to practitioners with certifications from recognized organizations:</p>
-                    <ul>
-                        <li>AHVMA (American Holistic Veterinary Medical Association)</li>
-                        <li>Chi Institute - TCVM Certification</li>
-                        <li>IVAS (International Veterinary Acupuncture Society)</li>
-                        <li>AVCA (American Veterinary Chiropractic Association)</li>
-                        <li>CIVT (College of Integrative Veterinary Therapies)</li>
-                        <li>Academy of Veterinary Homeopathy</li>
-                        <li>VBMA (Veterinary Botanical Medicine Association)</li>
                     </ul>
                 </section>
 
-                <section>
-                    <h2>Submit Your Practice</h2>
-                    <p>
-                        Please provide the following information to submit your practice for inclusion:
-                    </p>
+                <section class="submit-form-section">
+                    <h2>Practice Submission Form</h2>
+                    
+                    <form name="submit-practice" method="POST" action="/success/" data-netlify="true" netlify-honeypot="bot-field" class="submit-form">
+                        <input type="hidden" name="form-name" value="submit-practice">
+                        
+                        <!-- Honeypot field for spam prevention -->
+                        <p class="hidden" style="display:none;">
+                            <label>Don't fill this out if you're human: <input name="bot-field"></label>
+                        </p>
 
-                    <div class="submit-form-placeholder">
-                        <div class="form-note">
-                            <p>
-                                <strong>How to Submit:</strong> Please email the following information to
-                                <a href="mailto:submit@example.com">submit@example.com</a>:
-                            </p>
+                        <h3>Practice Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="practice-name" class="form-label">Practice Name <span class="required">*</span></label>
+                            <input type="text" id="practice-name" name="practice-name" class="form-input" required>
                         </div>
 
-                        <h3>Required Information</h3>
-                        <ul>
-                            <li>Practice name</li>
-                            <li>Veterinarian name(s)</li>
-                            <li>Complete address (street, city, state, ZIP)</li>
-                            <li>Phone number</li>
-                            <li>Email address</li>
-                            <li>Website URL</li>
-                            <li>Holistic modalities offered (acupuncture, chiropractic, herbal medicine, etc.)</li>
-                            <li>Certifications and memberships</li>
-                            <li>Species treated (dogs, cats, horses, exotic, etc.)</li>
-                            <li>Brief practice description (200-500 words)</li>
-                            <li>Whether you offer telehealth consultations</li>
-                        </ul>
+                        <div class="form-group">
+                            <label for="vet-names" class="form-label">Veterinarian Name(s) <span class="required">*</span></label>
+                            <input type="text" id="vet-names" name="vet-names" class="form-input" placeholder="e.g., Dr. Jane Smith, Dr. John Doe" required>
+                        </div>
 
-                        <h3>Optional Information</h3>
-                        <ul>
-                            <li>Year established</li>
-                            <li>Practice philosophy</li>
-                            <li>Special areas of focus</li>
-                            <li>Insurance accepted</li>
-                        </ul>
-                    </div>
+                        <h3>Location</h3>
+
+                        <div class="form-group">
+                            <label for="address" class="form-label">Street Address <span class="required">*</span></label>
+                            <input type="text" id="address" name="address" class="form-input" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group form-group--half">
+                                <label for="city" class="form-label">City <span class="required">*</span></label>
+                                <input type="text" id="city" name="city" class="form-input" required>
+                            </div>
+                            <div class="form-group form-group--quarter">
+                                <label for="state" class="form-label">State <span class="required">*</span></label>
+                                <select id="state" name="state" class="form-select" required>
+                                    <option value="">Select...</option>
+                                    {% for state in states %}
+                                    <option value="{{ state.code }}">{{ state.code }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group form-group--quarter">
+                                <label for="zip" class="form-label">ZIP Code <span class="required">*</span></label>
+                                <input type="text" id="zip" name="zip" class="form-input" pattern="[0-9]{5}" required>
+                            </div>
+                        </div>
+
+                        <h3>Contact Information</h3>
+
+                        <div class="form-row">
+                            <div class="form-group form-group--half">
+                                <label for="phone" class="form-label">Phone Number <span class="required">*</span></label>
+                                <input type="tel" id="phone" name="phone" class="form-input" required>
+                            </div>
+                            <div class="form-group form-group--half">
+                                <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" class="form-input" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="website" class="form-label">Website URL</label>
+                            <input type="url" id="website" name="website" class="form-input" placeholder="https://">
+                        </div>
+
+                        <h3>Services Offered</h3>
+
+                        <div class="form-group">
+                            <label class="form-label">Holistic Modalities <span class="required">*</span></label>
+                            <p class="form-help">Select all that apply:</p>
+                            <div class="checkbox-grid">
+                                {% for specialty in specialties %}
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="specialties" value="{{ specialty.name }}">
+                                    <span>{{ specialty.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Species Treated <span class="required">*</span></label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="species" value="Dogs"> <span>Dogs</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="species" value="Cats"> <span>Cats</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="species" value="Horses"> <span>Horses</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="species" value="Exotic"> <span>Exotic</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="species" value="Birds"> <span>Birds</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="species" value="Reptiles"> <span>Reptiles</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="species" value="Farm Animals"> <span>Farm Animals</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="certifications" class="form-label">Certifications & Memberships</label>
+                            <input type="text" id="certifications" name="certifications" class="form-input" placeholder="e.g., AHVMA, Chi Institute, IVAS">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="telehealth" value="Yes">
+                                <span>We offer telehealth/remote consultations</span>
+                            </label>
+                        </div>
+
+                        <h3>About Your Practice</h3>
+
+                        <div class="form-group">
+                            <label for="description" class="form-label">Practice Description <span class="required">*</span></label>
+                            <p class="form-help">Tell us about your practice, philosophy, and approach to holistic care (200-500 words recommended).</p>
+                            <textarea id="description" name="description" class="form-textarea" rows="8" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="year-established" class="form-label">Year Established</label>
+                            <input type="number" id="year-established" name="year-established" class="form-input" min="1900" max="2026" style="width: 120px;">
+                        </div>
+
+                        <div class="form-group" style="margin-top: 2rem;">
+                            <button type="submit" class="btn btn--primary btn--large">Submit Practice for Review</button>
+                        </div>
+                    </form>
                 </section>
 
                 <section>
-                    <h2>Listing Guidelines</h2>
-                    <p>All listings are subject to review. We may:</p>
-                    <ul>
-                        <li>Verify your veterinary license</li>
-                        <li>Check certification claims</li>
-                        <li>Edit descriptions for clarity and consistency</li>
-                        <li>Contact you for additional information</li>
-                    </ul>
-                    <p>
-                        Basic listings are free. In the future, we may offer enhanced "Featured" listings
-                        with additional visibility for a fee.
-                    </p>
-                </section>
-
-                <section>
-                    <h2>Update Your Listing</h2>
-                    <p>
-                        Already listed and need to update your information? Email us at
-                        <a href="mailto:updates@example.com">updates@example.com</a> with your
-                        practice name and the changes you'd like to make.
-                    </p>
+                    <h2>What Happens Next?</h2>
+                    <p>After you submit your practice:</p>
+                    <ol>
+                        <li>We'll review your submission (typically within 5-7 business days)</li>
+                        <li>We may contact you to verify information or request additional details</li>
+                        <li>Once approved, your listing will appear in our directory</li>
+                    </ol>
+                    <p>Basic listings are free. Questions? <a href="/contact/">Contact us</a>.</p>
                 </section>
             </article>
         </main>
@@ -128,9 +203,9 @@
             </div>
 
             <div class="sidebar-card">
-                <h3>Contact</h3>
-                <p>Questions about listings?</p>
-                <p><a href="mailto:info@example.com">info@example.com</a></p>
+                <h3>Need Help?</h3>
+                <p>Questions about submitting your practice?</p>
+                <a href="/contact/" class="btn btn--secondary btn--block">Contact Us</a>
             </div>
         </aside>
     </div>

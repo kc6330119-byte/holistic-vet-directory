@@ -1694,3 +1694,136 @@ ul, ol {
         text-decoration: underline;
     }
 }
+
+/* ============================================
+   Form Styles
+   ============================================ */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-group--half {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-group--quarter {
+    flex: 0 0 120px;
+    min-width: 100px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.form-label .required {
+    color: #dc3545;
+}
+
+.form-help {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: #fff;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    accent-color: var(--primary-color);
+}
+
+.btn--large {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+.btn--block {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+/* Success Page */
+.success-icon {
+    color: var(--primary-color);
+}
+
+.success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Contact Form Section */
+.contact-form-section,
+.submit-form-section {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+}
+
+.contact-form h3,
+.submit-form h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.contact-form h3:first-of-type,
+.submit-form h3:first-child {
+    margin-top: 0;
+}
