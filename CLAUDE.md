@@ -9,7 +9,7 @@ Build a directory website for veterinarians who provide holistic/integrative med
 - Pet owners seeking alternative/complementary veterinary care
 - People with pets having chronic health issues
 - Natural/organic lifestyle consumers with pets
-- Those interested in acupuncture, herbal medicine, chiropractic care, nutrition therapy, etc. for their animals
+- Those interested in acupuncture, herbal medicine, chiropractic care, nutrition therapy, etc. for their animals 
 
 ### Revenue Model
 - Primary: Google AdSense (contextual ads on listing pages, search results, detail pages)
