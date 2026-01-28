@@ -93,6 +93,20 @@ class Veterinarian:
     def __post_init__(self):
         if not self.slug:
             self.slug = slugify(self.practice_name)
+        
+        # Ensure list fields are actually lists (handle pipe-delimited strings from Airtable)
+        self.specialties = self._ensure_list(self.specialties)
+        self.certification_bodies = self._ensure_list(self.certification_bodies)
+        self.species_treated = self._ensure_list(self.species_treated)
+    
+    @staticmethod
+    def _ensure_list(value) -> List[str]:
+        """Convert a value to a list if it's a pipe-delimited string."""
+        if isinstance(value, list):
+            return value
+        if isinstance(value, str) and value:
+            return [item.strip() for item in value.split('|') if item.strip()]
+        return []
     
     @property
     def full_address(self) -> str:
