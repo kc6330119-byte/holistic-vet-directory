@@ -1853,8 +1853,8 @@ ul, ol {
 
 .specialty-card-full__icon {
     flex-shrink: 0;
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
     color: var(--color-primary, #2D6A4F);
 }
 
@@ -1933,18 +1933,18 @@ ul, ol {
 
 /* Force specialty icon size - more specific rules */
 .specialties-grid-full .specialty-card-full__icon {
-    width: 48px !important;
-    height: 48px !important;
-    min-width: 48px;
-    max-width: 48px;
-    min-height: 48px;
-    max-height: 48px;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px;
+    max-width: 32px;
+    min-height: 32px;
+    max-height: 32px;
     overflow: hidden;
 }
 
 .specialties-grid-full .specialty-card-full__icon svg {
-    width: 48px !important;
-    height: 48px !important;
-    max-width: 48px;
-    max-height: 48px;
+    width: 32px !important;
+    height: 32px !important;
+    max-width: 32px;
+    max-height: 32px;
 }
