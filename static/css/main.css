@@ -1827,3 +1827,106 @@ ul, ol {
 .submit-form h3:first-child {
     margin-top: 0;
 }
+
+/* Specialty Cards Full (Specialties List Page) */
+.specialties-grid-full {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.specialty-card-full {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.specialty-card-full:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.specialty-card-full__icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    color: var(--color-primary, #2D6A4F);
+}
+
+.specialty-card-full__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.specialty-card-full__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.specialty-card-full__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1.3;
+}
+
+.specialty-card-full__title a {
+    color: var(--color-text, #212529);
+    text-decoration: none;
+}
+
+.specialty-card-full__title a:hover {
+    color: var(--color-primary, #2D6A4F);
+}
+
+.specialty-card-full__description {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted, #6c757d);
+    line-height: 1.5;
+}
+
+.specialty-card-full__conditions {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted, #6c757d);
+}
+
+.specialty-card-full__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.specialty-card-full__count {
+    font-size: 0.85rem;
+    color: var(--color-text-muted, #6c757d);
+}
+
+.specialties-intro {
+    max-width: 800px;
+    margin: 0 auto 1rem;
+    text-align: center;
+    color: var(--color-text-muted, #6c757d);
+}
+
+@media (max-width: 600px) {
+    .specialty-card-full {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .specialty-card-full__icon {
+        margin: 0 auto;
+    }
+    
+    .specialty-card-full__footer {
+        justify-content: center;
+    }
+}
