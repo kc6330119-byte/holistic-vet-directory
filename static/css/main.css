@@ -1930,3 +1930,21 @@ ul, ol {
         justify-content: center;
     }
 }
+
+/* Force specialty icon size - more specific rules */
+.specialties-grid-full .specialty-card-full__icon {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px;
+    max-width: 48px;
+    min-height: 48px;
+    max-height: 48px;
+    overflow: hidden;
+}
+
+.specialties-grid-full .specialty-card-full__icon svg {
+    width: 48px !important;
+    height: 48px !important;
+    max-width: 48px;
+    max-height: 48px;
+}
