@@ -17,9 +17,13 @@
     <meta property="og:description" content="{{ page_description }}">
     <meta property="og:site_name" content="{{ config.site_name }}">
     <meta property="og:url" content="{{ config.site_url }}{{ request_path | default('/') }}">
+    <meta property="og:image" content="{{ config.site_url }}/static/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ config.site_url }}/static/images/og-image.png">
     <meta name="twitter:title" content="{{ page_title }}">
     <meta name="twitter:description" content="{{ page_description }}">
 
