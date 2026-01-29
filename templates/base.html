@@ -54,6 +54,7 @@
     </script>
     {% endblock %}
 
+    <!-- DEBUG: enable_adsense={{ config.enable_adsense }}, is_production={{ config.is_production }} -->
     {% if config.enable_adsense and config.is_production %}
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ config.adsense_client_id }}" crossorigin="anonymous"></script>
