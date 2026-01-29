@@ -12,11 +12,31 @@
     const mainNav = document.querySelector('.main-nav');
 
     if (mobileMenuToggle && mainNav) {
-        mobileMenuToggle.addEventListener('click', function() {
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            this.setAttribute('aria-expanded', !isExpanded);
+        function toggleMenu(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isExpanded = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+            mobileMenuToggle.setAttribute('aria-expanded', !isExpanded);
             mainNav.classList.toggle('is-open');
             document.body.classList.toggle('menu-open');
+        }
+        
+        // Use both click and touchend for iOS compatibility
+        mobileMenuToggle.addEventListener('click', toggleMenu);
+        mobileMenuToggle.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            toggleMenu(e);
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (mainNav.classList.contains('is-open') && 
+                !mainNav.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                mainNav.classList.remove('is-open');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
+            }
         });
     }
 
