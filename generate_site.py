@@ -836,6 +836,8 @@ def main():
     print(f"  Environment: {config.build_env}")
     print(f"  Data Source: {'Airtable' if use_airtable else 'CSV files'}")
     print(f"  AdSense: {'Enabled' if config.enable_adsense else 'Disabled'}")
+    if config.enable_adsense:
+        print(f"  AdSense Client ID: {'Set (' + config.adsense_client_id[:10] + '...)' if config.adsense_client_id else 'NOT SET'}")
     print(f"  Analytics: {'Enabled' if config.enable_analytics else 'Disabled'}")
     print(f"  Maps: {'Enabled' if config.enable_maps else 'Disabled'}")
     print()
