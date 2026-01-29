@@ -40,6 +40,11 @@ class SiteConfig:
     adsense_slot_sidebar: str = ""
     adsense_slot_infeed: str = ""
     adsense_slot_footer: str = ""
+    
+    # Google Analytics
+    enable_analytics: bool = False
+    analytics_measurement_id: str = ""
+    
     google_maps_api_key: str = ""
     
     @property
@@ -63,6 +68,10 @@ class SiteConfig:
             adsense_slot_sidebar=os.getenv('ADSENSE_SLOT_SIDEBAR', ''),
             adsense_slot_infeed=os.getenv('ADSENSE_SLOT_INFEED', ''),
             adsense_slot_footer=os.getenv('ADSENSE_SLOT_FOOTER', ''),
+            
+            enable_analytics=os.getenv('ENABLE_ANALYTICS', 'false').lower() == 'true',
+            analytics_measurement_id=os.getenv('GA_MEASUREMENT_ID', ''),
+            
             google_maps_api_key=os.getenv('GOOGLE_MAPS_API_KEY', ''),
         )
 
@@ -827,6 +836,7 @@ def main():
     print(f"  Environment: {config.build_env}")
     print(f"  Data Source: {'Airtable' if use_airtable else 'CSV files'}")
     print(f"  AdSense: {'Enabled' if config.enable_adsense else 'Disabled'}")
+    print(f"  Analytics: {'Enabled' if config.enable_analytics else 'Disabled'}")
     print(f"  Maps: {'Enabled' if config.enable_maps else 'Disabled'}")
     print()
     

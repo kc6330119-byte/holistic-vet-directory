@@ -58,6 +58,17 @@
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ config.adsense_client_id }}" crossorigin="anonymous"></script>
     {% endif %}
+
+    {% if config.enable_analytics and config.analytics_measurement_id %}
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.analytics_measurement_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ config.analytics_measurement_id }}');
+    </script>
+    {% endif %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
     <!-- Skip to content link for accessibility -->
