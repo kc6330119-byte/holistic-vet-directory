@@ -818,6 +818,12 @@ Sitemap: {self.config.site_url}/sitemap.xml
         if static_src.exists():
             shutil.copytree(static_src, static_dst)
             print(f"  Copied: static/")
+        
+        # Copy ads.txt to root for AdSense
+        ads_txt_src = static_src / 'ads.txt'
+        if ads_txt_src.exists():
+            shutil.copy(ads_txt_src, self.output_dir / 'ads.txt')
+            print(f"  Copied: ads.txt")
 
 
 def main():
@@ -836,8 +842,6 @@ def main():
     print(f"  Environment: {config.build_env}")
     print(f"  Data Source: {'Airtable' if use_airtable else 'CSV files'}")
     print(f"  AdSense: {'Enabled' if config.enable_adsense else 'Disabled'}")
-    if config.enable_adsense:
-        print(f"  AdSense Client ID: {'Set (' + config.adsense_client_id[:10] + '...)' if config.adsense_client_id else 'NOT SET'}")
     print(f"  Analytics: {'Enabled' if config.enable_analytics else 'Disabled'}")
     print(f"  Maps: {'Enabled' if config.enable_maps else 'Disabled'}")
     print()
