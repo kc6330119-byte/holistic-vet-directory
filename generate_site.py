@@ -493,6 +493,7 @@ class DataProcessor:
                 'vets': vet.veterinarian_names,
                 'city': vet.city,
                 'state': vet.state,
+                'zip': vet.zip_code,
                 'specialties': vet.specialties,
                 'species': vet.species_treated,
                 'telehealth': vet.telehealth_available,
