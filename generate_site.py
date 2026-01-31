@@ -598,8 +598,8 @@ class SiteGenerator:
     def _generate_homepage(self):
         print("Generating homepage...")
         self._render_and_write('index.html', 'index.html', {
-            'page_title': self.config.site_name,
-            'meta_description': self.config.site_description,
+            'page_title': 'Find Holistic Vets Near Me | Holistic Veterinarian Directory',
+            'page_description': 'Find holistic vets near you. Browse our directory of integrative veterinarians offering acupuncture, herbal medicine, chiropractic care and natural treatments for pets.',
             'featured_states': self.processor.get_featured_states(8),
             'featured_specialties': self.processor.get_featured_specialties(8),
             'recent_vets': sorted(self.processor.vets, key=lambda v: v.practice_name)[:6],
@@ -611,7 +611,7 @@ class SiteGenerator:
         vets = sorted(self.processor.vets, key=lambda v: (v.state, v.city, v.practice_name))
         self._render_and_write('vets_list.html', 'vets/index.html', {
             'page_title': 'Find a Holistic Veterinarian',
-            'meta_description': 'Browse our directory of holistic and integrative veterinarians across the United States.',
+            'page_description': 'Browse our directory of holistic and integrative veterinarians across the United States.',
             'vets': vets,
             'total_count': len(vets),
             'current_page': 1,
@@ -631,7 +631,7 @@ class SiteGenerator:
             
             self._render_and_write('state_list.html', f'vets/{state.slug}/index.html', {
                 'page_title': f'Holistic Veterinarians in {state.name}',
-                'meta_description': f'Find {state.vet_count} holistic and integrative veterinarians in {state.name}.',
+                'page_description': f'Find {state.vet_count} holistic and integrative veterinarians in {state.name}.',
                 'state': state,
                 'vets': sorted(state_vets, key=lambda v: (v.city, v.practice_name)),
                 'cities': cities,
@@ -651,7 +651,7 @@ class SiteGenerator:
                 city_name = city_vets[0].city
                 self._render_and_write('city_list.html', f'vets/{state.slug}/{city_slug}/index.html', {
                     'page_title': f'Holistic Veterinarians in {city_name}, {state.name}',
-                    'meta_description': f'Find {len(city_vets)} holistic veterinarians in {city_name}, {state.name}.',
+                    'page_description': f'Find {len(city_vets)} holistic veterinarians in {city_name}, {state.name}.',
                     'state': state,
                     'city_name': city_name,
                     'city_slug': city_slug,
@@ -674,7 +674,7 @@ class SiteGenerator:
             
             self._render_and_write('vet_detail.html', f'vet/{vet.slug}/index.html', {
                 'page_title': f'{vet.practice_name} - Holistic Veterinarian in {vet.city}, {vet.state}',
-                'meta_description': f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}. Services include {", ".join(vet.specialties[:3])}.',
+                'page_description': f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}. Services include {", ".join(vet.specialties[:3])}.',
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
@@ -685,7 +685,7 @@ class SiteGenerator:
         print("Generating specialties list...")
         self._render_and_write('specialties_list.html', 'specialties/index.html', {
             'page_title': 'Holistic Veterinary Specialties',
-            'meta_description': 'Learn about holistic veterinary modalities including acupuncture, herbal medicine, chiropractic care, and more.',
+            'page_description': 'Learn about holistic veterinary modalities including acupuncture, herbal medicine, chiropractic care, and more.',
             'specialties': sorted(self.processor.specialties, key=lambda s: s.name),
         })
     
@@ -701,7 +701,7 @@ class SiteGenerator:
 
             self._render_and_write('specialty_detail.html', f'specialty/{specialty.slug}/index.html', {
                 'page_title': f'{specialty.name} - Holistic Veterinary Care',
-                'meta_description': f'Find veterinarians offering {specialty.name}. {specialty.description[:150]}...' if specialty.description else f'Find veterinarians offering {specialty.name}.',
+                'page_description': f'Find veterinarians offering {specialty.name}. {specialty.description[:150]}...' if specialty.description else f'Find veterinarians offering {specialty.name}.',
                 'specialty': specialty,
                 'vets': sorted(spec_vets, key=lambda v: (v.state, v.city, v.practice_name)),
                 'vets_by_state': dict(vets_by_state),
@@ -710,8 +710,8 @@ class SiteGenerator:
     def _generate_search_page(self):
         print("Generating search page...")
         self._render_and_write('search.html', 'search/index.html', {
-            'page_title': 'Search Holistic Veterinarians',
-            'meta_description': 'Search our directory of holistic veterinarians by location, specialty, or species treated.',
+            'page_title': 'Find Holistic Vets Near Me | Search by Location',
+            'page_description': 'Search for holistic veterinarians near you. Find integrative vets by city, state, ZIP code, or specialty. Locate natural pet care in your area.',
         })
     
     def _generate_static_pages(self):
@@ -719,37 +719,37 @@ class SiteGenerator:
         
         self._render_and_write('about.html', 'about/index.html', {
             'page_title': 'About Holistic Vet Directory',
-            'meta_description': 'Learn about our mission to connect pet owners with holistic and integrative veterinary care.',
+            'page_description': 'Learn about our mission to connect pet owners with holistic and integrative veterinary care.',
         })
         
         self._render_and_write('submit.html', 'submit/index.html', {
             'page_title': 'Submit Your Practice',
-            'meta_description': 'Submit your holistic veterinary practice to our directory.',
+            'page_description': 'Submit your holistic veterinary practice to our directory.',
         })
         
         self._render_and_write('privacy.html', 'privacy/index.html', {
             'page_title': 'Privacy Policy',
-            'meta_description': 'Privacy policy for Holistic Vet Directory.',
+            'page_description': 'Privacy policy for Holistic Vet Directory.',
         })
         
         self._render_and_write('terms.html', 'terms/index.html', {
             'page_title': 'Terms of Service',
-            'meta_description': 'Terms of service for Holistic Vet Directory.',
+            'page_description': 'Terms of service for Holistic Vet Directory.',
         })
         
         self._render_and_write('contact.html', 'contact/index.html', {
             'page_title': 'Contact Us',
-            'meta_description': 'Contact us with questions about holistic veterinary care or to suggest a veterinarian.',
+            'page_description': 'Contact us with questions about holistic veterinary care or to suggest a veterinarian.',
         })
         
         self._render_and_write('success.html', 'success/index.html', {
             'page_title': 'Thank You',
-            'meta_description': 'Your message has been sent successfully.',
+            'page_description': 'Your message has been sent successfully.',
         })
         
         self._render_and_write('404.html', '404.html', {
             'page_title': 'Page Not Found',
-            'meta_description': 'The page you requested could not be found.',
+            'page_description': 'The page you requested could not be found.',
         })
     
     def _generate_search_index(self):
