@@ -37,6 +37,13 @@
                             About
                         </a>
                     </li>
+                    {% if has_blog %}
+                    <li class="nav-item">
+                        <a href="/blog/" class="nav-link {% if '/blog/' in request_path|default('') %}active{% endif %}">
+                            Blog
+                        </a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a href="/contact/" class="nav-link {% if '/contact/' in request_path|default('') %}active{% endif %}">
                             Contact

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-blog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">Holistic Pet Care Blog</h1>
+        <p class="page-header__subtitle">
+            Expert articles on natural veterinary medicine, integrative therapies, and holistic pet health
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content-layout">
+        <main class="content-main">
+            {% if posts %}
+            <div class="blog-list">
+                {% for post in posts %}
+                <article class="blog-card">
+                    {% if post.featured_image %}
+                    <div class="blog-card__image">
+                        <a href="/blog/{{ post.slug }}/">
+                            <img src="{{ post.featured_image }}" alt="{{ post.title }}" loading="lazy">
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <div class="blog-card__content">
+                        <header class="blog-card__header">
+                            <h2 class="blog-card__title">
+                                <a href="/blog/{{ post.slug }}/">{{ post.title }}</a>
+                            </h2>
+                            <div class="blog-card__meta">
+                                {% if post.author %}
+                                <span class="blog-card__author">By {{ post.author }}</span>
+                                {% endif %}
+                                {% if post.published_date_formatted %}
+                                <time class="blog-card__date">{{ post.published_date_formatted }}</time>
+                                {% endif %}
+                            </div>
+                        </header>
+
+                        <p class="blog-card__excerpt">{{ post.excerpt }}</p>
+
+                        <a href="/blog/{{ post.slug }}/" class="blog-card__link">
+                            Read More
+                            <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
+                </article>
+
+                {% if loop.index is divisibleby 3 and not loop.last %}
+                    {% set slot_type = 'infeed' %}
+                    {% include 'partials/adsense.html' %}
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h2>Coming Soon</h2>
+                <p>We're working on helpful articles about holistic pet care. Check back soon!</p>
+                <a href="/" class="btn btn--primary">Return to Homepage</a>
+            </div>
+            {% endif %}
+        </main>
+
+        <aside class="content-sidebar">
+            {% set slot_type = 'sidebar' %}
+            {% include 'partials/adsense.html' %}
+
+            <div class="sidebar-card">
+                <h3>Find a Holistic Vet</h3>
+                <p>Looking for integrative veterinary care for your pet?</p>
+                <a href="/vets/" class="btn btn--primary btn--block">Search Directory</a>
+            </div>
+
+            <div class="sidebar-card">
+                <h3>Popular Specialties</h3>
+                <ul class="sidebar-list">
+                    {% for specialty in specialties[:6] %}
+                    <li>
+                        <a href="/specialty/{{ specialty.slug }}/">{{ specialty.name }}</a>
+                        <span class="count">({{ specialty.vet_count }})</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="sidebar-card sidebar-card--highlight">
+                <h3>List Your Practice</h3>
+                <p>Are you a holistic veterinarian? Join our directory!</p>
+                <a href="/submit/" class="btn btn--secondary btn--block">Submit Listing</a>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

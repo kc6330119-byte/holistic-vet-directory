@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-blog-post{% endblock %}
+
+{% block content %}
+<article class="blog-post">
+    <header class="blog-post__header">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <ol>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li aria-current="page">{{ post.title }}</li>
+                </ol>
+            </nav>
+
+            <h1 class="blog-post__title">{{ post.title }}</h1>
+
+            <div class="blog-post__meta">
+                {% if post.author %}
+                <span class="blog-post__author">
+                    <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z" fill="currentColor"/>
+                    </svg>
+                    {{ post.author }}
+                </span>
+                {% endif %}
+                {% if post.published_date_formatted %}
+                <time class="blog-post__date">
+                    <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M14 2H13V0H11V2H5V0H3V2H2C0.9 2 0 2.9 0 4V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V4C16 2.9 15.1 2 14 2ZM14 14H2V6H14V14Z" fill="currentColor"/>
+                    </svg>
+                    {{ post.published_date_formatted }}
+                </time>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% if post.featured_image %}
+    <div class="blog-post__featured-image">
+        <div class="container">
+            <img src="{{ post.featured_image }}" alt="{{ post.title }}">
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="content-layout">
+            <main class="content-main">
+                <div class="blog-post__content prose">
+                    {{ post.content_html | safe }}
+                </div>
+
+                <footer class="blog-post__footer">
+                    <div class="blog-post__share">
+                        <span>Share this article:</span>
+                        <a href="https://twitter.com/intent/tweet?url={{ config.site_url }}/blog/{{ post.slug }}/&text={{ post.title | urlencode }}"
+                           target="_blank" rel="noopener noreferrer" class="share-link share-link--twitter" title="Share on Twitter">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ config.site_url }}/blog/{{ post.slug }}/"
+                           target="_blank" rel="noopener noreferrer" class="share-link share-link--facebook" title="Share on Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:?subject={{ post.title | urlencode }}&body=Check out this article: {{ config.site_url }}/blog/{{ post.slug }}/"
+                           class="share-link share-link--email" title="Share via Email">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <a href="/blog/" class="btn btn--secondary">
+                        <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M10 13l-5-5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Back to Blog
+                    </a>
+                </footer>
+
+                {% if related_posts %}
+                <section class="related-posts">
+                    <h2>Related Articles</h2>
+                    <div class="related-posts__grid">
+                        {% for related in related_posts %}
+                        <article class="related-post-card">
+                            {% if related.featured_image %}
+                            <div class="related-post-card__image">
+                                <a href="/blog/{{ related.slug }}/">
+                                    <img src="{{ related.featured_image }}" alt="{{ related.title }}" loading="lazy">
+                                </a>
+                            </div>
+                            {% endif %}
+                            <h3 class="related-post-card__title">
+                                <a href="/blog/{{ related.slug }}/">{{ related.title }}</a>
+                            </h3>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+            </main>
+
+            <aside class="content-sidebar">
+                {% set slot_type = 'sidebar' %}
+                {% include 'partials/adsense.html' %}
+
+                <div class="sidebar-card">
+                    <h3>Find a Holistic Vet</h3>
+                    <p>Looking for integrative veterinary care for your pet?</p>
+                    <a href="/vets/" class="btn btn--primary btn--block">Search Directory</a>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3>Popular Specialties</h3>
+                    <ul class="sidebar-list">
+                        {% for specialty in specialties[:6] %}
+                        <li>
+                            <a href="/specialty/{{ specialty.slug }}/">{{ specialty.name }}</a>
+                            <span class="count">({{ specialty.vet_count }})</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% set slot_type = 'sidebar' %}
+                {% include 'partials/adsense.html' %}
+            </aside>
+        </div>
+    </div>
+</article>
+{% endblock %}

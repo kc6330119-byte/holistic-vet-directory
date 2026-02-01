@@ -19,6 +19,7 @@ from collections import defaultdict
 from dotenv import load_dotenv
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from slugify import slugify
+import markdown
 
 # Load environment variables
 load_dotenv()
@@ -382,14 +383,110 @@ class DataLoader:
         
         return states
 
+    def load_blog_posts(self) -> List['BlogPost']:
+        """Load blog posts from Airtable or CSV."""
+        if self.use_airtable and self._airtable_loader:
+            return self._load_blog_posts_from_airtable()
+        return self._load_blog_posts_from_csv()
+    
+    def _load_blog_posts_from_airtable(self) -> List['BlogPost']:
+        """Load blog posts from Airtable."""
+        try:
+            from scripts.airtable_loader import BlogPostData
+            airtable_posts = self._airtable_loader.load_blog_posts()
+            posts = []
+            for ap in airtable_posts:
+                post = BlogPost(
+                    title=ap.title,
+                    content=ap.content,
+                    excerpt=ap.excerpt,
+                    author=ap.author,
+                    published_date=ap.published_date,
+                    featured_image=ap.featured_image,
+                    meta_description=ap.meta_description,
+                    status=ap.status,
+                    slug=ap.slug,
+                )
+                posts.append(post)
+            return posts
+        except Exception as e:
+            print(f"  Warning: Could not load blog posts: {e}")
+            return []
+    
+    def _load_blog_posts_from_csv(self) -> List['BlogPost']:
+        """Load blog posts from CSV file."""
+        csv_path = self.data_dir / 'blog_posts.csv'
+        if not csv_path.exists():
+            return []  # Blog is optional
+        
+        posts = []
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row.get('Title') and row.get('Status', '').lower() == 'published':
+                    post = BlogPost(
+                        title=row.get('Title', ''),
+                        content=row.get('Content', ''),
+                        excerpt=row.get('Excerpt', ''),
+                        author=row.get('Author', ''),
+                        published_date=row.get('Published Date', ''),
+                        featured_image=row.get('Featured Image', ''),
+                        meta_description=row.get('Meta Description', ''),
+                        status=row.get('Status', 'Draft'),
+                        slug=row.get('Slug', ''),
+                    )
+                    posts.append(post)
+        
+        return posts
+
+
+@dataclass
+class BlogPost:
+    """Blog post data model."""
+    title: str
+    content: str = ""
+    content_html: str = ""
+    excerpt: str = ""
+    author: str = ""
+    published_date: str = ""
+    featured_image: str = ""
+    meta_description: str = ""
+    status: str = "Draft"
+    slug: str = ""
+    
+    def __post_init__(self):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        # Convert markdown content to HTML
+        if self.content and not self.content_html:
+            self.content_html = markdown.markdown(
+                self.content,
+                extensions=['extra', 'codehilite', 'toc']
+            )
+        # Auto-generate excerpt if not provided
+        if not self.excerpt and self.content:
+            plain_text = self.content.replace('#', '').replace('*', '').replace('_', '').replace('\n', ' ')
+            self.excerpt = plain_text[:150].strip() + '...' if len(plain_text) > 150 else plain_text
+        # Format published date for display
+        if self.published_date and len(self.published_date) >= 10:
+            try:
+                from datetime import datetime
+                dt = datetime.strptime(self.published_date[:10], '%Y-%m-%d')
+                self.published_date_formatted = dt.strftime('%B %d, %Y')
+            except:
+                self.published_date_formatted = self.published_date
+        else:
+            self.published_date_formatted = self.published_date
+
 
 class DataProcessor:
     """Processes and organizes data for site generation."""
     
-    def __init__(self, vets: List[Veterinarian], specialties: List[Specialty], states: List[State]):
+    def __init__(self, vets: List[Veterinarian], specialties: List[Specialty], states: List[State], blog_posts: List[BlogPost] = None):
         self.vets = vets
         self.specialties = specialties
         self.states = states
+        self.blog_posts = blog_posts or []
         self._process()
     
     def _process(self):
@@ -548,6 +645,8 @@ class SiteGenerator:
             'now': datetime.now(),
             'states': sorted([s for s in processor.states if s.vet_count > 0], key=lambda s: s.name),
             'specialties': sorted([s for s in processor.specialties if s.vet_count > 0], key=lambda s: s.name),
+            'blog_posts': processor.blog_posts[:3],  # Recent posts for sidebar/footer
+            'has_blog': len(processor.blog_posts) > 0,
         }
     
     @staticmethod
@@ -586,6 +685,8 @@ class SiteGenerator:
         self._generate_specialties_list()
         self._generate_specialty_pages()
         self._generate_search_page()
+        self._generate_blog_list()
+        self._generate_blog_detail_pages()
         self._generate_static_pages()
         self._generate_search_index()
         self._generate_sitemap()
@@ -724,6 +825,46 @@ class SiteGenerator:
             'page_description': 'Search for holistic veterinarians near you. Find integrative vets by city, state, ZIP code, or specialty. Locate natural pet care in your area.',
         })
     
+    def _generate_blog_list(self):
+        """Generate blog listing page."""
+        if not self.processor.blog_posts:
+            print("Skipping blog list (no published posts)...")
+            return
+            
+        print("Generating blog list...")
+        self._render_and_write(
+            'blog_list.html',
+            'blog/index.html',
+            {
+                'page_title': 'Blog - Holistic Pet Care Articles',
+                'page_description': 'Expert articles on holistic veterinary care, natural pet health, and integrative medicine for your pets.',
+                'posts': self.processor.blog_posts,
+                'request_path': '/blog/',
+            }
+        )
+        print("  Generated: blog/index.html")
+
+    def _generate_blog_detail_pages(self):
+        """Generate individual blog post pages."""
+        if not self.processor.blog_posts:
+            print("Skipping blog detail pages (no published posts)...")
+            return
+            
+        print("Generating blog post pages...")
+        for post in self.processor.blog_posts:
+            self._render_and_write(
+                'blog_detail.html',
+                f'blog/{post.slug}/index.html',
+                {
+                    'page_title': f'{post.title} | Holistic Vet Directory Blog',
+                    'page_description': post.meta_description or post.excerpt,
+                    'post': post,
+                    'request_path': f'/blog/{post.slug}/',
+                    'related_posts': [p for p in self.processor.blog_posts if p.slug != post.slug][:3],
+                }
+            )
+            print(f"  Generated: blog/{post.slug}/index.html")
+
     def _generate_static_pages(self):
         print("Generating static pages...")
         
@@ -796,6 +937,12 @@ class SiteGenerator:
         for vet in self.processor.vets:
             urls.append({'loc': f'/vet/{vet.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
         
+        # Add blog pages
+        if self.processor.blog_posts:
+            urls.append({'loc': '/blog/', 'priority': '0.7', 'changefreq': 'weekly'})
+            for post in self.processor.blog_posts:
+                urls.append({'loc': f'/blog/{post.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
+        
         sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
         sitemap_xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         
@@ -866,17 +1013,19 @@ def main():
     vets = loader.load_veterinarians()
     specialties = loader.load_specialties()
     states = loader.load_states()
+    blog_posts = loader.load_blog_posts()
     
     print(f"  Loaded {len(vets)} veterinarians")
     print(f"  Loaded {len(specialties)} specialties")
     print(f"  Loaded {len(states)} states")
+    print(f"  Loaded {len(blog_posts)} blog posts")
     print()
     
     if not vets:
         print("Warning: No veterinarian data found. Site will be generated with empty listings.")
     
     # Process data
-    processor = DataProcessor(vets, specialties, states)
+    processor = DataProcessor(vets, specialties, states, blog_posts)
     
     # Generate site
     generator = SiteGenerator(config, processor, output_dir)

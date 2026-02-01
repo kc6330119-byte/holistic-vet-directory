@@ -111,6 +111,29 @@ class StateData:
             self.slug = slugify(self.name)
 
 
+@dataclass
+class BlogPostData:
+    """Blog post data from Airtable."""
+    title: str
+    content: str = ""
+    excerpt: str = ""
+    author: str = ""
+    published_date: str = ""
+    featured_image: str = ""
+    meta_description: str = ""
+    status: str = "Draft"
+    slug: str = ""
+    airtable_id: str = ""
+
+    def __post_init__(self):
+        if not self.slug and self.title:
+            self.slug = slugify(self.title)
+        # Auto-generate excerpt from content if not provided
+        if not self.excerpt and self.content:
+            # Strip markdown and take first 150 chars
+            plain_text = self.content.replace('#', '').replace('*', '').replace('_', '')
+            self.excerpt = plain_text[:150].strip() + '...' if len(plain_text) > 150 else plain_text
+
 class AirtableDataLoader:
     """Loads data from Airtable for site generation."""
 
@@ -257,6 +280,54 @@ class AirtableDataLoader:
 
         logger.info(f"Loaded {len(states)} states from Airtable")
         return states
+
+    def load_blog_posts(self, only_published: bool = True) -> List[BlogPostData]:
+        """Load blog posts from Airtable."""
+        logger.info("Loading blog posts from Airtable...")
+        
+        try:
+            table = self.base.table("Blog Posts")
+        except Exception as e:
+            logger.warning(f"Blog Posts table not found: {e}")
+            return []
+
+        try:
+            if only_published:
+                try:
+                    records = table.all(formula="{Status} = 'Published'")
+                except Exception:
+                    records = table.all()
+            else:
+                records = table.all()
+        except Exception as e:
+            logger.error(f"Failed to load blog posts: {e}")
+            return []
+
+        posts = []
+        for record in records:
+            fields = record.get("fields", {})
+
+            post = BlogPostData(
+                title=fields.get("Title", ""),
+                content=fields.get("Content", ""),
+                excerpt=fields.get("Excerpt", ""),
+                author=fields.get("Author", ""),
+                published_date=fields.get("Published Date", ""),
+                featured_image=fields.get("Featured Image", ""),
+                meta_description=fields.get("Meta Description", ""),
+                status=fields.get("Status", "Draft"),
+                slug=fields.get("Slug", ""),
+                airtable_id=record.get("id", ""),
+            )
+
+            if post.title and (not only_published or post.status == "Published"):
+                posts.append(post)
+
+        # Sort by published date (newest first)
+        posts.sort(key=lambda p: p.published_date or "", reverse=True)
+        
+        logger.info(f"Loaded {len(posts)} blog posts from Airtable")
+        return posts
 
     def load_all(self) -> Tuple[List[VeterinarianData], List[SpecialtyData], List[StateData]]:
         """Load all data from Airtable."""
@@ -451,3 +522,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
