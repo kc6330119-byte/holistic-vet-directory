@@ -95,6 +95,7 @@ class Veterinarian:
     year_established: Optional[int] = None
     telehealth_available: bool = False
     featured_listing: bool = False
+    image_url: str = ""
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     slug: str = ""
@@ -286,6 +287,7 @@ class DataLoader:
                 year_established=av.year_established,
                 telehealth_available=av.telehealth_available,
                 featured_listing=av.featured_listing,
+                image_url=av.image_url,
                 latitude=av.latitude,
                 longitude=av.longitude,
                 slug=av.slug,

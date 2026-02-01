@@ -11,6 +11,12 @@
     <div class="vet-card__badge">Featured</div>
     {% endif %}
 
+    {% if vet.featured_listing and vet.image_url %}
+    <div class="vet-card__image">
+        <img src="{{ vet.image_url }}" alt="{{ vet.practice_name }}" loading="lazy">
+    </div>
+    {% endif %}
+
     <div class="vet-card__content">
         <!-- Header -->
         <header class="vet-card__header">

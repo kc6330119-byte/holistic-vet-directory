@@ -70,6 +70,7 @@ class VeterinarianData:
     year_established: Optional[int] = None
     telehealth_available: bool = False
     featured_listing: bool = False
+    image_url: str = ""
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     slug: str = ""
@@ -184,6 +185,7 @@ class AirtableDataLoader:
                 year_established=fields.get("Year Established"),
                 telehealth_available=fields.get("Telehealth Available", False),
                 featured_listing=fields.get("Featured Listing", False),
+                image_url=fields.get("Image URL", ""),
                 latitude=fields.get("Latitude"),
                 longitude=fields.get("Longitude"),
                 slug=fields.get("Slug", ""),
