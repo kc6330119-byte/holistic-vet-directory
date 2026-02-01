@@ -56,7 +56,7 @@ class SiteConfig:
     @classmethod
     def from_env(cls) -> 'SiteConfig':
         return cls(
-            site_name=os.getenv('SITE_NAME', cls.site_name),
+            site_name=os.getenv('SITE_TITLE', cls.site_name),
             site_description=os.getenv('SITE_DESCRIPTION', cls.site_description),
             site_url=os.getenv('SITE_URL', cls.site_url),
             build_env=os.getenv('BUILD_ENV', cls.build_env),
@@ -708,7 +708,7 @@ class SiteGenerator:
     def _generate_homepage(self):
         print("Generating homepage...")
         self._render_and_write('index.html', 'index.html', {
-            'page_title': 'Find Holistic Vets Near Me | Holistic Veterinarian Directory',
+            'page_title': 'Find Holistic Vets Near Me',
             'page_description': 'Find holistic vets near you. Browse our directory of integrative veterinarians offering acupuncture, herbal medicine, chiropractic care and natural treatments for pets.',
             'featured_states': self.processor.get_featured_states(8),
             'featured_specialties': self.processor.get_featured_specialties(8),
