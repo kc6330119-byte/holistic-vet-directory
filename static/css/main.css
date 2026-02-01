@@ -2020,23 +2020,30 @@ ul, ol {
    Featured Vet Card Image
    ============================================================================= */
 .vet-card__image {
-    width: 100%;
-    height: 160px;
+    width: calc(100% + 2rem);
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
     overflow: hidden;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
     margin: -1rem -1rem 1rem -1rem;
-    width: calc(100% + 2rem);
+    background: var(--color-bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .vet-card__image img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    object-position: center;
 }
 
 .vet-card:hover .vet-card__image img {
-    transform: scale(1.05);
+    opacity: 0.95;
 }
 
 .vet-card--featured {
