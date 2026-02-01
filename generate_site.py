@@ -460,6 +460,13 @@ class DataProcessor:
             featured.extend(non_featured[:limit - len(featured)])
         return featured[:limit]
     
+    def get_featured_vets(self, limit: int = 6) -> List[Veterinarian]:
+        """Get featured veterinarians for homepage."""
+        featured = [v for v in self.vets if v.featured_listing]
+        # Sort by practice name for consistency
+        featured = sorted(featured, key=lambda v: v.practice_name)
+        return featured[:limit]
+    
     def get_featured_specialties(self, limit: int = 8) -> List[Specialty]:
         return sorted(
             [s for s in self.specialties if s.vet_count > 0],
@@ -602,6 +609,7 @@ class SiteGenerator:
             'page_description': 'Find holistic vets near you. Browse our directory of integrative veterinarians offering acupuncture, herbal medicine, chiropractic care and natural treatments for pets.',
             'featured_states': self.processor.get_featured_states(8),
             'featured_specialties': self.processor.get_featured_specialties(8),
+            'featured_vets': self.processor.get_featured_vets(6),
             'recent_vets': sorted(self.processor.vets, key=lambda v: v.practice_name)[:6],
             'total_vets': len(self.processor.vets),
         })

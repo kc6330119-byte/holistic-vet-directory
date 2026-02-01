@@ -154,6 +154,27 @@
     </div>
 </section>
 
+<!-- Featured Veterinarians -->
+{% if featured_vets %}
+<section class="section section--featured-vets">
+    <div class="container">
+        <header class="section__header">
+            <h2 class="section__title">Featured Holistic Veterinarians</h2>
+            <p class="section__subtitle">
+                Trusted practices offering exceptional integrative care for your pets
+            </p>
+        </header>
+
+        <div class="vet-grid">
+            {% for vet in featured_vets %}
+                {% set featured = true %}
+                {% include 'partials/vet_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <!-- Ad: Middle -->
 {% set slot_type = 'infeed' %}
 {% include 'partials/adsense.html' %}
