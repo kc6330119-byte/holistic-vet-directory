@@ -39,6 +39,12 @@
          data-ad-client="{{ config.adsense_client_id }}"
          data-ad-slot="{{ config.adsense_slot_footer }}"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+    {% else %}
+    <!-- Ad placeholder while waiting for AdSense approval -->
+    <div class="ad-placeholder ad-placeholder--{{ slot_type }}">
+        <span>Advertisement</span>
+    </div>
     {% endif %}
 </div>
 {% elif not config.is_production %}
