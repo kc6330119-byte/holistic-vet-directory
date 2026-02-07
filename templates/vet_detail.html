@@ -87,9 +87,15 @@
                 <h2 class="vet-section__title">Specialties & Services</h2>
                 <div class="specialty-tags">
                     {% for spec in vet.specialties %}
-                    <a href="/specialty/{{ spec | slugify }}/" class="specialty-tag specialty-tag--large">
+                    {% set spec_slug = spec | slugify %}
+                    {% set is_valid_specialty = specialties | selectattr('slug', 'equalto', spec_slug) | list | length > 0 %}
+                    {% if is_valid_specialty %}
+                    <a href="/specialty/{{ spec_slug }}/" class="specialty-tag specialty-tag--large">
                         {{ spec }}
                     </a>
+                    {% else %}
+                    <span class="specialty-tag specialty-tag--large">{{ spec }}</span>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </section>

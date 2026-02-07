@@ -697,6 +697,19 @@ class SiteGenerator:
     
     def _render_and_write(self, template_name: str, output_path: str, context: Dict[str, Any]):
         template = self.env.get_template(template_name)
+        
+        # Auto-generate request_path for canonical URLs if not provided
+        if 'request_path' not in context:
+            # Convert output_path to URL path (e.g., "vets/index.html" -> "/vets/")
+            if output_path == 'index.html':
+                context['request_path'] = '/'
+            elif output_path == '404.html':
+                context['request_path'] = '/404.html'
+            elif output_path.endswith('/index.html'):
+                context['request_path'] = '/' + output_path.replace('/index.html', '/').replace('index.html', '')
+            else:
+                context['request_path'] = '/' + output_path
+        
         full_context = {**self.common_context, **context}
         html = template.render(**full_context)
         
