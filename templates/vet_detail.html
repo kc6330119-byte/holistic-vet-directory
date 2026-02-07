@@ -6,7 +6,7 @@
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "VeterinaryCare",
+    "@type": "Veterinarian",
     "name": "{{ vet.practice_name }}",
     "description": "{{ vet.practice_description | truncate_words(30) | replace('"', '\\"') }}",
     {% if vet.address or vet.city %}
@@ -30,7 +30,6 @@
     },
     {% endif %}
     {% if vet.specialties %}
-    "medicalSpecialty": [{% for spec in vet.specialties %}"{{ spec }}"{% if not loop.last %}, {% endif %}{% endfor %}],
     {% endif %}
     "priceRange": "$$"
 }
