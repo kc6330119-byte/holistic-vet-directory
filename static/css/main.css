@@ -2534,3 +2534,39 @@ ul, ol {
     height: 90px;
     margin: var(--space-4) auto;
 }
+
+/* -----------------------------------------------------------------------------
+   Blog Community CTA
+   ----------------------------------------------------------------------------- */
+.blog-post__community {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    margin: var(--space-8) 0;
+}
+
+.blog-post__community h3 {
+    color: white;
+    margin: 0 0 var(--space-2) 0;
+    font-size: var(--font-size-xl);
+}
+
+.blog-post__community p {
+    margin: 0 0 var(--space-4) 0;
+    opacity: 0.9;
+}
+
+.blog-post__community .btn {
+    background: white;
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.blog-post__community .btn:hover {
+    background: var(--color-gray-100);
+    color: var(--color-primary-dark);
+}
