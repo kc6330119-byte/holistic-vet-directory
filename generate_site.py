@@ -756,7 +756,7 @@ class SiteGenerator:
             
             self._render_and_write('state_list.html', f'vets/{state.slug}/index.html', {
                 'page_title': f'Holistic Veterinarians in {state.name}',
-                'page_description': f'Find {state.vet_count} holistic and integrative veterinarians in {state.name}.',
+                'page_description': f'Find {state.vet_count} holistic, homeopathic, and integrative veterinarians in {state.name}. Browse certified practitioners offering acupuncture, herbal medicine, chiropractic and natural pet care near you.',
                 'state': state,
                 'vets': sorted(state_vets, key=lambda v: (v.city, v.practice_name)),
                 'cities': cities,
@@ -776,7 +776,7 @@ class SiteGenerator:
                 city_name = city_vets[0].city
                 self._render_and_write('city_list.html', f'vets/{state.slug}/{city_slug}/index.html', {
                     'page_title': f'Holistic Veterinarians in {city_name}, {state.name}',
-                    'page_description': f'Find {len(city_vets)} holistic veterinarians in {city_name}, {state.name}.',
+                    'page_description': f'Find {len(city_vets)} holistic and integrative veterinarians in {city_name}, {state.name}. Discover homeopathic, naturopathic, and holistic vets offering natural pet care near you.',
                     'state': state,
                     'city_name': city_name,
                     'city_slug': city_slug,
