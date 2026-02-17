@@ -729,6 +729,7 @@ class SiteGenerator:
             'recent_vets': sorted(self.processor.vets, key=lambda v: v.practice_name)[:6],
             'total_vets': len(self.processor.vets),
             'total_states': len([s for s in self.processor.states if s.vet_count > 0]),
+            'total_posts': len([p for p in self.processor.blog_posts if p.status == 'Published']),
         })
     
     def _generate_vets_list(self):
