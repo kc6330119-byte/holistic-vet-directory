@@ -124,6 +124,7 @@ class BlogPostData:
     status: str = "Draft"
     slug: str = ""
     airtable_id: str = ""
+    featured: bool = False
 
     def __post_init__(self):
         if not self.slug and self.title:
@@ -318,6 +319,7 @@ class AirtableDataLoader:
                 status=fields.get("Status", "Draft"),
                 slug=fields.get("Slug", ""),
                 airtable_id=record.get("id", ""),
+                featured=bool(fields.get("Featured", False)),
             )
 
             if post.title and (not only_published or post.status == "Published"):

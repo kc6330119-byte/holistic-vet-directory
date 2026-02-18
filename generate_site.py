@@ -406,6 +406,7 @@ class DataLoader:
                     meta_description=ap.meta_description,
                     status=ap.status,
                     slug=ap.slug,
+                    featured=ap.featured,
                 )
                 posts.append(post)
             return posts
@@ -453,6 +454,7 @@ class BlogPost:
     meta_description: str = ""
     status: str = "Draft"
     slug: str = ""
+    featured: bool = False
     
     def __post_init__(self):
         if not self.slug:
@@ -720,6 +722,10 @@ class SiteGenerator:
     
     def _generate_homepage(self):
         print("Generating homepage...")
+        published_posts = [p for p in self.processor.blog_posts if p.status == 'Published']
+        featured_post = next((p for p in published_posts if p.featured), None)
+        if not featured_post and published_posts:
+            featured_post = published_posts[0]
         self._render_and_write('index.html', 'index.html', {
             'page_title': 'Find Holistic Vets Near Me',
             'page_description': 'Find holistic vets near you. Browse our directory of integrative veterinarians offering acupuncture, herbal medicine, chiropractic care and natural treatments for pets.',
@@ -729,7 +735,8 @@ class SiteGenerator:
             'recent_vets': sorted(self.processor.vets, key=lambda v: v.practice_name)[:6],
             'total_vets': len(self.processor.vets),
             'total_states': len([s for s in self.processor.states if s.vet_count > 0]),
-            'total_posts': len([p for p in self.processor.blog_posts if p.status == 'Published']),
+            'total_posts': len(published_posts),
+            'featured_post': featured_post,
         })
     
     def _generate_vets_list(self):
