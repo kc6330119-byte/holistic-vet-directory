@@ -2042,12 +2042,12 @@ ul, ol {
     display: flex;
     align-items: flex-start;
     gap: 2rem;
-    max-width: 900px;
+    max-width: 700px;
     margin: 0 auto;
 }
 
 .video-feature__panel {
-    flex: 1;
+    flex: 0 0 calc(50% - 1rem);
     min-width: 0;
 }
 
