@@ -2353,6 +2353,24 @@ ul, ol {
     margin-bottom: var(--space-2);
 }
 
+.blog-chart-wrap {
+    position: relative;
+    height: 380px;
+    margin: var(--space-8) 0;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+}
+
+.blog-chart-caption {
+    text-align: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-light);
+    margin-top: var(--space-3);
+    font-style: italic;
+}
+
 .blog-post__content blockquote {
     border-left: 4px solid var(--color-primary);
     padding-left: var(--space-4);

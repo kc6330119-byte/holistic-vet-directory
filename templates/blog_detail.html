@@ -147,3 +147,25 @@
     </div>
 </article>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var charts = document.querySelectorAll('canvas[data-chart]');
+    if (charts.length === 0) return;
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+    script.onload = function() {
+        charts.forEach(function(canvas) {
+            try {
+                var config = JSON.parse(canvas.getAttribute('data-chart'));
+                new Chart(canvas, config);
+            } catch(e) {
+                console.error('Chart initialization error:', e);
+            }
+        });
+    };
+    document.head.appendChild(script);
+});
+</script>
+{% endblock %}
