@@ -71,6 +71,7 @@ class VeterinarianData:
     telehealth_available: bool = False
     featured_listing: bool = False
     image_url: str = ""
+    logo_image_url: str = ""
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     slug: str = ""

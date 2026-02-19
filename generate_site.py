@@ -290,6 +290,7 @@ class DataLoader:
                 telehealth_available=av.telehealth_available,
                 featured_listing=av.featured_listing,
                 image_url=av.image_url,
+                logo_image_url=av.logo_image_url,
                 latitude=av.latitude,
                 longitude=av.longitude,
                 slug=av.slug,
