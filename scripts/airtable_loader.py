@@ -210,6 +210,7 @@ class AirtableDataLoader:
                 telehealth_available=fields.get("Telehealth Available", False),
                 featured_listing=fields.get("Featured Listing", False),
                 image_url=fields.get("Image URL", ""),
+                logo_image_url=fields.get("Logo Image URL", ""),
                 latitude=fields.get("Latitude"),
                 longitude=fields.get("Longitude"),
                 slug=fields.get("Slug", ""),

@@ -842,7 +842,25 @@ ul, ol {
 }
 
 .vet-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
     margin-bottom: var(--space-3);
+}
+
+.vet-card__header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.vet-card__logo {
+    max-height: 48px;
+    max-width: 120px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
 }
 
 .vet-card__title {
@@ -1255,7 +1273,25 @@ ul, ol {
 }
 
 .vet-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-6);
     margin-bottom: var(--space-6);
+}
+
+.vet-detail-header__text {
+    flex: 1;
+    min-width: 0;
+}
+
+.vet-detail-header__logo {
+    max-height: 80px;
+    max-width: 200px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
 }
 
 .vet-detail-header__title {

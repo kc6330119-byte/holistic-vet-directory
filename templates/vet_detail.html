@@ -55,25 +55,33 @@
         <main class="vet-detail-main">
             <!-- Header -->
             <header class="vet-detail-header">
-                {% if vet.featured_listing %}
-                <span class="featured-badge">Featured Practice</span>
+                <div class="vet-detail-header__text">
+                    {% if vet.featured_listing %}
+                    <span class="featured-badge">Featured Practice</span>
+                    {% endif %}
+
+                    <h1 class="vet-detail-header__title">{{ vet.practice_name }}</h1>
+
+                    {% if vet.veterinarian_names %}
+                    <p class="vet-detail-header__vets">
+                        <strong>Veterinarian{{ 's' if ',' in vet.veterinarian_names else '' }}:</strong>
+                        {{ vet.veterinarian_names }}
+                    </p>
+                    {% endif %}
+
+                    <p class="vet-detail-header__location">
+                        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 1C6.13 1 3 4.13 3 8c0 4.5 7 11 7 11s7-6.5 7-11c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+                        </svg>
+                        {{ vet.full_address }}
+                    </p>
+                </div>
+                {% if vet.logo_image_url %}
+                <img src="{{ vet.logo_image_url }}"
+                     alt="{{ vet.practice_name }} logo"
+                     class="vet-detail-header__logo"
+                     loading="lazy">
                 {% endif %}
-
-                <h1 class="vet-detail-header__title">{{ vet.practice_name }}</h1>
-
-                {% if vet.veterinarian_names %}
-                <p class="vet-detail-header__vets">
-                    <strong>Veterinarian{{ 's' if ',' in vet.veterinarian_names else '' }}:</strong>
-                    {{ vet.veterinarian_names }}
-                </p>
-                {% endif %}
-
-                <p class="vet-detail-header__location">
-                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M10 1C6.13 1 3 4.13 3 8c0 4.5 7 11 7 11s7-6.5 7-11c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
-                    </svg>
-                    {{ vet.full_address }}
-                </p>
             </header>
 
             <!-- Ad: Top -->
