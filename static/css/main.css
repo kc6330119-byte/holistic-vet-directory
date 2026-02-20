@@ -850,6 +850,7 @@ ul, ol {
     justify-content: space-between;
     gap: var(--space-3);
     margin-bottom: var(--space-3);
+    overflow: hidden;
 }
 
 .vet-card__header-text {
@@ -858,11 +859,15 @@ ul, ol {
 }
 
 .vet-card__logo {
+    display: block;
     max-height: 48px;
     max-width: 120px;
     width: auto;
-    max-width: 100%;
+    height: auto;
     object-fit: contain;
+    flex-shrink: 1;
+    min-width: 0;
+    align-self: flex-start;
     border-radius: var(--radius-sm);
 }
 
