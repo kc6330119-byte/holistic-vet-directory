@@ -802,11 +802,14 @@ ul, ol {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    overflow: hidden;
 }
 
 .vet-card {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    width: 100%;
     background: var(--color-bg-alt);
     border: 1px solid var(--color-border-light);
     border-radius: var(--radius-xl);
@@ -926,6 +929,8 @@ ul, ol {
     color: var(--color-text-light);
     font-size: var(--font-size-sm);
     margin-bottom: var(--space-3);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .vet-card__contact {
