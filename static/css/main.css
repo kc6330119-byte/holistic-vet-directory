@@ -858,8 +858,8 @@ ul, ol {
     max-height: 48px;
     max-width: 120px;
     width: auto;
+    max-width: 100%;
     object-fit: contain;
-    flex-shrink: 0;
     border-radius: var(--radius-sm);
 }
 
