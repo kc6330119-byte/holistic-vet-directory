@@ -1276,9 +1276,19 @@ ul, ol {
     padding: var(--space-8) 0;
 }
 
+/* On mobile, show sidebar (contact/map) before main content */
+.vet-detail-sidebar {
+    order: -1;
+}
+
 @media (min-width: 1024px) {
     .vet-detail-layout {
         grid-template-columns: 1fr 350px;
+    }
+
+    /* Restore natural order on desktop */
+    .vet-detail-sidebar {
+        order: 0;
     }
 }
 
