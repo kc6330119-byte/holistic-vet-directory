@@ -1010,6 +1010,12 @@ Sitemap: {self.config.site_url}/sitemap.xml
             shutil.copy(ads_txt_src, self.output_dir / 'ads.txt')
             print(f"  Copied: ads.txt")
 
+        # Copy llms.txt to root for AI/LLM visibility
+        llms_txt_src = static_src / 'llms.txt'
+        if llms_txt_src.exists():
+            shutil.copy(llms_txt_src, self.output_dir / 'llms.txt')
+            print(f"  Copied: llms.txt")
+
 
 def main():
     # Configuration

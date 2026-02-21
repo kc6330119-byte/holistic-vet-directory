@@ -1,0 +1,46 @@
+# Holistic Vet Directory
+
+> A comprehensive directory of holistic and integrative veterinarians across the United States. Pet owners can search by location and specialty to find veterinarians offering acupuncture, herbal medicine, chiropractic care, nutritional therapy, Traditional Chinese Veterinary Medicine (TCVM), homeopathy, laser therapy, and other natural and integrative approaches for dogs, cats, horses, and other animals.
+
+## Main Pages
+
+- [Homepage](https://holisticvetdirectory.com/): Search for holistic and integrative vets by location and specialty
+- [All Vets](https://holisticvetdirectory.com/vets/): Complete directory of holistic veterinarians in the US
+- [Specialties](https://holisticvetdirectory.com/specialties/): Overview of all holistic veterinary specialties
+- [Blog](https://holisticvetdirectory.com/blog/): Educational articles on holistic and integrative pet care
+- [About](https://holisticvetdirectory.com/about/): About the Holistic Vet Directory
+
+## Specialty Pages
+
+- [Acupuncture](https://holisticvetdirectory.com/specialty/acupuncture/): Veterinary acupuncture for pain, mobility, and chronic conditions in pets
+- [Herbal Medicine](https://holisticvetdirectory.com/specialty/herbal-medicine/): Botanical and plant-based medicine for animals
+- [Chiropractic](https://holisticvetdirectory.com/specialty/chiropractic/): Veterinary chiropractic care for dogs, cats, and horses
+- [Nutritional Therapy](https://holisticvetdirectory.com/specialty/nutritional-therapy/): Therapeutic nutrition, elimination diets, and food therapy for pets
+- [Traditional Chinese Veterinary Medicine (TCVM)](https://holisticvetdirectory.com/specialty/traditional-chinese-veterinary-medicine-tcvm/): Acupuncture, Chinese herbal medicine, and food therapy based on TCVM principles
+- [Homeopathy](https://holisticvetdirectory.com/specialty/homeopathy/): Veterinary homeopathy for chronic and constitutional conditions
+- [Laser Therapy](https://holisticvetdirectory.com/specialty/laser-therapy/): Low-level laser therapy (photobiomodulation) for pain, inflammation, and wound healing
+- [Physical Therapy / Rehabilitation](https://holisticvetdirectory.com/specialty/physical-therapy-rehabilitation/): Veterinary physical rehabilitation and hydrotherapy
+- [Naturopathy](https://holisticvetdirectory.com/specialty/naturopathy/): Naturopathic veterinary medicine
+- [Ozone Therapy](https://holisticvetdirectory.com/specialty/ozone-therapy/): Ozone therapy for infections, inflammation, and chronic disease in animals
+
+## Blog — Dog Allergies Topic Cluster
+
+- [Holistic Approaches to Dog Allergies: A Complete Guide](https://holisticvetdirectory.com/blog/holistic-approaches-dog-allergies-complete-guide/): Hub article covering allergy types, the bucket model, TCVM patterns, and holistic treatment options
+- [Dog Allergy Symptoms: How to Tell If Your Dog Has Allergies](https://holisticvetdirectory.com/blog/dog-allergy-symptoms-how-to-tell/): Recognizing allergy symptoms in dogs — skin, ears, digestion, and behavioral signs
+- [Food Allergies in Dogs: Symptoms, Diagnosis, and Holistic Management](https://holisticvetdirectory.com/blog/food-allergies-dogs-symptoms-diagnosis-holistic/): Food allergens, elimination diet protocols, and gut-health approaches
+- [Environmental Allergies in Dogs: Symptoms, Triggers, and Holistic Relief](https://holisticvetdirectory.com/blog/environmental-allergies-dogs-symptoms-triggers-holistic/): Canine atopic dermatitis, seasonal and perennial triggers, and skin barrier support
+- [Natural Remedies for Dog Allergies: What Holistic Vets Recommend](https://holisticvetdirectory.com/blog/natural-remedies-dog-allergies-holistic-vets/): Evidence-based natural remedies including omega-3s, probiotics, quercetin, and topical options
+- [How a Holistic Vet Can Help Your Allergic Dog — and How to Find One](https://holisticvetdirectory.com/blog/holistic-vet-dog-allergies-how-to-find/): What holistic vets do differently for allergies and how to find one
+
+## Blog — Other Articles
+
+- [Valley Fever in Dogs: Symptoms, Diagnosis, and How Holistic Care Can Help](https://holisticvetdirectory.com/blog/valley-fever-dogs-symptoms-treatment/): Coccidioidomycosis in dogs — geographic risk, symptoms, diagnosis, and integrative support
+- [Benefits of Acupuncture for Dogs and Cats](https://holisticvetdirectory.com/blog/benefits-acupuncture-dogs-cats/): How veterinary acupuncture works and what conditions it treats
+- [What to Expect at Your First Holistic Vet Visit](https://holisticvetdirectory.com/blog/what-to-expect-first-holistic-vet-visit/): A guide for first-time holistic vet patients
+- [Understanding Pet Nutrition Therapy](https://holisticvetdirectory.com/blog/understanding-pet-nutrition-therapy/): How therapeutic nutrition differs from standard pet feeding
+- [When to Consider a Holistic Vet for Your Pet](https://holisticvetdirectory.com/blog/when-to-consider-holistic-vet/): Signs that your pet may benefit from integrative veterinary care
+- [What Is Holistic Veterinary Medicine?](https://holisticvetdirectory.com/blog/what-is-holistic-veterinary-medicine/): An introduction to holistic and integrative veterinary practice
+
+## Optional
+
+- [Sitemap](https://holisticvetdirectory.com/sitemap.xml)
