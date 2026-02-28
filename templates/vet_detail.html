@@ -34,6 +34,42 @@
     "priceRange": "$$"
 }
 </script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ config.site_url }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Find a Vet",
+            "item": "{{ config.site_url }}/vets/"
+        }{% if state %},
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ state.name }}",
+            "item": "{{ config.site_url }}/vets/{{ state.slug }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "{{ vet.practice_name }}"
+        }{% else %},
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ vet.practice_name }}"
+        }{% endif %}
+    ]
+}
+</script>
 {% endblock %}
 
 {% block content %}

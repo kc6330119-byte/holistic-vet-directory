@@ -11,6 +11,31 @@
     "description": "{{ specialty.description | truncate_words(30) | replace('"', '\\"') }}"
 }
 </script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ config.site_url }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Specialties",
+            "item": "{{ config.site_url }}/specialties/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ specialty.name }}"
+        }
+    ]
+}
+</script>
 {% endblock %}
 
 {% block content %}

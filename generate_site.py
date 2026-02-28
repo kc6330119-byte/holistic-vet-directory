@@ -105,11 +105,16 @@ class Veterinarian:
     def __post_init__(self):
         if not self.slug:
             self.slug = slugify(self.practice_name)
-        
+
         # Ensure list fields are actually lists (handle pipe-delimited strings from Airtable)
         self.specialties = self._ensure_list(self.specialties)
         self.certification_bodies = self._ensure_list(self.certification_bodies)
         self.species_treated = self._ensure_list(self.species_treated)
+
+        # Auto-generate a description only when Airtable has none or a very thin one (<150 chars).
+        # Any description 150+ characters is treated as real content and left untouched.
+        if len(self.practice_description.strip()) < 150:
+            self.practice_description = self._generate_auto_description()
     
     @staticmethod
     def _ensure_list(value) -> List[str]:
@@ -119,6 +124,63 @@ class Veterinarian:
         if isinstance(value, str) and value:
             return [item.strip() for item in value.split('|') if item.strip()]
         return []
+
+    def _generate_auto_description(self) -> str:
+        """Build a rich description from available fields when Airtable has none."""
+        parts = []
+
+        # Opening sentence — specialties + location
+        if self.specialties and self.city and self.state:
+            specs = self.specialties[:3]
+            if len(specs) > 1:
+                spec_str = ", ".join(specs[:-1]) + " and " + specs[-1]
+            else:
+                spec_str = specs[0]
+            if len(self.specialties) > 3:
+                spec_str += f", and {len(self.specialties) - 3} additional modalities"
+            parts.append(
+                f"{self.practice_name} is a holistic veterinary practice in {self.city}, {self.state}, "
+                f"offering {spec_str}."
+            )
+        elif self.specialties:
+            parts.append(
+                f"{self.practice_name} is a holistic veterinary practice specializing in "
+                f"{self.specialties[0]}."
+            )
+        elif self.city and self.state:
+            parts.append(
+                f"{self.practice_name} is a holistic veterinary practice in {self.city}, {self.state}."
+            )
+        else:
+            parts.append(f"{self.practice_name} is a holistic and integrative veterinary practice.")
+
+        # Species treated
+        if self.species_treated:
+            species_lower = [s.lower() for s in self.species_treated]
+            if len(species_lower) == 1:
+                parts.append(f"The practice provides integrative care for {species_lower[0]}.")
+            else:
+                species_str = ", ".join(species_lower[:-1]) + f" and {species_lower[-1]}"
+                parts.append(f"The practice provides integrative care for {species_str}.")
+
+        # Certifications
+        if self.certification_bodies:
+            cert_str = ", ".join(self.certification_bodies[:2])
+            parts.append(f"Certified through {cert_str}.")
+
+        # Telehealth
+        if self.telehealth_available:
+            parts.append("Telehealth consultations are available for remote care.")
+
+        # Years in practice
+        if self.year_established:
+            years = datetime.now().year - self.year_established
+            if years > 0:
+                parts.append(
+                    f"Established in {self.year_established}, with {years} years serving the community."
+                )
+
+        return " ".join(parts)
     
     @property
     def full_address(self) -> str:
