@@ -30,3 +30,10 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.bak
+
+# Airtable exports and outreach data (contain personal contact data)
+data/airtable_*.csv
+data/*_export.csv
+data/*_export_*.csv
+data/outreach_sent.json
+data/outreach_failed.json
