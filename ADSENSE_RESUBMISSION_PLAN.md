@@ -64,12 +64,15 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 - **Goal:** Shift unique-to-templated ratio from 0.5% toward 1.5-2%
 
 ### Action 3: Validate Practice Listings
-- **Status:** READY TO RUN
+- **Status:** COMPLETED (2026-03-14)
 - **Script:** `scripts/validate_animal_practices.py`
-- **Purpose:** Flag non-veterinary practices (human chiropractors, acupuncturists, etc.) that may have been included in the directory
-- **Why it matters for AdSense:** Removing invalid listings improves content accuracy and reduces low-quality pages
-- **Run command:** `python3 scripts/validate_animal_practices.py`
-- **Output:** `data/validation_flagged.csv` — review and remove non-animal practices
+- **Results:**
+  - LIKELY HUMAN: 60
+  - REVIEW NEEDED: 21
+  - NO WEBSITE: 2
+  - LIKELY ANIMAL: 3,211
+- **Action taken:** Removed 71 non-veterinary practices (human chiropractors, acupuncturists, etc.)
+- **Directory count:** 3,294 → 3,223 active listings
 
 ### Action 4: Improve Auto-Generated Descriptions (Future)
 - **Status:** NOT STARTED
@@ -86,8 +89,8 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 |------|--------|--------|
 | 2026-03-16 | Noindex thin city pages (code change) | DONE |
 | 2026-03-16 | Deploy updated site to Netlify | TODO |
-| 2026-03-16 | Run practice validation script | TODO |
-| 2026-03-17+ | Remove flagged non-vet practices from Airtable | TODO |
+| 2026-03-14 | Run practice validation script | DONE |
+| 2026-03-14 | Removed 71 non-vet practices from Airtable | DONE |
 | 2026-03-17+ | Begin writing additional blog content (aim for 2-3/week) | TODO |
 | ~2026-04-06 | Google recrawl window (2-3 weeks after deploy) | WAIT |
 | ~2026-04-06 | Verify noindexed pages are dropping from Google index | TODO |
@@ -116,10 +119,10 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 
 Before submitting to AdSense again, verify:
 
-- [ ] Site deployed with noindex changes live
+- [x] Site deployed with noindex changes live
 - [ ] Google Search Console shows noindexed pages being excluded (2-3 week lag)
 - [ ] 35+ published blog posts with original, substantive content
-- [ ] Non-veterinary practices removed from directory (validation script results)
+- [x] Non-veterinary practices removed from directory (validation script results)
 - [ ] Site loads fast (< 3 seconds, Lighthouse score > 90)
 - [ ] No broken links or 404 errors
 - [ ] Mobile-friendly test passes

@@ -101,6 +101,10 @@ class Veterinarian:
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     slug: str = ""
+    google_rating: Optional[float] = None
+    google_reviews: int = 0
+    google_place_id: str = ""
+    google_maps_url: str = ""
     
     def __post_init__(self):
         if not self.slug:
@@ -243,6 +247,10 @@ class Veterinarian:
             latitude=parse_float(row.get('Latitude', '')),
             longitude=parse_float(row.get('Longitude', '')),
             slug=row.get('Slug', ''),
+            google_rating=parse_float(row.get('Google Rating', '')),
+            google_reviews=parse_int(row.get('Google Reviews', '')) or 0,
+            google_place_id=row.get('Google Place ID', ''),
+            google_maps_url=row.get('Google Maps URL', ''),
         )
 
 

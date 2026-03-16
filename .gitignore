@@ -47,5 +47,9 @@ data/validation_results.csv
 data/validation_flagged.csv
 data/validation_progress.json
 
+# Google ratings script output
+data/google_ratings.csv
+data/google_ratings_progress.json
+
 # Airtable CSV exports (root-level, contain personal data)
 Veterinarians-*.csv

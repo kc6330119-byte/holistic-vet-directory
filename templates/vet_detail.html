@@ -29,6 +29,14 @@
         "longitude": {{ vet.longitude }}
     },
     {% endif %}
+    {% if vet.google_rating and vet.google_reviews %}
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ vet.google_rating }}",
+        "reviewCount": "{{ vet.google_reviews }}",
+        "bestRating": "5"
+    },
+    {% endif %}
     {% if vet.specialties %}
     {% endif %}
     "priceRange": "$$"
@@ -299,6 +307,25 @@
                 </div>
                 {% endif %}
             </div>
+
+            <!-- Google Rating -->
+            {% if vet.google_rating %}
+            <div class="info-card">
+                <h3 class="info-card__title">Google Rating</h3>
+                <p class="info-card__value" style="color: #F4A261; letter-spacing: 2px;">
+                    {% for i in range(1, 6) %}{% if i <= vet.google_rating|int %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}
+                </p>
+                <p class="info-card__value">{{ vet.google_rating }} / 5</p>
+                {% if vet.google_reviews %}
+                <p class="info-card__note">Based on {{ vet.google_reviews }} Google {{ 'review' if vet.google_reviews == 1 else 'reviews' }}</p>
+                {% endif %}
+                {% if vet.google_maps_url %}
+                <a href="{{ vet.google_maps_url }}" target="_blank" rel="noopener" class="text-link" style="display: block; margin-top: 0.5rem; font-size: 0.85rem;">
+                    View on Google Maps &rarr;
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
 
             <!-- Additional Info -->
             {% if vet.year_established %}
