@@ -48,6 +48,16 @@
         </div>
         {% endif %}
 
+        <!-- Google Rating -->
+        {% if vet.google_rating and not compact %}
+        <div class="vet-card__rating">
+            <span style="color: #F4A261;">&#9733; {{ vet.google_rating }}</span>
+            {% if vet.google_reviews %}
+            <span class="vet-card__review-count">({{ vet.google_reviews }} {{ 'review' if vet.google_reviews == 1 else 'reviews' }})</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
         <!-- Species Treated -->
         {% if vet.species_treated and not compact %}
         <div class="vet-card__species">

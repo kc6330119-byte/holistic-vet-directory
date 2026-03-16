@@ -74,12 +74,35 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 - **Action taken:** Removed 71 non-veterinary practices (human chiropractors, acupuncturists, etc.)
 - **Directory count:** 3,294 → 3,223 active listings
 
-### Action 4: Improve Auto-Generated Descriptions (Future)
-- **Status:** NOT STARTED
-- **Goal:** Rewrite the auto-description generator to produce more varied, longer, genuinely useful descriptions
-- **Current pattern:** Formulaic sentence structure detectable as boilerplate
-- **Target:** More natural language variation, 250+ words, unique angles per practice
-- **Priority:** Lower — focus on Actions 1-3 first
+### Action 4: Improve Auto-Generated Descriptions
+- **Status:** COMPLETED (2026-03-16)
+- **Change:** Rewrote `_generate_auto_description()` in `generate_site.py` with deterministic template variation
+- **How it works:** Uses MD5 hash of each vet's slug to select from multiple sentence patterns, so descriptions read naturally and vary across practices but rebuild identically every time
+- **Improvements over original:**
+  - 6 opening sentence variations (was 1 fixed pattern)
+  - Rich specialty descriptions explaining what each modality does and treats (14 specialties covered)
+  - Varied phrasing for species, certifications, telehealth, and years in practice
+  - Google rating data woven into descriptions when available
+  - 4 closing sentence variations
+  - Target 150-250 words (was ~100 words)
+- **Scope:** Applies to 415 vets with thin/empty Airtable descriptions (< 150 chars). Existing good descriptions remain untouched.
+
+### Action 5: Add Google Ratings to Vet Pages
+- **Status:** COMPLETED (2026-03-16)
+- **Script:** `scripts/fetch_google_ratings.py`
+- **Results:**
+  - 3,157 vets found with ratings (98%)
+  - 3,127 HIGH confidence matches pushed to Airtable
+  - 30 MEDIUM confidence records excluded (address mismatches)
+  - 0 LOW confidence matches
+- **Site changes:**
+  - `templates/vet_detail.html` — star rating display in sidebar + Google Maps link
+  - `templates/vet_detail.html` — AggregateRating schema markup (enables star snippets in Google search results)
+  - `generate_site.py` — Veterinarian dataclass reads Google Rating, Google Reviews, Google Place ID, Google Maps URL fields
+  - `scripts/airtable_loader.py` — VeterinarianData dataclass reads Google fields from Airtable API
+- **Airtable fields added:** Google Rating (number), Google Reviews (number), Google Place ID (text), Google Maps URL (URL)
+- **Cost:** ~$81, covered by Google Maps Platform $200/month free credit
+- **Maintenance:** Re-run monthly to refresh ratings (Google requires data not be cached beyond 30 days)
 
 ---
 
@@ -88,9 +111,13 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 | Date | Action | Status |
 |------|--------|--------|
 | 2026-03-16 | Noindex thin city pages (code change) | DONE |
-| 2026-03-16 | Deploy updated site to Netlify | TODO |
+| 2026-03-16 | Deploy site with noindex changes | DONE |
 | 2026-03-14 | Run practice validation script | DONE |
 | 2026-03-14 | Removed 71 non-vet practices from Airtable | DONE |
+| 2026-03-16 | Fetch Google ratings for 3,223 vets (3,127 pushed to Airtable) | DONE |
+| 2026-03-16 | Rewrite auto-description generator (415 thin descriptions) | DONE |
+| 2026-03-16 | Add Google rating display + AggregateRating schema to vet pages | DONE |
+| 2026-03-16 | Deploy site with ratings + descriptions | PENDING |
 | 2026-03-17+ | Begin writing additional blog content (aim for 2-3/week) | TODO |
 | ~2026-04-06 | Google recrawl window (2-3 weeks after deploy) | WAIT |
 | ~2026-04-06 | Verify noindexed pages are dropping from Google index | TODO |
@@ -120,9 +147,12 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 Before submitting to AdSense again, verify:
 
 - [x] Site deployed with noindex changes live
+- [x] Google ratings added to 3,127 vet pages with AggregateRating schema
+- [x] Auto-description generator rewritten with varied, richer content
+- [x] Non-veterinary practices removed from directory (71 removed)
+- [ ] Deploy site with ratings + improved descriptions
 - [ ] Google Search Console shows noindexed pages being excluded (2-3 week lag)
 - [ ] 35+ published blog posts with original, substantive content
-- [x] Non-veterinary practices removed from directory (validation script results)
 - [ ] Site loads fast (< 3 seconds, Lighthouse score > 90)
 - [ ] No broken links or 404 errors
 - [ ] Mobile-friendly test passes
