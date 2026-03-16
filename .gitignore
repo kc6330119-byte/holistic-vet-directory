@@ -41,3 +41,11 @@ data/outreach_failed.json
 data/scraped_emails.csv
 data/scrape_progress.json
 data/airtable_update_log.json
+
+# Validation script output
+data/validation_results.csv
+data/validation_flagged.csv
+data/validation_progress.json
+
+# Airtable CSV exports (root-level, contain personal data)
+Veterinarians-*.csv

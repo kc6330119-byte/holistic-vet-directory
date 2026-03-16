@@ -846,6 +846,7 @@ class SiteGenerator:
                     continue
                 
                 city_name = city_vets[0].city
+                noindex = len(city_vets) < 3
                 self._render_and_write('city_list.html', f'vets/{state.slug}/{city_slug}/index.html', {
                     'page_title': f'Holistic Veterinarians in {city_name}, {state.name}',
                     'page_description': f'Find {len(city_vets)} holistic and integrative veterinarians in {city_name}, {state.name}. Discover homeopathic, naturopathic, and holistic vets offering natural pet care near you.',
@@ -853,6 +854,7 @@ class SiteGenerator:
                     'city_name': city_name,
                     'city_slug': city_slug,
                     'vets': sorted(city_vets, key=lambda v: v.practice_name),
+                    'noindex': noindex,
                 })
     
     def _generate_vet_detail_pages(self):
