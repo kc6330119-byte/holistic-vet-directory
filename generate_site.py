@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import csv
+import hashlib
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -130,59 +131,336 @@ class Veterinarian:
         return []
 
     def _generate_auto_description(self) -> str:
-        """Build a rich description from available fields when Airtable has none."""
-        parts = []
+        """Build a varied, detailed description from available fields."""
+        # Use slug hash to deterministically select template variations
+        # so the same vet always gets the same description across rebuilds.
+        h = int(hashlib.md5(self.slug.encode()).hexdigest(), 16)
 
-        # Opening sentence — specialties + location
-        if self.specialties and self.city and self.state:
-            specs = self.specialties[:3]
-            if len(specs) > 1:
-                spec_str = ", ".join(specs[:-1]) + " and " + specs[-1]
+        parts = []
+        city = self.city
+        state = self.state
+        name = self.practice_name
+        specs = self.specialties
+        species = [s.lower() for s in self.species_treated]
+        certs = self.certification_bodies
+        current_year = datetime.now().year
+        years_open = (current_year - self.year_established) if self.year_established else 0
+
+        # ── Specialty descriptions for richer content ──────────────────────
+        SPECIALTY_INFO = {
+            "Acupuncture": (
+                "acupuncture, a time-tested technique that uses fine needles at specific "
+                "points on the body to relieve pain, reduce inflammation, and promote "
+                "natural healing"
+            ),
+            "Chiropractic": (
+                "chiropractic care, which focuses on the alignment of the spine and "
+                "joints to improve mobility, nerve function, and overall structural health"
+            ),
+            "Herbal Medicine": (
+                "herbal medicine, drawing on plant-based formulas to address conditions "
+                "ranging from digestive disorders to skin problems and immune support"
+            ),
+            "Homeopathy": (
+                "homeopathy, a gentle system of medicine that uses highly diluted "
+                "remedies to stimulate the body's own healing response"
+            ),
+            "Nutritional Therapy": (
+                "nutritional therapy, crafting individualized diet plans and targeted "
+                "supplements to support each patient's specific health needs"
+            ),
+            "Physical Therapy/Rehabilitation": (
+                "physical rehabilitation, including therapeutic exercises and manual "
+                "therapies to help animals recover from surgery, injury, or chronic "
+                "mobility issues"
+            ),
+            "Traditional Chinese Veterinary Medicine (TCVM)": (
+                "Traditional Chinese Veterinary Medicine, a comprehensive system that "
+                "integrates acupuncture, herbal formulas, food therapy, and Tui-na "
+                "massage to restore balance and wellness"
+            ),
+            "Laser Therapy": (
+                "laser therapy, a non-invasive treatment that uses focused light energy "
+                "to reduce pain, decrease inflammation, and accelerate tissue repair"
+            ),
+            "Massage Therapy": (
+                "therapeutic massage, which helps relieve muscle tension, improve "
+                "circulation, and reduce stress and anxiety in animals"
+            ),
+            "Aromatherapy": (
+                "aromatherapy, using carefully selected essential oils to support "
+                "emotional well-being, respiratory health, and natural healing"
+            ),
+            "Energy Medicine (Reiki, etc.)": (
+                "energy medicine including Reiki, a gentle hands-on practice that "
+                "promotes relaxation, stress relief, and energetic balance"
+            ),
+            "Ozone Therapy": (
+                "ozone therapy, an advanced treatment that uses medical-grade ozone "
+                "to support immune function, fight infection, and enhance oxygen delivery"
+            ),
+            "Prolotherapy": (
+                "prolotherapy, a regenerative injection technique that stimulates the "
+                "body's natural repair process to strengthen weakened joints and connective tissue"
+            ),
+            "Naturopathy": (
+                "naturopathic veterinary care, an approach that emphasizes the body's "
+                "inherent ability to heal using natural therapies and minimal intervention"
+            ),
+        }
+
+        # ── Opening sentence (6 variations) ────────────────────────────────
+        variant = h % 6
+
+        if specs and city and state:
+            top_spec = specs[0]
+            if variant == 0:
+                parts.append(
+                    f"Located in {city}, {state}, {name} takes an integrative approach "
+                    f"to veterinary medicine, combining conventional care with natural "
+                    f"healing modalities."
+                )
+            elif variant == 1:
+                parts.append(
+                    f"{name} brings holistic and integrative veterinary care to the "
+                    f"{city}, {state} community, offering treatments that address "
+                    f"the whole animal rather than just individual symptoms."
+                )
+            elif variant == 2:
+                parts.append(
+                    f"Pet owners in {city}, {state} looking for a veterinarian who "
+                    f"goes beyond conventional medicine will find a comprehensive "
+                    f"integrative practice at {name}."
+                )
+            elif variant == 3:
+                parts.append(
+                    f"At {name} in {city}, {state}, the focus is on treating the whole "
+                    f"patient. The practice blends modern veterinary science with "
+                    f"natural therapies to support long-term health and well-being."
+                )
+            elif variant == 4:
+                parts.append(
+                    f"{name} is an integrative veterinary practice in {city}, {state}, "
+                    f"where conventional diagnostics and treatments work alongside "
+                    f"holistic modalities to give patients the best of both worlds."
+                )
             else:
-                spec_str = specs[0]
-            if len(self.specialties) > 3:
-                spec_str += f", and {len(self.specialties) - 3} additional modalities"
+                parts.append(
+                    f"For pet owners in the {city}, {state} area seeking alternatives "
+                    f"to a purely conventional approach, {name} offers holistic "
+                    f"veterinary care rooted in both science and natural medicine."
+                )
+        elif city and state:
             parts.append(
-                f"{self.practice_name} is a holistic veterinary practice in {self.city}, {self.state}, "
-                f"offering {spec_str}."
-            )
-        elif self.specialties:
-            parts.append(
-                f"{self.practice_name} is a holistic veterinary practice specializing in "
-                f"{self.specialties[0]}."
-            )
-        elif self.city and self.state:
-            parts.append(
-                f"{self.practice_name} is a holistic veterinary practice in {self.city}, {self.state}."
+                f"{name} provides holistic veterinary care to the {city}, {state} "
+                f"community, focusing on natural approaches that support the whole animal."
             )
         else:
-            parts.append(f"{self.practice_name} is a holistic and integrative veterinary practice.")
+            parts.append(
+                f"{name} is a holistic veterinary practice dedicated to integrative "
+                f"care that treats the whole animal, not just symptoms."
+            )
 
-        # Species treated
-        if self.species_treated:
-            species_lower = [s.lower() for s in self.species_treated]
-            if len(species_lower) == 1:
-                parts.append(f"The practice provides integrative care for {species_lower[0]}.")
+        # ── Specialty details (up to 3, with rich descriptions) ────────────
+        if specs:
+            described = []
+            for spec in specs[:3]:
+                info = SPECIALTY_INFO.get(spec)
+                if info:
+                    described.append(info)
+
+            if described:
+                transition_variant = (h >> 4) % 4
+                if transition_variant == 0:
+                    intro = "The practice offers "
+                elif transition_variant == 1:
+                    intro = "Services include "
+                elif transition_variant == 2:
+                    intro = "Among the treatments available, the practice provides "
+                else:
+                    intro = "Patients can benefit from "
+
+                if len(described) == 1:
+                    parts.append(f"{intro}{described[0]}.")
+                elif len(described) == 2:
+                    parts.append(f"{intro}{described[0]}. The team also provides {described[1]}.")
+                else:
+                    parts.append(
+                        f"{intro}{described[0]}. Additionally, the practice offers "
+                        f"{described[1]}, as well as {described[2]}."
+                    )
+
+            # Mention remaining specialties not described in detail
+            remaining = [s for s in specs[3:] if s not in [sp for sp in specs[:3]]]
+            if remaining:
+                if len(remaining) == 1:
+                    parts.append(f"The practice also offers {remaining[0].lower()}.")
+                else:
+                    rem_str = ", ".join(s.lower() for s in remaining[:-1])
+                    parts.append(
+                        f"Additional services include {rem_str} and "
+                        f"{remaining[-1].lower()}."
+                    )
+
+        # ── Species treated (varied phrasing) ──────────────────────────────
+        if species:
+            species_variant = (h >> 8) % 5
+            if len(species) == 1:
+                sp = species[0]
+                if species_variant % 2 == 0:
+                    parts.append(f"The practice focuses on holistic care for {sp}.")
+                else:
+                    parts.append(
+                        f"The veterinary team specializes in providing integrative "
+                        f"treatment for {sp}."
+                    )
             else:
-                species_str = ", ".join(species_lower[:-1]) + f" and {species_lower[-1]}"
-                parts.append(f"The practice provides integrative care for {species_str}.")
+                if len(species) > 2:
+                    sp_str = ", ".join(species[:-1]) + f", and {species[-1]}"
+                else:
+                    sp_str = f"{species[0]} and {species[1]}"
 
-        # Certifications
-        if self.certification_bodies:
-            cert_str = ", ".join(self.certification_bodies[:2])
-            parts.append(f"Certified through {cert_str}.")
+                if species_variant == 0:
+                    parts.append(
+                        f"The practice welcomes {sp_str}, providing each patient with "
+                        f"an individualized care plan tailored to their species and needs."
+                    )
+                elif species_variant == 1:
+                    parts.append(
+                        f"Integrative care is available for {sp_str}, with treatment "
+                        f"plans designed around the unique physiology and health needs "
+                        f"of each animal."
+                    )
+                elif species_variant == 2:
+                    parts.append(
+                        f"The team treats {sp_str}, taking a whole-patient approach "
+                        f"that considers diet, environment, and lifestyle alongside "
+                        f"clinical symptoms."
+                    )
+                elif species_variant == 3:
+                    parts.append(
+                        f"Patients include {sp_str}. Each animal receives a "
+                        f"comprehensive evaluation to determine the most effective "
+                        f"combination of conventional and holistic therapies."
+                    )
+                else:
+                    parts.append(
+                        f"Whether your companion is a {species[0]} or a {species[-1]}, "
+                        f"the practice offers integrative care tailored to their "
+                        f"individual health profile."
+                    )
 
-        # Telehealth
-        if self.telehealth_available:
-            parts.append("Telehealth consultations are available for remote care.")
+        # ── Certifications (woven into context) ───────────────────────────
+        if certs:
+            cert_variant = (h >> 12) % 3
+            cert_list = certs[:3]
+            cert_str = ", ".join(cert_list)
 
-        # Years in practice
-        if self.year_established:
-            years = datetime.now().year - self.year_established
-            if years > 0:
+            if cert_variant == 0:
                 parts.append(
-                    f"Established in {self.year_established}, with {years} years serving the community."
+                    f"The veterinary team holds certifications from {cert_str}, "
+                    f"reflecting advanced training in holistic and integrative modalities."
                 )
+            elif cert_variant == 1:
+                parts.append(
+                    f"Professional credentials include certification through {cert_str}, "
+                    f"demonstrating a commitment to evidence-based integrative practice."
+                )
+            else:
+                parts.append(
+                    f"With credentials from {cert_str}, the practitioners bring "
+                    f"specialized training that goes beyond what is covered in "
+                    f"conventional veterinary programs."
+                )
+
+        # ── Google rating ──────────────────────────────────────────────────
+        if self.google_rating and self.google_reviews:
+            rating_variant = (h >> 16) % 3
+            if rating_variant == 0:
+                parts.append(
+                    f"The practice has earned a {self.google_rating}-star rating on "
+                    f"Google from {self.google_reviews} reviews, reflecting the trust "
+                    f"and satisfaction of the pet owners they serve."
+                )
+            elif rating_variant == 1:
+                parts.append(
+                    f"Pet owners have rated {name} {self.google_rating} out of 5 stars "
+                    f"on Google across {self.google_reviews} reviews."
+                )
+            else:
+                parts.append(
+                    f"With a {self.google_rating}-star Google rating based on "
+                    f"{self.google_reviews} reviews, {name} is well regarded by "
+                    f"the local pet-owner community."
+                )
+
+        # ── Telehealth ─────────────────────────────────────────────────────
+        if self.telehealth_available:
+            tele_variant = (h >> 20) % 3
+            if tele_variant == 0:
+                parts.append(
+                    "For pet owners who cannot visit in person, the practice also "
+                    "offers telehealth consultations, making it easier to access "
+                    "holistic guidance from home."
+                )
+            elif tele_variant == 1:
+                parts.append(
+                    "Remote consultations are available through telehealth, allowing "
+                    "the veterinary team to provide initial assessments, follow-up "
+                    "care, and nutritional guidance virtually."
+                )
+            else:
+                parts.append(
+                    "Telehealth appointments are available for clients who prefer "
+                    "the convenience of virtual consultations or live outside the "
+                    "immediate area."
+                )
+
+        # ── Years in practice ──────────────────────────────────────────────
+        if years_open > 0:
+            year_variant = (h >> 24) % 3
+            if year_variant == 0:
+                parts.append(
+                    f"Established in {self.year_established}, the practice has spent "
+                    f"{years_open} years building a reputation for compassionate, "
+                    f"integrative animal care."
+                )
+            elif year_variant == 1:
+                parts.append(
+                    f"The practice has been serving the community since "
+                    f"{self.year_established}, bringing {years_open} years of "
+                    f"experience in holistic veterinary medicine."
+                )
+            else:
+                parts.append(
+                    f"With {years_open} years in practice since {self.year_established}, "
+                    f"the team brings deep experience in blending conventional and "
+                    f"natural approaches to animal health."
+                )
+
+        # ── Closing sentence (4 variations) ────────────────────────────────
+        close_variant = (h >> 28) % 4
+        if close_variant == 0 and city:
+            parts.append(
+                f"Pet owners in the {city} area are encouraged to call or visit "
+                f"the website to learn more about the integrative services available."
+            )
+        elif close_variant == 1:
+            parts.append(
+                "Whether dealing with a chronic condition, recovering from surgery, "
+                "or simply looking for a more natural approach to wellness, this "
+                "practice offers options worth exploring."
+            )
+        elif close_variant == 2:
+            parts.append(
+                "A consultation is a good first step for pet owners interested "
+                "in learning how holistic care might benefit their animal companion."
+            )
+        else:
+            parts.append(
+                "The practice welcomes new clients and is happy to discuss how an "
+                "integrative approach can support your pet's health and quality of life."
+            )
 
         return " ".join(parts)
     
