@@ -75,6 +75,10 @@ class VeterinarianData:
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     slug: str = ""
+    google_rating: Optional[float] = None
+    google_reviews: int = 0
+    google_place_id: str = ""
+    google_maps_url: str = ""
     status: str = "Active"
     airtable_id: str = ""
 
@@ -215,6 +219,10 @@ class AirtableDataLoader:
                 latitude=fields.get("Latitude"),
                 longitude=fields.get("Longitude"),
                 slug=fields.get("Slug", ""),
+                google_rating=fields.get("Google Rating"),
+                google_reviews=fields.get("Google Reviews") or 0,
+                google_place_id=fields.get("Google Place ID", ""),
+                google_maps_url=fields.get("Google Maps URL", ""),
                 status=fields.get("Status", "Active"),
                 airtable_id=record.get("id", ""),
             )

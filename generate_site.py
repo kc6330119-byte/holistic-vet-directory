@@ -364,6 +364,10 @@ class DataLoader:
                 latitude=av.latitude,
                 longitude=av.longitude,
                 slug=av.slug,
+                google_rating=av.google_rating,
+                google_reviews=av.google_reviews,
+                google_place_id=av.google_place_id,
+                google_maps_url=av.google_maps_url,
             )
             vets.append(vet)
         return vets
