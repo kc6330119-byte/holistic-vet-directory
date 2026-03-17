@@ -51,5 +51,13 @@ data/validation_progress.json
 data/google_ratings.csv
 data/google_ratings_progress.json
 
+# Ad-hoc import files (contain personal contact data)
+data/florida_veterinarians.csv
+data/new_veterinarians.csv
+
+# Google Search Console exports
+data/Pages.csv
+data/Queries.csv
+
 # Airtable CSV exports (root-level, contain personal data)
 Veterinarians-*.csv

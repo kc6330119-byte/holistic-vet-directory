@@ -49,25 +49,29 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 
 ### Action 2: Increase Original Blog Content
 - **Status:** IN PROGRESS
-- **Current count:** 34 published blog posts (up from 15 at rejection)
-- **Added 2026-03-16 ("What to Expect" series — 5 articles, 12,032 words total):**
+- **Status:** COMPLETED (2026-03-17) — TARGET REACHED
+- **Current count:** 40 published blog posts (up from 15 at rejection — 167% increase)
+- **Added 2026-03-16 ("What to Expect" series — 5 articles, 12,032 words):**
   - [x] What to Expect at Your Pet's First Acupuncture Session (2,181 words)
   - [x] What to Expect at a Veterinary Chiropractic Appointment (2,571 words)
   - [x] What to Expect from Veterinary Herbal Medicine (2,307 words)
   - [x] Your Pet's First TCVM Consultation: What to Know (2,293 words)
   - [x] What to Expect from Veterinary Laser Therapy (2,680 words)
-- **Target before resubmission:** 40-50 posts
-- **Posts still needed:** 6-16 more
-- **Remaining content ideas:**
+- **Added 2026-03-17 (6 articles, 15,718 words):**
+  - [x] What to Expect from Veterinary Homeopathy (2,417 words)
+  - [x] What to Expect from Veterinary Massage Therapy (2,176 words)
+  - [x] What to Expect from Veterinary Nutritional Therapy (2,227 words)
+  - [x] Holistic Approaches to Dog Arthritis: A Complete Guide (2,154 words)
+  - [x] Holistic Approaches to Pet Anxiety (2,770 words) — replaced redundant allergy article
+  - [x] Holistic vs. Conventional: When to Consider Integrative Care (1,886 words)
+- **Note:** Original #39 (pet allergies) was scrapped — 7 allergy articles already existed. Replaced with pet anxiety article.
+- **Total new content:** 25 blog posts, ~27,750 words of original content added since rejection
+- **Future content ideas (post-approval):**
   - [ ] More species-specific articles (birds, exotic pets, farm animals)
-  - [ ] Condition-specific guides (arthritis, allergies, cancer support, anxiety)
-  - [ ] "What to expect" guides for remaining modalities (homeopathy, massage, nutritional therapy)
+  - [ ] Condition-specific guides (cancer support, digestive/gut health, senior wellness)
   - [ ] Regional guides ("Holistic Vet Care in the Pacific Northwest")
   - [ ] Interview/Q&A articles with responding holistic vets
   - [ ] Seasonal content (winter joint care, summer skin issues, holiday stress)
-  - [ ] Nutrition deep-dives (raw feeding, supplements, food therapy)
-  - [ ] "Holistic vs. conventional" comparison articles for common conditions
-- **Goal:** Shift unique-to-templated ratio from 0.5% toward 1.5-2%
 
 ### Action 3: Validate Practice Listings
 - **Status:** COMPLETED (2026-03-14)
@@ -141,10 +145,10 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 | 2026-03-16 | Write 5 "What to Expect" blog articles (12,032 words) | DONE |
 | 2026-03-16 | Add interactive map to all state pages (Leaflet/OSM) | DONE |
 | 2026-03-16 | Deploy all changes (ratings, descriptions, map, blog posts) | DONE |
-| 2026-03-17+ | Continue writing blog content toward 40+ posts | TODO |
+| 2026-03-17 | Write 6 more blog articles (15,718 words) | DONE |
+| 2026-03-17 | All 40 blog posts published — target reached | DONE |
 | ~2026-04-06 | Google recrawl window (2-3 weeks after deploy) | WAIT |
 | ~2026-04-06 | Verify noindexed pages are dropping from Google index | TODO |
-| ~2026-04-20 | Target: reach 35+ blog posts | TODO |
 | ~2026-04-27 | **Resubmit to AdSense** (6 weeks after deploy) | TODO |
 
 ## How to Check Progress
@@ -178,7 +182,7 @@ Before submitting to AdSense again, verify:
 - [x] 5 "What to Expect" blog articles published (12,032 words)
 - [x] Deploy site with all changes
 - [ ] Google Search Console shows noindexed pages being excluded (2-3 week lag)
-- [ ] 40+ published blog posts with original, substantive content (currently at 34)
+- [x] 40 published blog posts with original, substantive content
 - [ ] Site loads fast (< 3 seconds, Lighthouse score > 90)
 - [ ] No broken links or 404 errors
 - [ ] Mobile-friendly test passes
@@ -207,8 +211,9 @@ Before submitting to AdSense again, verify:
 - 1,742 thin city pages noindexed
 - Interactive maps added to all 53 state pages
 - 5 original blog articles written (12,032 words)
-- Blog count: 15 → 34 (127% increase)
-- Remaining to target: 6 more blog posts to reach 40
+- Blog count: 15 → 40 (167% increase) — TARGET REACHED
+- Total new content: 25 blog posts, ~27,750 words of original content since rejection
+- Redundant allergy article caught and replaced with pet anxiety article
 
 ---
 

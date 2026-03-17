@@ -1081,8 +1081,8 @@ class SiteGenerator:
         if not featured_post and published_posts:
             featured_post = published_posts[0]
         self._render_and_write('index.html', 'index.html', {
-            'page_title': 'Find Holistic Vets Near Me',
-            'page_description': 'Find holistic vets near you. Browse our directory of integrative veterinarians offering acupuncture, herbal medicine, chiropractic care and natural treatments for pets.',
+            'page_title': 'Find a Holistic Veterinarian Near You',
+            'page_description': 'The largest directory of holistic and integrative veterinarians in the U.S. Search 3,200+ practitioners offering acupuncture, herbal medicine, chiropractic, TCVM, and natural pet care — with Google ratings and reviews.',
             'featured_states': self.processor.get_featured_states(8),
             'featured_specialties': self.processor.get_featured_specialties(8),
             'featured_vets': self.processor.get_featured_vets(6),
@@ -1097,8 +1097,8 @@ class SiteGenerator:
         print("Generating vets listing...")
         vets = sorted(self.processor.vets, key=lambda v: (v.state, v.city, v.practice_name))
         self._render_and_write('vets_list.html', 'vets/index.html', {
-            'page_title': 'Find a Holistic Veterinarian',
-            'page_description': 'Browse our directory of holistic and integrative veterinarians across the United States.',
+            'page_title': 'Browse Holistic Veterinarians by State',
+            'page_description': 'Browse 3,200+ holistic and integrative veterinarians across all 50 states. Find practitioners offering acupuncture, chiropractic, herbal medicine, and natural pet care with verified Google ratings.',
             'vets': vets,
             'total_count': len(vets),
             'current_page': 1,
@@ -1213,7 +1213,7 @@ class SiteGenerator:
         print("Generating search page...")
         self._render_and_write('search.html', 'search/index.html', {
             'page_title': 'Find Holistic Vets Near Me | Search by Location',
-            'page_description': 'Search for holistic veterinarians near you. Find integrative vets by city, state, ZIP code, or specialty. Locate natural pet care in your area.',
+            'page_description': 'Search for holistic veterinarians by city, state, or ZIP code. Filter by specialty — acupuncture, herbal medicine, chiropractic, TCVM, and more. Find integrative pet care near you.',
         })
     
     def _generate_blog_list(self):

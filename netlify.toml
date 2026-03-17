@@ -40,6 +40,37 @@
   to = "/about/index.html"
   status = 200
 
+# 301 redirects for fixed blog slugs (typos in original slugs)
+[[redirects]]
+  from = "/blog/hiropractic-care-for-pets/"
+  to = "/blog/chiropractic-care-for-pets/"
+  status = 301
+
+[[redirects]]
+  from = "/blog/hiropractic-care-for-pets/*"
+  to = "/blog/chiropractic-care-for-pets/"
+  status = 301
+
+[[redirects]]
+  from = "/blog/aturopathic-vs-holistic-vet-differences/"
+  to = "/blog/naturopathic-vs-holistic-vet-differences/"
+  status = 301
+
+[[redirects]]
+  from = "/blog/aturopathic-vs-holistic-vet-differences/*"
+  to = "/blog/naturopathic-vs-holistic-vet-differences/"
+  status = 301
+
+[[redirects]]
+  from = "/blog/nderstanding-tcvm-traditional-chinese-veterinary-medicine/"
+  to = "/blog/understanding-tcvm-traditional-chinese-veterinary-medicine/"
+  status = 301
+
+[[redirects]]
+  from = "/blog/nderstanding-tcvm-traditional-chinese-veterinary-medicine/*"
+  to = "/blog/understanding-tcvm-traditional-chinese-veterinary-medicine/"
+  status = 301
+
 [[redirects]]
   from = "/*"
   to = "/404.html"
