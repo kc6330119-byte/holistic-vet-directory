@@ -1172,10 +1172,23 @@ class SiteGenerator:
     
     def _generate_specialties_list(self):
         print("Generating specialties list...")
+
+        # Build top-rated vets (4.7+) per specialty for the specialties overview page
+        top_rated_by_specialty = {}
+        for specialty in self.processor.specialties:
+            spec_vets = self.processor.vets_by_specialty.get(specialty.slug, [])
+            top = sorted(
+                [v for v in spec_vets if v.google_rating and v.google_rating >= 4.7],
+                key=lambda v: (-v.google_rating, -v.google_reviews)
+            )[:3]
+            if top:
+                top_rated_by_specialty[specialty.slug] = top
+
         self._render_and_write('specialties_list.html', 'specialties/index.html', {
             'page_title': 'Holistic Veterinary Specialties',
             'page_description': 'Learn about holistic veterinary modalities including acupuncture, herbal medicine, chiropractic care, and more.',
             'specialties': sorted(self.processor.specialties, key=lambda s: s.name),
+            'top_rated_by_specialty': top_rated_by_specialty,
         })
     
     def _generate_specialty_pages(self):

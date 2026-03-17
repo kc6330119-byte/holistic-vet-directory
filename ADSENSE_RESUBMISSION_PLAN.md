@@ -140,6 +140,7 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 | 2026-03-16 | Deploy site with ratings + descriptions | DONE |
 | 2026-03-16 | Write 5 "What to Expect" blog articles (12,032 words) | DONE |
 | 2026-03-16 | Add interactive map to all state pages (Leaflet/OSM) | DONE |
+| 2026-03-16 | Deploy all changes (ratings, descriptions, map, blog posts) | DONE |
 | 2026-03-17+ | Continue writing blog content toward 40+ posts | TODO |
 | ~2026-04-06 | Google recrawl window (2-3 weeks after deploy) | WAIT |
 | ~2026-04-06 | Verify noindexed pages are dropping from Google index | TODO |
@@ -208,3 +209,22 @@ Before submitting to AdSense again, verify:
 - 5 original blog articles written (12,032 words)
 - Blog count: 15 → 34 (127% increase)
 - Remaining to target: 6 more blog posts to reach 40
+
+---
+
+## Post-Approval Features (or If Rejected in April)
+
+### User Review System
+- **Status:** PLANNED
+- **Priority:** Build after AdSense approval, OR as a contingency if rejected again in April
+- **Concept:** Allow pet owners to submit reviews for listed veterinarians
+- **Implementation approach (fits existing infrastructure):**
+  - New "Reviews" table in Airtable (fields: Practice Name/Slug, Reviewer Name, Rating, Review Text, Date, Status)
+  - Netlify Forms or free form service to capture submissions (no backend needed)
+  - Manual moderation in Airtable (set Status to "Approved" before reviews go live)
+  - `generate_site.py` picks up approved reviews during site rebuild
+  - Homepage carousel displaying latest approved reviews
+  - Individual reviews displayed on vet detail pages
+- **Why it helps SEO:** User-generated content is unique, original content that Google values highly — no other site has these reviews
+- **Why wait:** Need a critical mass of 10-15 reviews before it adds value; an empty or sparse carousel hurts more than it helps
+- **Seeding strategy:** Ask vets who responded positively to outreach to encourage their clients to leave reviews

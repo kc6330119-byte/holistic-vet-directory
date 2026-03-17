@@ -80,6 +80,17 @@
                 </p>
                 {% endif %}
 
+                {% if top_rated_by_specialty and top_rated_by_specialty[specialty.slug] is defined %}
+                <div class="specialty-card-full__top-rated" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e9ecef;">
+                    <p style="font-size: 0.8rem; font-weight: 600; color: #495057; margin-bottom: 0.4rem;">Top-Rated Practitioners:</p>
+                    {% for vet in top_rated_by_specialty[specialty.slug] %}
+                    <a href="/vet/{{ vet.slug }}/" style="display: block; font-size: 0.8rem; color: #2D6A4F; text-decoration: none; padding: 0.15rem 0;">
+                        <span style="color: #F4A261;">&#9733;</span> {{ vet.google_rating }} {{ vet.practice_name }} <span style="color: #999;">— {{ vet.city }}, {{ vet.state }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <div class="specialty-card-full__footer">
                     <span class="specialty-card-full__count">
                         {{ specialty.vet_count }} {{ specialty.vet_count | pluralize('practitioner', 'practitioners') }}
