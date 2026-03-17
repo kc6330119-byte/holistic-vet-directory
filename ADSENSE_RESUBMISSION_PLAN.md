@@ -49,13 +49,19 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 
 ### Action 2: Increase Original Blog Content
 - **Status:** IN PROGRESS
-- **Current count:** 15 published blog posts (~1,200 words each)
+- **Current count:** 34 published blog posts (up from 15 at rejection)
+- **Added 2026-03-16 ("What to Expect" series — 5 articles, 12,032 words total):**
+  - [x] What to Expect at Your Pet's First Acupuncture Session (2,181 words)
+  - [x] What to Expect at a Veterinary Chiropractic Appointment (2,571 words)
+  - [x] What to Expect from Veterinary Herbal Medicine (2,307 words)
+  - [x] Your Pet's First TCVM Consultation: What to Know (2,293 words)
+  - [x] What to Expect from Veterinary Laser Therapy (2,680 words)
 - **Target before resubmission:** 40-50 posts
-- **Posts needed:** 25-35 more
-- **Content ideas:**
+- **Posts still needed:** 6-16 more
+- **Remaining content ideas:**
   - [ ] More species-specific articles (birds, exotic pets, farm animals)
   - [ ] Condition-specific guides (arthritis, allergies, cancer support, anxiety)
-  - [ ] "What to expect" guides for each modality (acupuncture session, chiropractic visit, etc.)
+  - [ ] "What to expect" guides for remaining modalities (homeopathy, massage, nutritional therapy)
   - [ ] Regional guides ("Holistic Vet Care in the Pacific Northwest")
   - [ ] Interview/Q&A articles with responding holistic vets
   - [ ] Seasonal content (winter joint care, summer skin issues, holiday stress)
@@ -87,7 +93,20 @@ Google classifies these as **doorway pages** — pages created primarily for sea
   - Target 150-250 words (was ~100 words)
 - **Scope:** Applies to 415 vets with thin/empty Airtable descriptions (< 150 chars). Existing good descriptions remain untouched.
 
-### Action 5: Add Google Ratings to Vet Pages
+### Action 5: Add Interactive Map to State Pages
+- **Status:** COMPLETED (2026-03-16)
+- **Change:** Added an interactive Leaflet/OpenStreetMap map to the sidebar of every state listing page
+- **File modified:** `templates/state_list.html`
+- **Features:**
+  - All vet locations displayed as custom green pins
+  - Marker clustering for states with many listings (prevents clutter)
+  - Click a pin → popup with practice name (linked to detail page), city, and star rating
+  - Map auto-zooms to fit all vets in the state
+  - Scroll-wheel zoom disabled to prevent accidental scrolling
+- **Cost:** Zero — Leaflet + OpenStreetMap is completely free
+- **Impact:** Adds unique, interactive content to every state page; improves user engagement and time on page
+
+### Action 6: Add Google Ratings to Vet Pages
 - **Status:** COMPLETED (2026-03-16)
 - **Script:** `scripts/fetch_google_ratings.py`
 - **Results:**
@@ -119,7 +138,9 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 | 2026-03-16 | Rewrite auto-description generator (415 thin descriptions) | DONE |
 | 2026-03-16 | Add Google rating display + AggregateRating schema to vet pages | DONE |
 | 2026-03-16 | Deploy site with ratings + descriptions | DONE |
-| 2026-03-17+ | Begin writing additional blog content (aim for 2-3/week) | TODO |
+| 2026-03-16 | Write 5 "What to Expect" blog articles (12,032 words) | DONE |
+| 2026-03-16 | Add interactive map to all state pages (Leaflet/OSM) | DONE |
+| 2026-03-17+ | Continue writing blog content toward 40+ posts | TODO |
 | ~2026-04-06 | Google recrawl window (2-3 weeks after deploy) | WAIT |
 | ~2026-04-06 | Verify noindexed pages are dropping from Google index | TODO |
 | ~2026-04-20 | Target: reach 35+ blog posts | TODO |
@@ -149,11 +170,14 @@ Before submitting to AdSense again, verify:
 
 - [x] Site deployed with noindex changes live
 - [x] Google ratings added to 3,127 vet pages with AggregateRating schema
+- [x] Star ratings added to vet cards on homepage and listing pages
 - [x] Auto-description generator rewritten with varied, richer content
 - [x] Non-veterinary practices removed from directory (71 removed)
-- [ ] Deploy site with ratings + improved descriptions
+- [x] Interactive map added to all state pages
+- [x] 5 "What to Expect" blog articles published (12,032 words)
+- [x] Deploy site with all changes
 - [ ] Google Search Console shows noindexed pages being excluded (2-3 week lag)
-- [ ] 35+ published blog posts with original, substantive content
+- [ ] 40+ published blog posts with original, substantive content (currently at 34)
 - [ ] Site loads fast (< 3 seconds, Lighthouse score > 90)
 - [ ] No broken links or 404 errors
 - [ ] Mobile-friendly test passes
@@ -169,3 +193,18 @@ Before submitting to AdSense again, verify:
 - **Quality over quantity for blog posts.** Each post should be 1,000+ words of genuinely useful, original content. Google can detect filler.
 - **Dogs Naturally Magazine pitch** submitted (2026-03-16) — if accepted, the backlink from a 2M-visitor/month site would significantly boost domain authority before resubmission.
 - AdSense reviewers look at the site holistically. The combination of fewer indexed pages + more original content + cleaner listings will present a much stronger case.
+
+---
+
+## Progress Summary (2026-03-16)
+
+**Completed in one day:**
+- 7 major site improvements implemented and deployed
+- 71 non-veterinary practices removed from directory
+- 3,127 Google ratings added to vet pages and cards
+- 415 auto-generated descriptions rewritten with varied, natural language
+- 1,742 thin city pages noindexed
+- Interactive maps added to all 53 state pages
+- 5 original blog articles written (12,032 words)
+- Blog count: 15 → 34 (127% increase)
+- Remaining to target: 6 more blog posts to reach 40

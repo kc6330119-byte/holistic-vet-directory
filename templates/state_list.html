@@ -6,6 +6,16 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<style>
+@media (max-width: 768px) {
+    .state-map-mobile { display: block !important; }
+    .state-map-desktop { display: none !important; }
+}
+@media (min-width: 769px) {
+    .state-map-mobile { display: none !important; }
+    .state-map-desktop { display: block; }
+}
+</style>
 {% endblock %}
 
 {% block schema %}
@@ -87,13 +97,19 @@
 {% include 'partials/adsense.html' %}
 
 <div class="container">
+    <!-- Map: mobile (above listings) -->
+    <div class="state-map-mobile" style="display: none; margin-bottom: 1.5rem;">
+        <h3 class="filter-section__title">View Results on Map</h3>
+        <div id="state-map-mobile" style="height: 250px; border-radius: 8px; z-index: 1;"></div>
+    </div>
+
     <div class="listing-layout">
         <!-- Sidebar -->
         <aside class="listing-sidebar">
-            <!-- Map -->
-            <div class="filter-section">
+            <!-- Map: desktop (in sidebar) -->
+            <div class="filter-section state-map-desktop">
                 <h3 class="filter-section__title">View Results on Map</h3>
-                <div id="state-map" style="height: 220px; border-radius: 8px; z-index: 1;"></div>
+                <div id="state-map-desktop" style="height: 220px; border-radius: 8px; z-index: 1;"></div>
             </div>
 
             <!-- Cities in State -->
@@ -189,7 +205,9 @@
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
 (function() {
-    var mapEl = document.getElementById('state-map');
+    // Pick the visible map element (mobile or desktop)
+    var isMobile = window.innerWidth <= 768;
+    var mapEl = document.getElementById(isMobile ? 'state-map-mobile' : 'state-map-desktop');
     if (!mapEl) return;
 
     var vets = [
