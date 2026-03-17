@@ -103,6 +103,7 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 - **Airtable fields added:** Google Rating (number), Google Reviews (number), Google Place ID (text), Google Maps URL (URL)
 - **Cost:** ~$81, covered by Google Maps Platform $200/month free credit
 - **Maintenance:** Re-run monthly to refresh ratings (Google requires data not be cached beyond 30 days)
+- **Update (2026-03-16):** Added star rating and review count to vet cards (`templates/partials/vet_card.html`) — now visible on homepage Featured/Recently Added cards and all listing pages (state, city, specialty)
 
 ---
 
@@ -117,7 +118,7 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 | 2026-03-16 | Fetch Google ratings for 3,223 vets (3,127 pushed to Airtable) | DONE |
 | 2026-03-16 | Rewrite auto-description generator (415 thin descriptions) | DONE |
 | 2026-03-16 | Add Google rating display + AggregateRating schema to vet pages | DONE |
-| 2026-03-16 | Deploy site with ratings + descriptions | PENDING |
+| 2026-03-16 | Deploy site with ratings + descriptions | DONE |
 | 2026-03-17+ | Begin writing additional blog content (aim for 2-3/week) | TODO |
 | ~2026-04-06 | Google recrawl window (2-3 weeks after deploy) | WAIT |
 | ~2026-04-06 | Verify noindexed pages are dropping from Google index | TODO |

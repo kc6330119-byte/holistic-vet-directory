@@ -2,6 +2,12 @@
 
 {% block body_class %}page-state-list{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+{% endblock %}
+
 {% block schema %}
 <script type="application/ld+json">
 {
@@ -84,6 +90,12 @@
     <div class="listing-layout">
         <!-- Sidebar -->
         <aside class="listing-sidebar">
+            <!-- Map -->
+            <div class="filter-section">
+                <h3 class="filter-section__title">View Results on Map</h3>
+                <div id="state-map" style="height: 220px; border-radius: 8px; z-index: 1;"></div>
+            </div>
+
             <!-- Cities in State -->
             {% if cities %}
             <div class="filter-section">
@@ -170,4 +182,81 @@
 <!-- Ad: Footer -->
 {% set slot_type = 'footer' %}
 {% include 'partials/adsense.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+(function() {
+    var mapEl = document.getElementById('state-map');
+    if (!mapEl) return;
+
+    var vets = [
+        {% for vet in vets %}
+        {% if vet.latitude and vet.longitude %}
+        {
+            lat: {{ vet.latitude }},
+            lng: {{ vet.longitude }},
+            name: {{ vet.practice_name | tojson }},
+            city: {{ vet.city | tojson }},
+            slug: {{ vet.slug | tojson }},
+            rating: {{ vet.google_rating or 'null' }},
+            reviews: {{ vet.google_reviews or 0 }}
+        }{% if not loop.last %},{% endif %}
+        {% endif %}
+        {% endfor %}
+    ];
+
+    if (vets.length === 0) {
+        mapEl.innerHTML = '<p style="text-align:center;padding:2rem;color:#666;">No map data available</p>';
+        return;
+    }
+
+    var map = L.map('state-map', {
+        scrollWheelZoom: false,
+        zoomControl: true
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18
+    }).addTo(map);
+
+    var markers = L.markerClusterGroup({
+        maxClusterRadius: 40,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false
+    });
+
+    var vetIcon = L.divIcon({
+        html: '<svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12z" fill="#2D6A4F"/><circle cx="12" cy="11" r="5" fill="white"/></svg>',
+        className: 'vet-map-marker',
+        iconSize: [24, 32],
+        iconAnchor: [12, 32],
+        popupAnchor: [0, -32]
+    });
+
+    vets.forEach(function(v) {
+        var popup = '<div style="font-size:13px;line-height:1.4;min-width:160px;">' +
+            '<strong><a href="/vet/' + v.slug + '/" style="color:#2D6A4F;">' + v.name + '</a></strong><br>' +
+            '<span style="color:#666;">' + v.city + '</span>';
+        if (v.rating) {
+            popup += '<br><span style="color:#F4A261;">&#9733;</span> ' + v.rating;
+            if (v.reviews) popup += ' <span style="color:#999;font-size:11px;">(' + v.reviews + ')</span>';
+        }
+        popup += '</div>';
+
+        var marker = L.marker([v.lat, v.lng], { icon: vetIcon }).bindPopup(popup);
+        markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+
+    var bounds = markers.getBounds();
+    if (bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [20, 20] });
+    }
+})();
+</script>
 {% endblock %}
