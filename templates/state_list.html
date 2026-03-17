@@ -7,13 +7,14 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 <style>
-@media (max-width: 768px) {
-    .state-map-mobile { display: block !important; }
-    .state-map-desktop { display: none !important; }
-}
+/* Mobile: map shows above listings */
+.state-map-top { margin-bottom: 1.5rem; }
+.state-map-sidebar { display: none; }
+
+/* Desktop: map moves to sidebar */
 @media (min-width: 769px) {
-    .state-map-mobile { display: none !important; }
-    .state-map-desktop { display: block; }
+    .state-map-top { display: none; }
+    .state-map-sidebar { display: block; }
 }
 </style>
 {% endblock %}
@@ -97,20 +98,17 @@
 {% include 'partials/adsense.html' %}
 
 <div class="container">
-    <!-- Map: mobile (above listings) -->
-    <div class="state-map-mobile" style="display: none; margin-bottom: 1.5rem;">
+    <!-- Map: shown above listings on mobile, hidden on desktop -->
+    <div class="state-map-top">
         <h3 class="filter-section__title">View Results on Map</h3>
-        <div id="state-map-mobile" style="height: 250px; border-radius: 8px; z-index: 1;"></div>
+        <div id="state-map" style="height: 250px; border-radius: 8px; z-index: 1;"></div>
     </div>
 
     <div class="listing-layout">
         <!-- Sidebar -->
         <aside class="listing-sidebar">
-            <!-- Map: desktop (in sidebar) -->
-            <div class="filter-section state-map-desktop">
-                <h3 class="filter-section__title">View Results on Map</h3>
-                <div id="state-map-desktop" style="height: 220px; border-radius: 8px; z-index: 1;"></div>
-            </div>
+            <!-- Map placeholder: JS moves map here on desktop -->
+            <div id="sidebar-map-slot" class="state-map-sidebar"></div>
 
             <!-- Cities in State -->
             {% if cities %}
@@ -205,9 +203,17 @@
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
 (function() {
-    // Pick the visible map element (mobile or desktop)
-    var isMobile = window.innerWidth <= 768;
-    var mapEl = document.getElementById(isMobile ? 'state-map-mobile' : 'state-map-desktop');
+    var mapContainer = document.querySelector('.state-map-top');
+    var sidebarSlot = document.getElementById('sidebar-map-slot');
+
+    // On desktop, move the map into the sidebar
+    if (window.innerWidth > 768 && sidebarSlot && mapContainer) {
+        sidebarSlot.appendChild(mapContainer);
+        sidebarSlot.style.display = 'block';
+        mapContainer.style.display = 'block';
+    }
+
+    var mapEl = document.getElementById('state-map');
     if (!mapEl) return;
 
     var vets = [
