@@ -93,6 +93,16 @@
     </div>
 </div>
 
+{% if state_editorial %}
+<div class="container">
+    <div class="state-editorial" style="max-width: 800px; margin: 0 auto 1.5rem; padding: 0 1rem;">
+        <p style="font-size: 0.95rem; line-height: 1.7; color: #495057;">
+            {{ state_editorial }}
+        </p>
+    </div>
+</div>
+{% endif %}
+
 <!-- Ad: Header -->
 {% set slot_type = 'header' %}
 {% include 'partials/adsense.html' %}

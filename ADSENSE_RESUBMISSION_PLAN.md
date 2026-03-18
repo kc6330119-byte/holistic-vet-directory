@@ -147,6 +147,13 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 | 2026-03-16 | Deploy all changes (ratings, descriptions, map, blog posts) | DONE |
 | 2026-03-17 | Write 6 more blog articles (15,718 words) | DONE |
 | 2026-03-17 | All 40 blog posts published — target reached | DONE |
+| 2026-03-17 | Fixed 3 blog slug typos + added 301 redirects in netlify.toml | DONE |
+| 2026-03-17 | Analyzed Google Search Console data (Pages + Queries reports) | DONE |
+| 2026-03-17 | Optimized title tags and meta descriptions for homepage, /vets/, and search page | DONE |
+| 2026-03-17 | Top-rated practitioners added to specialty cards on /specialties/ page | DONE |
+| 2026-03-17 | Updated About page "How to Use" section with maps, ratings, and blog guides | DONE |
+| 2026-03-17 | Deploy all changes | DONE |
+| ~2026-04-06 | Export fresh Search Console reports (Pages + Queries) to compare against baseline | TODO |
 | ~2026-04-06 | Google recrawl window (2-3 weeks after deploy) | WAIT |
 | ~2026-04-06 | Verify noindexed pages are dropping from Google index | TODO |
 | ~2026-04-27 | **Resubmit to AdSense** (6 weeks after deploy) | TODO |
@@ -167,6 +174,16 @@ Google classifies these as **doorway pages** — pages created primarily for sea
 - Watch average position and impressions trends
 - Ensure core vet detail pages and state pages remain indexed
 
+### Compare Search Console Reports (~April 6)
+- Export fresh Pages and Queries reports from Search Console
+- Compare against March 8-14 baseline (saved in `data/Pages.csv` and `data/Queries.csv`)
+- Key metrics to compare:
+  - Total impressions and clicks (should increase)
+  - Average position for "holistic vet" queries (should improve)
+  - CTR on page 1 results (should improve with new titles/descriptions)
+  - Number of pages with impressions (should decrease as noindexed pages drop)
+  - Blog post visibility (new articles should begin appearing)
+
 ---
 
 ## Pre-Resubmission Checklist
@@ -181,6 +198,11 @@ Before submitting to AdSense again, verify:
 - [x] Interactive map added to all state pages
 - [x] 5 "What to Expect" blog articles published (12,032 words)
 - [x] Deploy site with all changes
+- [x] Fixed 3 blog slug typos with 301 redirects
+- [x] Optimized homepage, /vets/, and search page title tags and meta descriptions
+- [x] Top-rated practitioners added to specialty cards
+- [x] About page updated with new feature descriptions
+- [ ] Export fresh Search Console reports (Pages + Queries) ~April 6 to compare against March 8-14 baseline
 - [ ] Google Search Console shows noindexed pages being excluded (2-3 week lag)
 - [x] 40 published blog posts with original, substantive content
 - [ ] Site loads fast (< 3 seconds, Lighthouse score > 90)
@@ -198,6 +220,7 @@ Before submitting to AdSense again, verify:
 - **Quality over quantity for blog posts.** Each post should be 1,000+ words of genuinely useful, original content. Google can detect filler.
 - **Dogs Naturally Magazine pitch** submitted (2026-03-16) — if accepted, the backlink from a 2M-visitor/month site would significantly boost domain authority before resubmission.
 - AdSense reviewers look at the site holistically. The combination of fewer indexed pages + more original content + cleaner listings will present a much stronger case.
+- **Blog content strategy going forward:** 40 posts is sufficient for AdSense resubmission. Hold off on writing more until the April Search Console data reveals which queries are gaining traction — then write targeted articles based on actual performance data rather than guessing. Exception: if a vet offers a guest article or interview, publish it immediately — third-party content is high-value for credibility.
 
 ---
 
@@ -214,6 +237,14 @@ Before submitting to AdSense again, verify:
 - Blog count: 15 → 40 (167% increase) — TARGET REACHED
 - Total new content: 25 blog posts, ~27,750 words of original content since rejection
 - Redundant allergy article caught and replaced with pet anxiety article
+
+**Additional improvements (2026-03-17):**
+- 3 blog slug typos fixed (missing first letters) with 301 redirects preserving SEO value
+- Google Search Console baseline established (March 8-14 data: Pages + Queries reports)
+- Homepage, /vets/, and search page title tags and meta descriptions optimized based on actual query data
+- Top-rated practitioners (4.7+ stars) added to specialty cards on /specialties/ page
+- About page "How to Use This Directory" section updated with maps, Google ratings, and blog guide links
+- Key finding: directory-intent queries already on page 1 (position 3-4.5); high-volume "near me" queries at positions 45-62 with room to improve
 
 ---
 

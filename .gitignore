@@ -59,5 +59,8 @@ data/new_veterinarians.csv
 data/Pages.csv
 data/Queries.csv
 
+# Internal planning docs
+ADSENSE_RESUBMISSION_PLAN.md
+
 # Airtable CSV exports (root-level, contain personal data)
 Veterinarians-*.csv
