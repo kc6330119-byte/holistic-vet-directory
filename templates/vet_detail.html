@@ -68,12 +68,14 @@
         {
             "@type": "ListItem",
             "position": 4,
-            "name": "{{ vet.practice_name }}"
+            "name": "{{ vet.practice_name }}",
+            "item": "{{ config.site_url }}/vet/{{ vet.slug }}/"
         }{% else %},
         {
             "@type": "ListItem",
             "position": 3,
-            "name": "{{ vet.practice_name }}"
+            "name": "{{ vet.practice_name }}",
+            "item": "{{ config.site_url }}/vet/{{ vet.slug }}/"
         }{% endif %}
     ]
 }
