@@ -2,6 +2,33 @@
 
 {% block body_class %}page-blog-post{% endblock %}
 
+{% block schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ post.title | replace('"', '\\"') }}",
+    "description": "{{ page_description | replace('"', '\\"') }}",
+    {% if post.featured_image %}"image": "{{ post.featured_image }}",{% endif %}
+    {% if post.published_date %}"datePublished": "{{ post.published_date[:10] }}",{% endif %}
+    {% if post.published_date %}"dateModified": "{{ post.published_date[:10] }}",{% endif %}
+    "author": {
+        "@type": "Person",
+        "name": "{{ post.author or 'Holistic Vet Directory' }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Holistic Vet Directory",
+        "url": "{{ config.site_url }}"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ config.site_url }}/blog/{{ post.slug }}/"
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <article class="blog-post">
     <header class="blog-post__header">

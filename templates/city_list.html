@@ -87,6 +87,18 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="city-intro" style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-radius: 0.75rem; border-left: 4px solid #0D9488;">
+        <p style="margin: 0; color: #1e293b; line-height: 1.7;">
+            {{ city }}, {{ state.name }} is home to <strong>{{ listing_count }} holistic and integrative veterinary {{ listing_count | pluralize('practice', 'practices') }}</strong>.
+            {% if dominant_specialty %}
+            The most widely offered specialty among {{ city }} holistic vets is <strong>{{ dominant_specialty }}</strong>.
+            {% endif %}
+            Whether you're looking for acupuncture, herbal medicine, chiropractic care, or other natural therapies for your pet, browse our directory to find a qualified holistic veterinarian near you in {{ city }}.
+        </p>
+    </div>
+</div>
+
 <!-- Ad: Header -->
 {% set slot_type = 'header' %}
 {% include 'partials/adsense.html' %}

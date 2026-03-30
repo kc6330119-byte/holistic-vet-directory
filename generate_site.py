@@ -1665,6 +1665,14 @@ class SiteGenerator:
                 
                 city_name = city_vets[0].city
                 noindex = len(city_vets) < 3
+
+                # Find dominant specialty for editorial intro
+                specialty_counts = {}
+                for v in city_vets:
+                    for spec in v.specialties:
+                        specialty_counts[spec] = specialty_counts.get(spec, 0) + 1
+                dominant_specialty = max(specialty_counts, key=specialty_counts.get) if specialty_counts else None
+
                 self._render_and_write('city_list.html', f'vets/{state.slug}/{city_slug}/index.html', {
                     'page_title': f'Holistic Veterinarians in {city_name}, {state.name}',
                     'page_description': f'Find {len(city_vets)} holistic and integrative veterinarians in {city_name}, {state.name}. Discover homeopathic, naturopathic, and holistic vets offering natural pet care near you.',
@@ -1673,6 +1681,8 @@ class SiteGenerator:
                     'city_slug': city_slug,
                     'vets': sorted(city_vets, key=lambda v: v.practice_name),
                     'noindex': noindex,
+                    'dominant_specialty': dominant_specialty,
+                    'listing_count': len(city_vets),
                 })
     
     def _generate_vet_detail_pages(self):
@@ -1691,7 +1701,7 @@ class SiteGenerator:
             
             self._render_and_write('vet_detail.html', f'vet/{vet.slug}/index.html', {
                 'page_title': f'{vet.practice_name} - Holistic Veterinarian in {vet.city}, {vet.state}',
-                'page_description': f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}. Services include {", ".join(vet.specialties[:3])}.',
+                'page_description': vet.practice_description[:155] if vet.practice_description else f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}.',
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
