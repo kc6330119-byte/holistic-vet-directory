@@ -1,0 +1,499 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-holistic-care-guide{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "name": "Holistic Pet Care Guide — Conditions, Specialties & Certifications",
+    "url": "{{ config.site_url }}/holistic-care-guide/",
+    "description": "{{ page_description }}",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What holistic treatments are available for pet arthritis?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Holistic treatments for pet arthritis include acupuncture, chiropractic care, physical therapy/rehabilitation, laser therapy, hydrotherapy, nutritional therapy, and stem cell therapy. Many holistic veterinarians combine multiple modalities for the best results."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What does AHVMA certification mean for a veterinarian?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AHVMA (American Holistic Veterinary Medical Association) membership indicates a veterinarian is committed to integrative and holistic approaches. While not a specialty certification itself, AHVMA members must hold a valid DVM/VMD license and demonstrate a commitment to holistic veterinary practice through continuing education."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is the difference between TCVM and regular acupuncture for pets?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Traditional Chinese Veterinary Medicine (TCVM) is a comprehensive system that includes acupuncture, herbal medicine, food therapy, and Tui-na massage. Regular veterinary acupuncture focuses specifically on needle therapy. TCVM practitioners certified through the Chi Institute complete extensive training in all four branches of Chinese veterinary medicine."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How do I choose the right holistic veterinarian for my pet?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Look for a licensed DVM/VMD with additional certification in their holistic specialty (e.g., CVA for acupuncture, CCRT for rehabilitation). Check their training institution, years of experience, and whether they treat your pet's species. Read reviews and ask about their approach to integrating holistic and conventional care."
+            }
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb__item"><a href="/">Home</a></li>
+                <li class="breadcrumb__item breadcrumb__item--active" aria-current="page">Holistic Care Guide</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">{{ page_title }}</h1>
+        <p class="page-header__subtitle">
+            Find the right holistic treatment for your pet's condition, understand practitioner certifications, and make informed decisions about integrative veterinary care.
+        </p>
+    </div>
+</div>
+
+<!-- Ad: Header -->
+{% set slot_type = 'header' %}
+{% include 'partials/adsense.html' %}
+
+<div class="container">
+
+    <!-- Jump Links -->
+    <nav class="guide-nav" aria-label="Page sections">
+        <ul class="guide-nav__list">
+            <li><a href="#condition-matcher" class="guide-nav__link">Condition &rarr; Specialty Matcher</a></li>
+            <li><a href="#certification-decoder" class="guide-nav__link">Certification Decoder</a></li>
+            <li><a href="#all-specialties" class="guide-nav__link">All Specialties</a></li>
+        </ul>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- SECTION 1: Condition-to-Specialty Matcher     -->
+    <!-- ============================================ -->
+    <section id="condition-matcher" class="guide-section">
+        <h2 class="guide-section__title">Condition &rarr; Specialty Matcher</h2>
+        <p class="guide-section__intro">
+            Select your pet's condition to see which holistic modalities may help. Use the species filter to narrow results to treatments commonly available for your type of pet.
+        </p>
+
+        <!-- Species Filter -->
+        <div class="species-filter" role="group" aria-label="Filter by species">
+            <span class="species-filter__label">Filter by species:</span>
+            <button class="species-filter__btn active" data-species="all">All Pets</button>
+            <button class="species-filter__btn" data-species="dogs">Dogs</button>
+            <button class="species-filter__btn" data-species="cats">Cats</button>
+            <button class="species-filter__btn" data-species="horses">Horses</button>
+        </div>
+
+        <!-- Condition Selector -->
+        <div class="condition-selector">
+            <label for="condition-select" class="condition-selector__label">What is your pet experiencing?</label>
+            <select id="condition-select" class="condition-selector__select">
+                <option value="">— Select a condition —</option>
+            </select>
+        </div>
+
+        <!-- Results -->
+        <div id="matcher-results" class="matcher-results" aria-live="polite" style="display:none;">
+            <h3 class="matcher-results__heading">Recommended Holistic Treatments</h3>
+            <div id="matcher-results-list" class="matcher-results__list"></div>
+            <p class="matcher-results__disclaimer">
+                <em>This guide is for informational purposes only and does not replace professional veterinary advice. Always consult a licensed veterinarian before starting any treatment.</em>
+            </p>
+        </div>
+
+        <!-- No Results -->
+        <div id="matcher-no-results" class="matcher-no-results" style="display:none;">
+            <p>No matching specialties found for this condition and species filter. Try selecting "All Pets" or a different condition.</p>
+        </div>
+    </section>
+
+    <!-- Ad: In-feed -->
+    {% set slot_type = 'infeed' %}
+    {% include 'partials/adsense.html' %}
+
+    <!-- ============================================ -->
+    <!-- SECTION 2: Certification Decoder              -->
+    <!-- ============================================ -->
+    <section id="certification-decoder" class="guide-section">
+        <h2 class="guide-section__title">Certification Decoder</h2>
+        <p class="guide-section__intro">
+            Understanding veterinary holistic certifications helps you evaluate a practitioner's training and expertise. Here are the major certifying bodies and what their credentials mean.
+        </p>
+
+        <div class="cert-grid">
+            <article class="cert-card">
+                <div class="cert-card__header">
+                    <h3 class="cert-card__title">AHVMA</h3>
+                    <span class="cert-card__full-name">American Holistic Veterinary Medical Association</span>
+                </div>
+                <div class="cert-card__body">
+                    <p><strong>What it means:</strong> Membership in the leading professional organization for holistic veterinarians. Members must hold a valid DVM/VMD license and commit to continuing education in integrative medicine.</p>
+                    <p><strong>What to look for:</strong> AHVMA membership indicates a vet's commitment to holistic approaches, but is not a specialty certification. Look for additional credentials in specific modalities.</p>
+                    <p><strong>Training:</strong> Annual conferences, CE courses, and peer-reviewed journal access.</p>
+                </div>
+            </article>
+
+            <article class="cert-card">
+                <div class="cert-card__header">
+                    <h3 class="cert-card__title">Chi Institute (CVA, CVCH, CVFT)</h3>
+                    <span class="cert-card__full-name">Chi Institute of Traditional Chinese Veterinary Medicine</span>
+                </div>
+                <div class="cert-card__body">
+                    <p><strong>What it means:</strong> The Chi Institute is the world's leading TCVM training program. Graduates earn certifications in veterinary acupuncture (CVA), Chinese herbal medicine (CVCH), and/or food therapy (CVFT).</p>
+                    <p><strong>What to look for:</strong> CVA certification requires 100+ hours of training. CVCH and CVFT require additional coursework. Chi Institute graduates are trained in all four branches of TCVM.</p>
+                    <p><strong>Training:</strong> Hands-on clinical training, case studies, and written/practical exams.</p>
+                </div>
+            </article>
+
+            <article class="cert-card">
+                <div class="cert-card__header">
+                    <h3 class="cert-card__title">IVAS (CVA)</h3>
+                    <span class="cert-card__full-name">International Veterinary Acupuncture Society</span>
+                </div>
+                <div class="cert-card__body">
+                    <p><strong>What it means:</strong> IVAS provides one of the most recognized veterinary acupuncture certifications worldwide. Their CVA (Certified Veterinary Acupuncturist) credential requires extensive coursework and practical training.</p>
+                    <p><strong>What to look for:</strong> IVAS CVA certification requires 120+ hours of training, including hands-on clinical practice and a comprehensive exam. This is considered the gold standard for veterinary acupuncture.</p>
+                    <p><strong>Training:</strong> Multi-module course over 6-12 months with supervised clinical practice.</p>
+                </div>
+            </article>
+
+            <article class="cert-card">
+                <div class="cert-card__header">
+                    <h3 class="cert-card__title">AVCA</h3>
+                    <span class="cert-card__full-name">American Veterinary Chiropractic Association</span>
+                </div>
+                <div class="cert-card__body">
+                    <p><strong>What it means:</strong> AVCA certification is the primary credential for veterinary chiropractic practitioners. Certified practitioners have completed approved coursework and passed rigorous written and practical exams.</p>
+                    <p><strong>What to look for:</strong> AVCA certification requires 210+ hours of approved animal chiropractic training. Both DVMs and human chiropractors can earn this credential.</p>
+                    <p><strong>Training:</strong> Programs through Options for Animals or Parker University, plus written and practical board exams.</p>
+                </div>
+            </article>
+
+            <article class="cert-card">
+                <div class="cert-card__header">
+                    <h3 class="cert-card__title">AVH</h3>
+                    <span class="cert-card__full-name">Academy of Veterinary Homeopathy</span>
+                </div>
+                <div class="cert-card__body">
+                    <p><strong>What it means:</strong> AVH certification (CVH — Certified Veterinary Homeopath) indicates advanced training in classical homeopathic veterinary medicine. This is the most recognized homeopathy credential for veterinarians.</p>
+                    <p><strong>What to look for:</strong> CVH certification requires documented case submissions, peer review, and demonstrated proficiency. AVH members follow classical homeopathic principles.</p>
+                    <p><strong>Training:</strong> Extensive case-based study, mentorship, and peer-reviewed case submissions.</p>
+                </div>
+            </article>
+
+            <article class="cert-card">
+                <div class="cert-card__header">
+                    <h3 class="cert-card__title">CCRT / CCRP</h3>
+                    <span class="cert-card__full-name">Certified Canine Rehabilitation Therapist / Practitioner</span>
+                </div>
+                <div class="cert-card__body">
+                    <p><strong>What it means:</strong> CCRT (University of Tennessee) and CCRP (Canine Rehabilitation Institute) are the leading credentials for veterinary physical rehabilitation. These practitioners are trained in therapeutic exercise, hydrotherapy, and manual therapy techniques.</p>
+                    <p><strong>What to look for:</strong> Both certifications require 100+ hours of coursework plus clinical rotations. CCRT is offered through the University of Tennessee's veterinary program.</p>
+                    <p><strong>Training:</strong> Multi-module coursework, clinical hours, and board examination.</p>
+                </div>
+            </article>
+        </div>
+
+        <div class="cert-tip">
+            <h3>How to Evaluate Credentials</h3>
+            <ul>
+                <li><strong>Verify licensing first</strong> — every holistic vet should hold a valid DVM or VMD degree and state license</li>
+                <li><strong>Ask about specific certifications</strong> — "AHVMA member" is different from "CVA certified"</li>
+                <li><strong>Check training hours</strong> — reputable certifications require 100+ hours of specialized study</li>
+                <li><strong>Look for continuing education</strong> — good practitioners keep their skills current</li>
+                <li><strong>Ask about integrative approach</strong> — the best holistic vets combine natural therapies with conventional medicine when needed</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Ad: In-feed -->
+    {% set slot_type = 'infeed' %}
+    {% include 'partials/adsense.html' %}
+
+    <!-- ============================================ -->
+    <!-- SECTION 3: All Specialties Quick Reference     -->
+    <!-- ============================================ -->
+    <section id="all-specialties" class="guide-section">
+        <h2 class="guide-section__title">All Holistic Specialties</h2>
+        <p class="guide-section__intro">
+            Browse all {{ specialties | length }} holistic veterinary modalities in our directory. Click any specialty to find practitioners near you.
+        </p>
+
+        <div class="specialties-ref-grid">
+            {% for specialty in specialties %}
+            <a href="/specialty/{{ specialty.slug }}/" class="specialty-ref-card">
+                <h3 class="specialty-ref-card__title">{{ specialty.name }}</h3>
+                <p class="specialty-ref-card__desc">{{ specialty.description | truncate_words(20) }}</p>
+                {% if specialty.vet_count > 0 %}
+                <span class="specialty-ref-card__count">{{ specialty.vet_count }} {{ specialty.vet_count | pluralize('practitioner', 'practitioners') }}</span>
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="guide-cta">
+        <h2>Ready to Find a Holistic Vet?</h2>
+        <p>Search our directory of {{ total_vets }} holistic and integrative veterinarians across the United States.</p>
+        <a href="/vets/" class="btn btn--primary btn--large">Find a Vet Near You &rarr;</a>
+    </section>
+</div>
+
+<!-- Ad: Footer -->
+{% set slot_type = 'footer' %}
+{% include 'partials/adsense.html' %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Guide Navigation */
+.guide-nav { margin: 2rem 0; padding: 1.25rem; background: var(--color-bg); border-radius: 8px; border: 1px solid #e9ecef; }
+.guide-nav__list { display: flex; flex-wrap: wrap; gap: 0.75rem; list-style: none; padding: 0; margin: 0; }
+.guide-nav__link { display: inline-block; padding: 0.5rem 1rem; background: white; border: 1px solid #dee2e6; border-radius: 6px; color: var(--color-primary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+.guide-nav__link:hover { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+
+/* Guide Sections */
+.guide-section { margin: 3rem 0; padding-top: 1rem; }
+.guide-section__title { font-size: 1.75rem; color: var(--color-primary-dark); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 3px solid var(--color-accent); display: inline-block; }
+.guide-section__intro { font-size: 1.05rem; color: #495057; margin-bottom: 1.5rem; max-width: 720px; line-height: 1.7; }
+
+/* Species Filter */
+.species-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+.species-filter__label { font-weight: 600; color: #495057; font-size: 0.9rem; }
+.species-filter__btn { padding: 0.5rem 1.25rem; border: 2px solid #dee2e6; border-radius: 24px; background: white; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: #495057; transition: all 0.2s; }
+.species-filter__btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.species-filter__btn.active { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+
+/* Condition Selector */
+.condition-selector { margin-bottom: 1.5rem; }
+.condition-selector__label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-primary-dark); }
+.condition-selector__select { width: 100%; max-width: 480px; padding: 0.75rem 1rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; color: #212529; background: white; cursor: pointer; transition: border-color 0.2s; }
+.condition-selector__select:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15); }
+
+/* Matcher Results */
+.matcher-results { margin-top: 1.5rem; }
+.matcher-results__heading { font-size: 1.2rem; color: var(--color-primary-dark); margin-bottom: 1rem; }
+.matcher-results__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.matcher-results__disclaimer { margin-top: 1.5rem; font-size: 0.85rem; color: #6c757d; }
+
+.matcher-result-card { padding: 1.25rem; background: white; border: 1px solid #e9ecef; border-radius: 8px; transition: box-shadow 0.2s; }
+.matcher-result-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.matcher-result-card__name { font-size: 1.1rem; font-weight: 600; color: var(--color-primary-dark); margin: 0 0 0.5rem 0; }
+.matcher-result-card__name a { color: inherit; text-decoration: none; }
+.matcher-result-card__name a:hover { color: var(--color-primary); text-decoration: underline; }
+.matcher-result-card__desc { font-size: 0.9rem; color: #495057; margin-bottom: 0.75rem; line-height: 1.6; }
+.matcher-result-card__conditions { font-size: 0.8rem; color: #6c757d; }
+.matcher-result-card__species { display: inline-block; margin-top: 0.5rem; font-size: 0.75rem; background: #e9ecef; padding: 0.2rem 0.6rem; border-radius: 12px; color: #495057; }
+.matcher-result-card__link { display: inline-block; margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-primary); font-weight: 500; text-decoration: none; }
+.matcher-result-card__link:hover { text-decoration: underline; }
+
+.matcher-no-results { margin-top: 1.5rem; padding: 1.25rem; background: #fff3cd; border-radius: 8px; color: #856404; }
+
+/* Certification Cards */
+.cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+.cert-card { background: white; border: 1px solid #e9ecef; border-radius: 8px; overflow: hidden; transition: box-shadow 0.2s; }
+.cert-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.cert-card__header { padding: 1rem 1.25rem; background: var(--color-primary-dark); color: white; }
+.cert-card__title { font-size: 1.2rem; margin: 0 0 0.25rem 0; }
+.cert-card__full-name { font-size: 0.8rem; opacity: 0.85; }
+.cert-card__body { padding: 1.25rem; }
+.cert-card__body p { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.75rem; color: #495057; }
+.cert-card__body p:last-child { margin-bottom: 0; }
+
+.cert-tip { padding: 1.5rem; background: linear-gradient(135deg, #f0fdf4, #ecfdf5); border: 1px solid var(--color-secondary-light); border-radius: 8px; margin-top: 1rem; }
+.cert-tip h3 { font-size: 1.1rem; color: var(--color-primary-dark); margin-bottom: 0.75rem; }
+.cert-tip ul { margin: 0; padding-left: 1.25rem; }
+.cert-tip li { margin-bottom: 0.5rem; font-size: 0.9rem; color: #495057; line-height: 1.6; }
+
+/* Specialties Reference Grid */
+.specialties-ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.specialty-ref-card { display: block; padding: 1.25rem; background: white; border: 1px solid #e9ecef; border-radius: 8px; text-decoration: none; transition: all 0.2s; }
+.specialty-ref-card:hover { border-color: var(--color-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+.specialty-ref-card__title { font-size: 1rem; font-weight: 600; color: var(--color-primary-dark); margin: 0 0 0.5rem 0; }
+.specialty-ref-card__desc { font-size: 0.85rem; color: #6c757d; margin: 0 0 0.5rem 0; line-height: 1.5; }
+.specialty-ref-card__count { font-size: 0.8rem; color: var(--color-accent-dark); font-weight: 500; }
+
+/* CTA */
+.guide-cta { text-align: center; padding: 3rem 2rem; margin: 3rem 0; background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); border-radius: 12px; color: white; }
+.guide-cta h2 { color: white; margin-bottom: 0.75rem; }
+.guide-cta p { opacity: 0.9; margin-bottom: 1.5rem; font-size: 1.05rem; }
+.guide-cta .btn--primary { background: var(--color-accent); color: var(--color-primary-dark); border-color: var(--color-accent); font-weight: 600; }
+.guide-cta .btn--primary:hover { background: var(--color-accent-dark); color: white; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .guide-nav__list { flex-direction: column; }
+    .cert-grid { grid-template-columns: 1fr; }
+    .matcher-results__list { grid-template-columns: 1fr; }
+    .species-filter { flex-direction: column; align-items: flex-start; }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    'use strict';
+
+    // Specialty data embedded from build
+    var specialties = [
+        {% for s in specialties %}
+        {
+            name: {{ s.name | tojson }},
+            slug: {{ s.slug | tojson }},
+            description: {{ s.description | tojson }},
+            conditions: {{ s.related_conditions | tojson }},
+            species: {{ s.species | tojson if s.species else '"All"' }},
+            vetCount: {{ s.vet_count | default(0) }}
+        }{{ "," if not loop.last }}
+        {% endfor %}
+    ];
+
+    // Parse conditions from all specialties to build unique condition list
+    function parseConditions(specList) {
+        var condSet = {};
+        specList.forEach(function(s) {
+            if (!s.conditions) return;
+            s.conditions.split(',').forEach(function(c) {
+                var trimmed = c.trim().toLowerCase();
+                if (trimmed) {
+                    // Store display version (title case)
+                    var display = c.trim().replace(/\b\w/g, function(l){ return l.toUpperCase(); });
+                    condSet[trimmed] = display;
+                }
+            });
+        });
+        var result = Object.keys(condSet).map(function(k){ return { key: k, display: condSet[k] }; });
+        result.sort(function(a,b){ return a.display.localeCompare(b.display); });
+        return result;
+    }
+
+    // Check if specialty serves a given species
+    function matchesSpecies(specSpecies, filterSpecies) {
+        if (filterSpecies === 'all') return true;
+        if (!specSpecies) return true; // "All" species
+        var s = specSpecies.toLowerCase();
+        if (s === 'all') return true;
+        return s.indexOf(filterSpecies) !== -1;
+    }
+
+    // Check if specialty treats a condition
+    function matchesCondition(specConditions, condKey) {
+        if (!condKey) return false;
+        if (!specConditions) return false;
+        var conditions = specConditions.toLowerCase().split(',').map(function(c){ return c.trim(); });
+        return conditions.some(function(c){ return c.indexOf(condKey) !== -1 || condKey.indexOf(c) !== -1; });
+    }
+
+    var currentSpecies = 'all';
+    var allConditions = parseConditions(specialties);
+
+    // DOM refs
+    var selectEl = document.getElementById('condition-select');
+    var resultsEl = document.getElementById('matcher-results');
+    var resultsListEl = document.getElementById('matcher-results-list');
+    var noResultsEl = document.getElementById('matcher-no-results');
+    var speciesBtns = document.querySelectorAll('.species-filter__btn');
+
+    // Populate condition dropdown
+    function populateConditions() {
+        // Clear existing options except first
+        while (selectEl.options.length > 1) selectEl.remove(1);
+
+        // Filter conditions based on species
+        var filtered = specialties.filter(function(s) { return matchesSpecies(s.species, currentSpecies); });
+        var conditions = parseConditions(filtered);
+
+        conditions.forEach(function(cond) {
+            var opt = document.createElement('option');
+            opt.value = cond.key;
+            opt.textContent = cond.display;
+            selectEl.appendChild(opt);
+        });
+    }
+
+    // Show results
+    function showResults() {
+        var condKey = selectEl.value;
+        if (!condKey) {
+            resultsEl.style.display = 'none';
+            noResultsEl.style.display = 'none';
+            return;
+        }
+
+        var matches = specialties.filter(function(s) {
+            return matchesCondition(s.conditions, condKey) && matchesSpecies(s.species, currentSpecies);
+        });
+
+        resultsListEl.innerHTML = '';
+
+        if (matches.length === 0) {
+            resultsEl.style.display = 'none';
+            noResultsEl.style.display = 'block';
+            return;
+        }
+
+        noResultsEl.style.display = 'none';
+        resultsEl.style.display = 'block';
+
+        matches.forEach(function(s) {
+            var card = document.createElement('div');
+            card.className = 'matcher-result-card';
+
+            var truncDesc = s.description;
+            if (truncDesc && truncDesc.length > 160) truncDesc = truncDesc.substring(0, 157) + '...';
+
+            var html = '<h4 class="matcher-result-card__name"><a href="/specialty/' + s.slug + '/">' + s.name + '</a></h4>';
+            html += '<p class="matcher-result-card__desc">' + truncDesc + '</p>';
+            html += '<p class="matcher-result-card__conditions"><strong>Also treats:</strong> ' + s.conditions + '</p>';
+            if (s.species && s.species !== 'All') {
+                html += '<span class="matcher-result-card__species">' + s.species + '</span>';
+            }
+            if (s.vetCount > 0) {
+                html += '<a href="/specialty/' + s.slug + '/" class="matcher-result-card__link">Find ' + s.vetCount + ' practitioners &rarr;</a>';
+            }
+
+            card.innerHTML = html;
+            resultsListEl.appendChild(card);
+        });
+    }
+
+    // Species filter click
+    speciesBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            speciesBtns.forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            currentSpecies = btn.getAttribute('data-species');
+            populateConditions();
+            showResults();
+        });
+    });
+
+    // Condition select change
+    selectEl.addEventListener('change', showResults);
+
+    // Init
+    populateConditions();
+})();
+</script>
+{% endblock %}

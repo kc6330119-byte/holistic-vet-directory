@@ -1043,6 +1043,7 @@ class SiteGenerator:
         self._generate_search_page()
         self._generate_blog_list()
         self._generate_blog_detail_pages()
+        self._generate_holistic_care_guide()
         self._generate_static_pages()
         self._generate_search_index()
         self._generate_sitemap()
@@ -1794,6 +1795,16 @@ class SiteGenerator:
             )
             print(f"  Generated: blog/{post.slug}/index.html")
 
+    def _generate_holistic_care_guide(self):
+        print("Generating holistic care guide...")
+        self._render_and_write('holistic_care_guide.html', 'holistic-care-guide/index.html', {
+            'page_title': 'Holistic Pet Care Guide — Conditions, Specialties & Certifications',
+            'page_description': 'Find the right holistic treatment for your pet. Match conditions to specialties, understand vet certifications like AHVMA, IVAS, and Chi Institute, and make informed choices about integrative veterinary care.',
+            'specialties': self.processor.specialties,
+            'total_vets': len(self.processor.vets),
+            'request_path': '/holistic-care-guide/',
+        })
+
     def _generate_static_pages(self):
         print("Generating static pages...")
         
@@ -1848,6 +1859,7 @@ class SiteGenerator:
             {'loc': '/vets/', 'priority': '0.9', 'changefreq': 'daily'},
             {'loc': '/specialties/', 'priority': '0.8', 'changefreq': 'weekly'},
             {'loc': '/search/', 'priority': '0.8', 'changefreq': 'monthly'},
+            {'loc': '/holistic-care-guide/', 'priority': '0.8', 'changefreq': 'weekly'},
             {'loc': '/about/', 'priority': '0.5', 'changefreq': 'monthly'},
             {'loc': '/submit/', 'priority': '0.5', 'changefreq': 'monthly'},
         ]
