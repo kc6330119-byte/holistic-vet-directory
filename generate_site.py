@@ -1641,6 +1641,45 @@ class SiteGenerator:
         ),
     }
 
+    # Key: "STATE_CODE:city-slug"
+    CITY_EDITORIAL = {
+        "CO:denver": (
+            "Denver's active, outdoor-oriented culture means pets here often share the "
+            "same high-altitude lifestyle as their owners — hiking, trail running, and "
+            "year-round mountain adventures. Holistic veterinarians in Denver understand "
+            "these unique demands, offering acupuncture and rehabilitation therapy for "
+            "athletic dogs recovering from joint stress, herbal medicine for respiratory "
+            "support at elevation, and nutritional therapy tailored to high-energy working "
+            "breeds. Denver's progressive pet-care culture has also made integrative "
+            "medicine more mainstream here than in most U.S. cities, with owners actively "
+            "seeking alternatives to over-vaccination and long-term pharmaceutical dependency."
+        ),
+        "TX:houston": (
+            "Houston's subtropical climate creates year-round challenges for pets: "
+            "persistent flea, tick, and heartworm pressure, seasonal allergies from "
+            "Gulf Coast pollen, and heat-related inflammation in brachycephalic breeds. "
+            "Holistic veterinarians in Houston offer acupuncture, herbal medicine, and "
+            "Traditional Chinese Veterinary Medicine to address these chronic conditions "
+            "with fewer pharmaceutical side effects. Houston's large and diverse pet-owning "
+            "community — from the Heights to the Energy Corridor — has driven growing "
+            "demand for integrative vet care that treats the root cause of illness rather "
+            "than masking symptoms. Whether your pet needs pain management, immune "
+            "support, or natural anxiety relief, Houston's holistic vets offer "
+            "evidence-based complementary therapies alongside conventional care."
+        ),
+    }
+
+    CITY_META_OVERRIDES = {
+        "CO:denver": (
+            "Find holistic veterinarians in Denver, Colorado specializing in acupuncture, "
+            "herbal medicine & integrative pet care. Browse holistic vets near you in Denver CO."
+        ),
+        "TX:houston": (
+            "Find holistic veterinarians in Houston, Texas offering acupuncture, herbal "
+            "medicine & integrative care. Browse holistic vets in Houston TX near you."
+        ),
+    }
+
     def _generate_state_pages(self):
         print("Generating state pages...")
         for state in self.processor.states:
@@ -1681,7 +1720,9 @@ class SiteGenerator:
                     continue
                 
                 city_name = city_vets[0].city
-                noindex = len(city_vets) < 3
+                # Only noindex if truly empty (0 vets) — single-vet city pages
+                # are still valid, indexable landing pages for local SEO queries
+                noindex = False
 
                 # Find dominant specialty for editorial intro
                 specialty_counts = {}
@@ -1690,16 +1731,23 @@ class SiteGenerator:
                         specialty_counts[spec] = specialty_counts.get(spec, 0) + 1
                 dominant_specialty = max(specialty_counts, key=specialty_counts.get) if specialty_counts else None
 
+                city_key = f"{state_code}:{city_slug}"
+                city_editorial = self.CITY_EDITORIAL.get(city_key, "")
+                city_meta = self.CITY_META_OVERRIDES.get(city_key, "")
+                page_description = city_meta or f'Find {len(city_vets)} holistic and integrative veterinarians in {city_name}, {state.name}. Discover homeopathic, naturopathic, and holistic vets offering natural pet care near you.'
+
                 self._render_and_write('city_list.html', f'vets/{state.slug}/{city_slug}/index.html', {
                     'page_title': f'Holistic Veterinarians in {city_name}, {state.name}',
-                    'page_description': f'Find {len(city_vets)} holistic and integrative veterinarians in {city_name}, {state.name}. Discover homeopathic, naturopathic, and holistic vets offering natural pet care near you.',
+                    'page_description': page_description,
                     'state': state,
+                    'city': city_name,
                     'city_name': city_name,
                     'city_slug': city_slug,
                     'vets': sorted(city_vets, key=lambda v: v.practice_name),
                     'noindex': noindex,
                     'dominant_specialty': dominant_specialty,
                     'listing_count': len(city_vets),
+                    'city_editorial': city_editorial,
                 })
     
     def _generate_vet_detail_pages(self):

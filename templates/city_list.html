@@ -80,7 +80,7 @@
             </ol>
         </nav>
 
-        <h1 class="page-header__title">Holistic Veterinarians in {{ city }}, {{ state.code }}</h1>
+        <h1 class="page-header__title">Holistic Veterinarians in {{ city }}, {{ state.name }}</h1>
         <p class="page-header__subtitle">
             {{ vets | length }} holistic and integrative veterinary {{ vets | length | pluralize('practice', 'practices') }} in {{ city }}
         </p>
@@ -97,6 +97,11 @@
             Whether you're looking for acupuncture, herbal medicine, chiropractic care, or other natural therapies for your pet, browse our directory to find a qualified holistic veterinarian near you in {{ city }}.
         </p>
     </div>
+    {% if city_editorial %}
+    <div class="city-editorial" style="max-width: 800px; margin: 0 auto 1.5rem; padding: 0 1rem;">
+        <p style="font-size: 0.95rem; line-height: 1.7; color: #495057;">{{ city_editorial }}</p>
+    </div>
+    {% endif %}
 </div>
 
 <!-- Ad: Header -->
