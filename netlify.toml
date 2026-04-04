@@ -77,6 +77,11 @@
   status = 404
 
 [[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
