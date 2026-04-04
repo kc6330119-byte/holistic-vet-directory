@@ -539,12 +539,13 @@ class Specialty:
     description: str = ""
     related_conditions: str = ""
     slug: str = ""
+    species: str = ""
     vet_count: int = 0
-    
+
     def __post_init__(self):
         if not self.slug:
             self.slug = slugify(self.name)
-    
+
     @classmethod
     def from_csv_row(cls, row: Dict[str, str]) -> 'Specialty':
         return cls(
@@ -552,6 +553,7 @@ class Specialty:
             description=row.get('Description', ''),
             related_conditions=row.get('Related Conditions', ''),
             slug=row.get('Slug', ''),
+            species=row.get('Species', ''),
         )
 
 
@@ -667,23 +669,9 @@ class DataLoader:
         return vets
     
     def load_specialties(self) -> List[Specialty]:
-        if self.use_airtable and self._airtable_loader:
-            return self._load_specialties_from_airtable()
+        # Always load from CSV — it is the authoritative source for specialty metadata
+        # (conditions, species, descriptions). Airtable does not have these fields populated.
         return self._load_specialties_from_csv()
-    
-    def _load_specialties_from_airtable(self) -> List[Specialty]:
-        """Load specialties from Airtable."""
-        airtable_specs = self._airtable_loader.load_specialties()
-        specialties = []
-        for asp in airtable_specs:
-            spec = Specialty(
-                name=asp.name,
-                description=asp.description,
-                related_conditions=asp.related_conditions,
-                slug=asp.slug,
-            )
-            specialties.append(spec)
-        return specialties
     
     def _load_specialties_from_csv(self) -> List[Specialty]:
         """Load specialties from CSV file."""
