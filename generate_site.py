@@ -1086,8 +1086,8 @@ class SiteGenerator:
         print("Generating vets listing...")
         vets = sorted(self.processor.vets, key=lambda v: (v.state, v.city, v.practice_name))
         self._render_and_write('vets_list.html', 'vets/index.html', {
-            'page_title': 'Browse Holistic Veterinarians by State',
-            'page_description': 'Browse 3,200+ holistic and integrative veterinarians across all 50 states. Find practitioners offering acupuncture, chiropractic, herbal medicine, and natural pet care with verified Google ratings.',
+            'page_title': 'Find Holistic Veterinarians Near You',
+            'page_description': 'Search 3,200+ holistic vets by state, city, or specialty. Find acupuncture, chiropractic & herbal medicine near you. Start your search today.',
             'vets': vets,
             'total_count': len(vets),
             'current_page': 1,
@@ -1689,8 +1689,8 @@ class SiteGenerator:
                     specialty_details.append(spec)
             
             self._render_and_write('vet_detail.html', f'vet/{vet.slug}/index.html', {
-                'page_title': f'{vet.practice_name} - Holistic Veterinarian in {vet.city}, {vet.state}',
-                'page_description': vet.practice_description[:155] if vet.practice_description else f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}.',
+                'page_title': f'Holistic Vet in {vet.city}, {vet.state} | {vet.practice_name}',
+                'page_description': (vet.practice_description[:118].rsplit(' ', 1)[0].rstrip('.,') + f' — holistic vet care in {vet.city}, {vet.state}.') if vet.practice_description else f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}. Book a consultation today.',
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
@@ -1775,7 +1775,7 @@ class SiteGenerator:
                 f'blog/{post.slug}/index.html',
                 {
                     'page_title': f'{post.title} | Holistic Vet Directory Blog',
-                    'page_description': post.meta_description or post.excerpt,
+                    'page_description': post.meta_description or (post.excerpt[:130].rsplit(' ', 1)[0].rstrip('.,') + ' — read the full guide at Holistic Vet Directory.' if post.excerpt else f'{post.title} — Expert holistic pet care advice. Read the full guide at Holistic Vet Directory.'),
                     'post': post,
                     'request_path': f'/blog/{post.slug}/',
                     'related_posts': [p for p in self.processor.blog_posts if p.slug != post.slug][:3],
