@@ -1150,15 +1150,19 @@ class SiteGenerator:
             "practitioners serving the state's large horse community."
         ),
         "CO": (
-            "Colorado's active, outdoor-oriented culture extends to its pets. Dogs "
-            "here hike fourteeners, run trails at altitude, and play hard in every "
-            "season — and their bodies show it. Holistic veterinarians in Colorado "
-            "see high demand for chiropractic care, acupuncture, and physical "
-            "rehabilitation for athletic and working dogs. The state's dry climate "
-            "and high altitude also create unique health considerations, including "
-            "increased UV exposure and respiratory adjustments for pets relocating "
-            "from lower elevations. Colorado has one of the strongest holistic vet "
-            "communities in the Mountain West."
+            "Colorado's active, outdoor-oriented culture extends to its pets — and "
+            "finding the right holistic veterinarian in Colorado has never been more "
+            "important. Dogs here hike fourteeners, run trails at altitude, and play "
+            "hard in every season, and their bodies show it. Whether you're searching "
+            "for a holistic vet near me in Colorado or looking for a specialist in "
+            "acupuncture, chiropractic, or physical rehabilitation, the state's "
+            "integrative vet community is well-equipped to help. Colorado's dry "
+            "climate and high altitude create unique health considerations including "
+            "increased UV exposure, joint stress from rocky terrain, and respiratory "
+            "adjustments for pets relocating from lower elevations. From Denver to "
+            "Colorado Springs to the mountain communities, holistic veterinarians "
+            "in Colorado offer a full range of integrative care modalities for dogs, "
+            "cats, horses, and more."
         ),
         "CT": (
             "Connecticut's holistic veterinary community serves a pet-owning "
@@ -1622,6 +1626,21 @@ class SiteGenerator:
         ),
     }
 
+    # State-specific page title overrides for high-impression, low-click pages
+    STATE_TITLE_OVERRIDES = {
+        "CO": "Find a Holistic Veterinarian in Colorado | Integrative Vets Near Me",
+    }
+
+    # State-specific meta description overrides
+    STATE_DESCRIPTION_OVERRIDES = {
+        "CO": (
+            "Looking for a holistic veterinarian in Colorado? Browse our directory of "
+            "integrative and holistic vets near you in Denver, Colorado Springs, and "
+            "across the state. Find practitioners offering acupuncture, chiropractic, "
+            "herbal medicine, and physical rehabilitation for dogs, cats, and horses."
+        ),
+    }
+
     def _generate_state_pages(self):
         print("Generating state pages...")
         for state in self.processor.states:
@@ -1632,9 +1651,18 @@ class SiteGenerator:
             cities = self.processor.cities_by_state.get(state.code, [])
             editorial = self.STATE_EDITORIAL.get(state.code, "")
 
+            page_title = self.STATE_TITLE_OVERRIDES.get(
+                state.code,
+                f'Holistic Veterinarians in {state.name}'
+            )
+            page_description = self.STATE_DESCRIPTION_OVERRIDES.get(
+                state.code,
+                f'Find {state.vet_count} holistic, homeopathic, and integrative veterinarians in {state.name}. Browse certified practitioners offering acupuncture, herbal medicine, chiropractic and natural pet care near you.'
+            )
+
             self._render_and_write('state_list.html', f'vets/{state.slug}/index.html', {
-                'page_title': f'Holistic Veterinarians in {state.name}',
-                'page_description': f'Find {state.vet_count} holistic, homeopathic, and integrative veterinarians in {state.name}. Browse certified practitioners offering acupuncture, herbal medicine, chiropractic and natural pet care near you.',
+                'page_title': page_title,
+                'page_description': page_description,
                 'state': state,
                 'vets': sorted(state_vets, key=lambda v: (v.city, v.practice_name)),
                 'cities': cities,
