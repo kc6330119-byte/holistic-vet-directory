@@ -1746,6 +1746,27 @@ class SiteGenerator:
             "medicine more mainstream here than in most U.S. cities, with owners actively "
             "seeking alternatives to over-vaccination and long-term pharmaceutical dependency."
         ),
+        "CO:colorado-springs": (
+            "Colorado Springs sits at over 6,000 feet with dramatic temperature swings "
+            "and intense UV exposure that affect pets year-round. Dogs here are prone to "
+            "joint wear from rocky terrain and altitude-related respiratory strain, while "
+            "the dry mountain air contributes to chronic skin conditions. Holistic "
+            "veterinarians in Colorado Springs offer chiropractic care and acupuncture "
+            "for musculoskeletal issues common in active mountain dogs, herbal medicine "
+            "for altitude-sensitive pets, and nutritional therapy designed for the unique "
+            "metabolic demands of life at elevation. The city's military community has "
+            "also increased demand for integrative care for working and service dogs."
+        ),
+        "CO:boulder": (
+            "Boulder's health-conscious, outdoors-focused community extends naturally to "
+            "how residents care for their pets. Dogs here hike the Flatirons, run trails, "
+            "and live active lives that create distinct veterinary needs — joint stress, "
+            "paw pad injuries, and altitude-related conditions. Holistic veterinarians in "
+            "Boulder offer acupuncture, chiropractic adjustments, and physical rehabilitation "
+            "for athletic animals, alongside herbal and nutritional therapies. Boulder's "
+            "culture of wellness and natural living means integrative vet care is not a "
+            "fringe choice here but a mainstream expectation."
+        ),
         "TX:houston": (
             "Houston's subtropical climate creates year-round challenges for pets: "
             "persistent flea, tick, and heartworm pressure, seasonal allergies from "
@@ -1759,16 +1780,229 @@ class SiteGenerator:
             "support, or natural anxiety relief, Houston's holistic vets offer "
             "evidence-based complementary therapies alongside conventional care."
         ),
+        "TX:austin": (
+            "Austin's warm climate and active outdoor culture create a pet community that "
+            "values natural, whole-body approaches to animal health. Cedar allergies, heat "
+            "stress, and tick-borne diseases are persistent concerns for Austin pets, and "
+            "holistic veterinarians here address these with acupuncture, herbal formulas, "
+            "and immune-supporting nutritional protocols. Austin's integrative vet scene "
+            "reflects the city's broader commitment to wellness, with practitioners "
+            "offering Traditional Chinese Veterinary Medicine, chiropractic care, and "
+            "rehabilitation therapy for everything from senior dog mobility to post-surgical "
+            "recovery."
+        ),
+        "TX:san-antonio": (
+            "San Antonio's hot, humid climate and dense vegetation contribute to chronic "
+            "allergies, skin conditions, and parasitic infections in pets throughout the "
+            "year. Holistic veterinarians in San Antonio combine acupuncture, herbal "
+            "medicine, and nutritional therapy to manage these ongoing challenges without "
+            "relying solely on pharmaceuticals. The city's growing interest in integrative "
+            "pet care means more practitioners now offer TCVM, laser therapy, and "
+            "chiropractic services as part of comprehensive treatment plans."
+        ),
+        "TX:dallas": (
+            "Dallas pet owners increasingly seek veterinarians who offer more than "
+            "conventional treatment protocols. The North Texas climate brings seasonal "
+            "allergy flares, heat-related stress, and tick-borne disease risk that "
+            "holistic vets address with acupuncture, herbal medicine, and dietary therapy. "
+            "Dallas's holistic veterinary community includes practitioners certified in "
+            "Traditional Chinese Veterinary Medicine, chiropractic care, and "
+            "rehabilitation — offering integrative options across the Metroplex."
+        ),
+        "AZ:scottsdale": (
+            "Scottsdale's desert environment presents unique health challenges for pets: "
+            "extreme heat exposure, valley fever risk, dry skin conditions, and paw pad "
+            "burns from hot pavement. Holistic veterinarians in Scottsdale specialize in "
+            "managing these climate-specific issues with acupuncture for pain and "
+            "inflammation, herbal medicine for immune support against valley fever, and "
+            "nutritional therapy for skin and coat health in arid conditions. The city's "
+            "wellness-oriented culture has made Scottsdale a hub for integrative pet care "
+            "in the Southwest."
+        ),
+        "AZ:phoenix": (
+            "Phoenix's extreme desert heat and valley fever prevalence demand specialized "
+            "veterinary knowledge. Holistic vets in Phoenix offer acupuncture and herbal "
+            "protocols for managing heat-related stress, fungal infections, and chronic "
+            "inflammatory conditions common in the Sonoran Desert. Nutritional therapy "
+            "tailored to desert living, chiropractic care for active dogs, and laser "
+            "therapy for wound healing are widely available across the metro area."
+        ),
+        "CA:san-francisco": (
+            "San Francisco's mild, foggy climate and dense urban environment create "
+            "distinct pet health needs — from anxiety in apartment-dwelling dogs to joint "
+            "issues in breeds navigating hilly terrain. Holistic veterinarians in San "
+            "Francisco offer acupuncture, behavioral support through herbal and flower "
+            "essence therapy, and nutritional counseling for pets on specialty diets. "
+            "The Bay Area's early adoption of integrative medicine means San Francisco "
+            "has one of the highest concentrations of TCVM-certified and holistic "
+            "practitioners in the country."
+        ),
+        "CA:los-angeles": (
+            "Los Angeles pet owners have access to one of the most diverse holistic "
+            "veterinary communities in the nation. Smog-related respiratory sensitivities, "
+            "year-round flea pressure, and stress from urban living are common concerns "
+            "that LA holistic vets address with acupuncture, herbal medicine, and TCVM. "
+            "From the Westside to the Valley, integrative practitioners offer everything "
+            "from chiropractic and rehabilitation therapy to raw diet consulting and "
+            "ozone therapy."
+        ),
+        "CA:san-diego": (
+            "San Diego's coastal climate is generally gentle on pets, but year-round "
+            "outdoor activity brings its own challenges: joint wear in active dogs, "
+            "ocean-related skin irritation, and foxtail injuries during dry season. "
+            "Holistic veterinarians in San Diego offer acupuncture, physical rehabilitation, "
+            "and herbal medicine alongside conventional care, with many practitioners "
+            "certified in TCVM or veterinary chiropractic."
+        ),
+        "NY:new-york": (
+            "New York City's fast-paced urban environment creates specific stressors for "
+            "pets — noise anxiety, limited exercise space, and exposure to sidewalk "
+            "chemicals and pollutants. Holistic veterinarians in NYC offer acupuncture "
+            "and herbal medicine for anxiety and chronic conditions, nutritional therapy "
+            "for weight management in apartment dogs, and chiropractic care for breeds "
+            "prone to spinal issues. Manhattan, Brooklyn, and Queens all have established "
+            "integrative vet practices serving the city's dedicated pet-owning community."
+        ),
+        "GA:atlanta": (
+            "Atlanta's warm, humid climate makes allergies, skin conditions, and parasitic "
+            "infections persistent concerns for pet owners. Holistic veterinarians in "
+            "Atlanta offer acupuncture, herbal medicine, and nutritional therapy to manage "
+            "these chronic issues with fewer side effects than long-term pharmaceutical "
+            "use. The city's growing holistic pet care community includes practitioners "
+            "offering TCVM, laser therapy, and chiropractic services across metro Atlanta."
+        ),
+        "FL:tampa": (
+            "Tampa's tropical climate means pets face year-round flea and tick pressure, "
+            "heartworm risk, heat-related inflammation, and allergy flares from mold and "
+            "subtropical pollen. Holistic veterinarians in Tampa address these chronic "
+            "conditions with acupuncture, herbal immune support, and anti-inflammatory "
+            "nutritional protocols. The Tampa Bay area has seen growing demand for "
+            "integrative vet care, with practitioners offering TCVM, homeopathy, and "
+            "rehabilitation therapy."
+        ),
+        "WA:seattle": (
+            "Seattle's damp, cool climate contributes to joint stiffness, ear infections, "
+            "and seasonal affective changes in pets. Holistic veterinarians in Seattle "
+            "offer acupuncture and chiropractic care for mobility issues, herbal medicine "
+            "for immune support during the long rainy season, and nutritional therapy "
+            "including raw and whole-food diets. The Pacific Northwest's nature-oriented "
+            "culture has made Seattle a strong market for integrative veterinary medicine."
+        ),
+        "PA:philadelphia": (
+            "Philadelphia pet owners are increasingly turning to holistic veterinary care "
+            "for chronic conditions like allergies, arthritis, and digestive issues. "
+            "Integrative vets in Philadelphia offer acupuncture, herbal medicine, and "
+            "chiropractic care alongside conventional treatments. The city's established "
+            "veterinary community — anchored by nearby Penn Vet — includes practitioners "
+            "trained in TCVM, nutritional therapy, and physical rehabilitation."
+        ),
+        "MO:st-louis": (
+            "St. Louis pet owners deal with seasonal extremes that affect pet health — "
+            "humid summers bring allergy and parasite pressure, while cold winters "
+            "aggravate arthritis and joint pain. Holistic veterinarians in the St. Louis "
+            "metro area offer acupuncture, herbal medicine, and chiropractic care to "
+            "manage these seasonal conditions naturally. The region's integrative vet "
+            "community serves pets across St. Louis City, St. Louis County, and the "
+            "surrounding metro."
+        ),
+        "UT:salt-lake-city": (
+            "Salt Lake City's high-altitude environment and dry mountain air create "
+            "distinct health concerns for pets, including joint stress from active "
+            "lifestyles, respiratory sensitivity, and dry skin conditions. Holistic "
+            "veterinarians in Salt Lake City offer acupuncture, chiropractic care, and "
+            "herbal medicine tailored to the needs of mountain-region pets, along with "
+            "nutritional therapy for breeds adapted to high-energy outdoor living."
+        ),
+        "NV:las-vegas": (
+            "Las Vegas pets contend with extreme desert heat, low humidity, and valley "
+            "fever risk. Holistic veterinarians in Las Vegas offer acupuncture and herbal "
+            "protocols for heat stress management, immune support, and chronic skin "
+            "conditions exacerbated by the arid climate. Nutritional therapy and laser "
+            "therapy are also commonly available from integrative practitioners across "
+            "the valley."
+        ),
     }
 
     CITY_META_OVERRIDES = {
         "CO:denver": (
-            "Find holistic veterinarians in Denver, Colorado specializing in acupuncture, "
-            "herbal medicine & integrative pet care. Browse holistic vets near you in Denver CO."
+            "Find holistic veterinarians in Denver, Colorado offering acupuncture, "
+            "herbal medicine & integrative pet care. Browse Denver holistic vets near you."
+        ),
+        "CO:colorado-springs": (
+            "Find holistic veterinarians in Colorado Springs offering acupuncture, "
+            "chiropractic & integrative care. Browse holistic vets in Colorado Springs."
+        ),
+        "CO:boulder": (
+            "Find holistic veterinarians in Boulder, Colorado offering acupuncture, "
+            "chiropractic & natural pet care. Browse Boulder holistic vets near you."
         ),
         "TX:houston": (
             "Find holistic veterinarians in Houston, Texas offering acupuncture, herbal "
-            "medicine & integrative care. Browse holistic vets in Houston TX near you."
+            "medicine & integrative care. Browse Houston holistic vets near you."
+        ),
+        "TX:austin": (
+            "Find holistic veterinarians in Austin, Texas offering acupuncture, TCVM & "
+            "integrative pet care. Browse Austin holistic vets near you."
+        ),
+        "TX:san-antonio": (
+            "Find holistic veterinarians in San Antonio, Texas offering acupuncture, "
+            "herbal medicine & integrative care. Browse San Antonio holistic vets."
+        ),
+        "TX:dallas": (
+            "Find holistic veterinarians in Dallas, Texas offering acupuncture, TCVM & "
+            "integrative pet care. Browse Dallas holistic vets near you."
+        ),
+        "AZ:scottsdale": (
+            "Find holistic veterinarians in Scottsdale, Arizona offering acupuncture, "
+            "herbal medicine & integrative care. Browse Scottsdale holistic vets."
+        ),
+        "AZ:phoenix": (
+            "Find holistic veterinarians in Phoenix, Arizona offering acupuncture, herbal "
+            "medicine & integrative pet care. Browse Phoenix holistic vets near you."
+        ),
+        "CA:san-francisco": (
+            "Find holistic veterinarians in San Francisco offering acupuncture, TCVM & "
+            "integrative pet care. Browse San Francisco holistic vets near you."
+        ),
+        "CA:los-angeles": (
+            "Find holistic veterinarians in Los Angeles offering acupuncture, herbal "
+            "medicine & integrative pet care. Browse LA holistic vets near you."
+        ),
+        "CA:san-diego": (
+            "Find holistic veterinarians in San Diego offering acupuncture, herbal "
+            "medicine & integrative pet care. Browse San Diego holistic vets near you."
+        ),
+        "NY:new-york": (
+            "Find holistic veterinarians in New York City offering acupuncture, herbal "
+            "medicine & integrative pet care. Browse NYC holistic vets near you."
+        ),
+        "GA:atlanta": (
+            "Find holistic veterinarians in Atlanta, Georgia offering acupuncture, herbal "
+            "medicine & integrative care. Browse Atlanta holistic vets near you."
+        ),
+        "FL:tampa": (
+            "Find holistic veterinarians in Tampa, Florida offering acupuncture, herbal "
+            "medicine & integrative pet care. Browse Tampa holistic vets near you."
+        ),
+        "WA:seattle": (
+            "Find holistic veterinarians in Seattle, Washington offering acupuncture, "
+            "chiropractic & integrative pet care. Browse Seattle holistic vets."
+        ),
+        "PA:philadelphia": (
+            "Find holistic veterinarians in Philadelphia offering acupuncture, herbal "
+            "medicine & integrative care. Browse Philadelphia holistic vets near you."
+        ),
+        "MO:st-louis": (
+            "Find holistic veterinarians in St. Louis, Missouri offering acupuncture, "
+            "herbal medicine & integrative care. Browse St. Louis holistic vets."
+        ),
+        "UT:salt-lake-city": (
+            "Find holistic veterinarians in Salt Lake City offering acupuncture, "
+            "chiropractic & integrative pet care. Browse SLC holistic vets near you."
+        ),
+        "NV:las-vegas": (
+            "Find holistic veterinarians in Las Vegas, Nevada offering acupuncture, "
+            "herbal medicine & integrative care. Browse Las Vegas holistic vets."
         ),
     }
 
@@ -1932,8 +2166,79 @@ class SiteGenerator:
             'top_rated_by_specialty': top_rated_by_specialty,
         })
     
+    # Maps specialty slugs to relevant blog post slugs for cross-linking
+    SPECIALTY_BLOG_MAP = {
+        "acupuncture": [
+            "what-to-expect-pet-acupuncture-session",
+            "holistic-approaches-to-dog-arthritis",
+            "holistic-approaches-to-pet-allergies",
+        ],
+        "chiropractic": [
+            "chiropractic-care-for-pets",
+            "what-to-expect-veterinary-chiropractic-appointment",
+            "holistic-approaches-to-dog-arthritis",
+        ],
+        "herbal-medicine": [
+            "herbal-medicine-for-dogs-safety-benefits",
+            "what-to-expect-veterinary-herbal-medicine",
+            "holistic-treatment-fungal-infections-dogs",
+        ],
+        "homeopathy": [
+            "homeopathic-veterinary-care-guide",
+            "what-to-expect-veterinary-homeopathy",
+            "naturopathic-vs-holistic-vet-differences",
+        ],
+        "nutritional-therapy": [
+            "what-to-expect-veterinary-nutritional-therapy",
+            "best-natural-pet-food-dogs-allergies",
+            "holistic-approaches-to-pet-allergies",
+        ],
+        "traditional-chinese-veterinary-medicine": [
+            "understanding-tcvm-traditional-chinese-veterinary-medicine",
+            "what-to-expect-tcvm-consultation",
+            "what-to-expect-pet-acupuncture-session",
+        ],
+        "laser-therapy": [
+            "laser-therapy-for-pets-how-it-works",
+            "what-to-expect-veterinary-laser-therapy",
+            "holistic-approaches-to-dog-arthritis",
+        ],
+        "massage-therapy": [
+            "what-to-expect-veterinary-massage-therapy",
+            "holistic-approaches-to-dog-arthritis",
+            "holistic-approaches-to-pet-anxiety",
+        ],
+        "physical-therapy-rehabilitation": [
+            "holistic-approaches-to-dog-arthritis",
+            "what-to-expect-veterinary-chiropractic-appointment",
+            "holistic-integrative-veterinary-care-for-horses",
+        ],
+    }
+
+    # Maps specialty slugs to related specialty slugs (commonly co-occurring modalities)
+    RELATED_SPECIALTIES_MAP = {
+        "acupuncture": ["traditional-chinese-veterinary-medicine", "herbal-medicine", "chiropractic"],
+        "chiropractic": ["acupuncture", "physical-therapy-rehabilitation", "massage-therapy"],
+        "herbal-medicine": ["traditional-chinese-veterinary-medicine", "acupuncture", "nutritional-therapy"],
+        "homeopathy": ["herbal-medicine", "nutritional-therapy", "flower-essence-therapy"],
+        "nutritional-therapy": ["herbal-medicine", "homeopathy", "acupuncture"],
+        "traditional-chinese-veterinary-medicine": ["acupuncture", "herbal-medicine", "nutritional-therapy"],
+        "physical-therapy-rehabilitation": ["chiropractic", "acupuncture", "laser-therapy", "massage-therapy"],
+        "laser-therapy": ["acupuncture", "physical-therapy-rehabilitation", "chiropractic"],
+        "massage-therapy": ["chiropractic", "acupuncture", "physical-therapy-rehabilitation"],
+        "hydrotherapy": ["physical-therapy-rehabilitation", "acupuncture", "massage-therapy"],
+        "ozone-therapy": ["acupuncture", "herbal-medicine", "laser-therapy"],
+        "flower-essence-therapy": ["homeopathy", "herbal-medicine", "massage-therapy"],
+        "prolotherapy": ["acupuncture", "chiropractic", "physical-therapy-rehabilitation"],
+        "essential-oil-therapy": ["herbal-medicine", "flower-essence-therapy", "massage-therapy"],
+        "stem-cell-therapy": ["acupuncture", "laser-therapy", "physical-therapy-rehabilitation"],
+    }
+
     def _generate_specialty_pages(self):
         print("Generating specialty pages...")
+        # Build blog post lookup by slug
+        blog_by_slug = {p.slug: p for p in self.processor.blog_posts}
+
         for specialty in self.processor.specialties:
             spec_vets = self.processor.vets_by_specialty.get(specialty.slug, [])
 
@@ -1942,12 +2247,25 @@ class SiteGenerator:
             for vet in spec_vets:
                 vets_by_state[vet.state].append(vet)
 
+            # Find related blog posts for this specialty
+            related_slugs = self.SPECIALTY_BLOG_MAP.get(specialty.slug, [])
+            related_blog_posts = [blog_by_slug[s] for s in related_slugs if s in blog_by_slug]
+
+            # Find related specialties for sidebar cross-linking
+            related_spec_slugs = self.RELATED_SPECIALTIES_MAP.get(specialty.slug, [])
+            related_specialties = [
+                s for s in self.processor.specialties
+                if s.slug in related_spec_slugs and s.vet_count > 0
+            ]
+
             self._render_and_write('specialty_detail.html', f'specialty/{specialty.slug}/index.html', {
                 'page_title': f'{specialty.name} - Holistic Veterinary Care',
                 'page_description': self._truncate_meta(f'Find veterinarians offering {specialty.name}. {specialty.description}') if specialty.description else f'Find veterinarians offering {specialty.name}.',
                 'specialty': specialty,
                 'vets': sorted(spec_vets, key=lambda v: (v.state, v.city, v.practice_name)),
                 'vets_by_state': dict(vets_by_state),
+                'related_blog_posts': related_blog_posts,
+                'related_specialties': related_specialties,
             })
     
     def _generate_search_page(self):

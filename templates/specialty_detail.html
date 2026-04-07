@@ -97,9 +97,26 @@
                 </ul>
             </div>
 
+            <!-- Related Specialties -->
+            {% if related_specialties %}
+            <div class="filter-section">
+                <h3 class="filter-section__title">Related Specialties</h3>
+                <ul class="filter-list">
+                    {% for other in related_specialties %}
+                    <li>
+                        <a href="/specialty/{{ other.slug }}/" class="filter-link">
+                            {{ other.name }}
+                            <span class="filter-count">{{ other.vet_count }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
             <!-- Other Specialties -->
             <div class="filter-section">
-                <h3 class="filter-section__title">Other Specialties</h3>
+                <h3 class="filter-section__title">All Specialties</h3>
                 <ul class="filter-list">
                     {% for other in specialties[:10] %}
                     {% if other.name != specialty.name %}
@@ -152,6 +169,26 @@
         </main>
     </div>
 </div>
+
+{% if related_blog_posts %}
+<!-- Related Blog Articles -->
+<section class="section section--related-articles">
+    <div class="container">
+        <h2 class="section__title">Articles About {{ specialty.name }}</h2>
+        <div class="blog-grid">
+            {% for post in related_blog_posts %}
+            <a href="/blog/{{ post.slug }}/" class="blog-card">
+                <h3 class="blog-card__title">{{ post.title }}</h3>
+                {% if post.excerpt %}
+                <p class="blog-card__excerpt">{{ post.excerpt | truncate_words(20) }}</p>
+                {% endif %}
+                <span class="blog-card__link">Read Article &rarr;</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 
 <!-- Ad: Footer -->
 {% set slot_type = 'footer' %}
