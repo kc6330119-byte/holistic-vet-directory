@@ -106,7 +106,8 @@ class Veterinarian:
     google_reviews: int = 0
     google_place_id: str = ""
     google_maps_url: str = ""
-    
+    has_real_description: bool = False
+
     def __post_init__(self):
         if not self.slug:
             self.slug = slugify(self.practice_name)
@@ -118,7 +119,8 @@ class Veterinarian:
 
         # Auto-generate a description only when Airtable has none or a very thin one (<150 chars).
         # Any description 150+ characters is treated as real content and left untouched.
-        if len(self.practice_description.strip()) < 150:
+        self.has_real_description = len(self.practice_description.strip()) >= 150
+        if not self.has_real_description:
             self.practice_description = self._generate_auto_description()
     
     @staticmethod
@@ -476,7 +478,31 @@ class Veterinarian:
     @property
     def has_coordinates(self) -> bool:
         return self.latitude is not None and self.longitude is not None
-    
+
+    @property
+    def quality_score(self) -> int:
+        """Score 0-10 indicating listing completeness for index-worthiness.
+
+        Used to decide whether a vet detail page should be noindexed.
+        Higher score = more complete, more valuable to searchers.
+        """
+        score = 0
+        if self.has_real_description:
+            score += 3          # Real human-written description is the strongest signal
+        if self.phone:
+            score += 1
+        if self.website:
+            score += 1
+        if self.google_rating and self.google_rating > 0:
+            score += 2          # Google rating adds significant trust
+        if self.has_coordinates:
+            score += 1
+        if self.certification_bodies:
+            score += 1
+        if self.email:
+            score += 1
+        return score
+
     @property
     def maps_url(self) -> str:
         if self.has_coordinates:
@@ -1720,21 +1746,34 @@ class SiteGenerator:
                 'state_editorial': editorial,
             })
     
+    # Minimum number of vets for a city page to be indexed.
+    # City pages with fewer vets are thin doorway pages that dilute quality signals.
+    CITY_NOINDEX_MIN_VETS = 3
+
     def _generate_city_pages(self):
         print("Generating city pages...")
+        city_indexed = 0
+        city_noindexed = 0
+
         for state_code, city_dict in self.processor.vets_by_city.items():
             state = self.processor.state_by_code.get(state_code)
             if not state:
                 continue
-            
+
             for city_slug, city_vets in city_dict.items():
                 if not city_vets:
                     continue
-                
+
                 city_name = city_vets[0].city
-                # Only noindex if truly empty (0 vets) — single-vet city pages
-                # are still valid, indexable landing pages for local SEO queries
-                noindex = False
+                city_key = f"{state_code}:{city_slug}"
+                city_editorial = self.CITY_EDITORIAL.get(city_key, "")
+
+                # Noindex thin city pages unless they have custom editorial content
+                noindex = len(city_vets) < self.CITY_NOINDEX_MIN_VETS and not city_editorial
+                if noindex:
+                    city_noindexed += 1
+                else:
+                    city_indexed += 1
 
                 # Find dominant specialty for editorial intro
                 specialty_counts = {}
@@ -1743,8 +1782,6 @@ class SiteGenerator:
                         specialty_counts[spec] = specialty_counts.get(spec, 0) + 1
                 dominant_specialty = max(specialty_counts, key=specialty_counts.get) if specialty_counts else None
 
-                city_key = f"{state_code}:{city_slug}"
-                city_editorial = self.CITY_EDITORIAL.get(city_key, "")
                 city_meta = self.CITY_META_OVERRIDES.get(city_key, "")
                 page_description = city_meta or f'Find {len(city_vets)} holistic and integrative veterinarians in {city_name}, {state.name}. Discover homeopathic, naturopathic, and holistic vets offering natural pet care near you.'
 
@@ -1761,13 +1798,23 @@ class SiteGenerator:
                     'listing_count': len(city_vets),
                     'city_editorial': city_editorial,
                 })
-    
+
+        print(f"  City pages: {city_indexed} indexed, {city_noindexed} noindexed (min vets: {self.CITY_NOINDEX_MIN_VETS})")
+
+    # Minimum quality score for a vet page to be indexed.
+    # Score is 0-10 based on: real description (+3), phone (+1), website (+1),
+    # Google rating (+2), coordinates (+1), certifications (+1), email (+1).
+    VET_NOINDEX_THRESHOLD = 5
+
     def _generate_vet_detail_pages(self):
         print("Generating vet detail pages...")
+        indexed_count = 0
+        noindexed_count = 0
+
         for vet in self.processor.vets:
             state = self.processor.state_by_code.get(vet.state)
             nearby_vets = self.processor.get_nearby_vets(vet, limit=5)
-            
+
             # Get specialty details for this vet
             specialty_details = []
             for spec_name in vet.specialties:
@@ -1775,7 +1822,16 @@ class SiteGenerator:
                 spec = self.processor.specialty_by_slug.get(spec_slug)
                 if spec:
                     specialty_details.append(spec)
-            
+
+            # Noindex thin vet pages to improve overall site quality signals.
+            # Pages still exist at the same URL (no redirects) but tell Google
+            # not to include them in search results until content is enriched.
+            noindex = vet.quality_score < self.VET_NOINDEX_THRESHOLD
+            if noindex:
+                noindexed_count += 1
+            else:
+                indexed_count += 1
+
             # Build a meta description that ends at a sentence boundary
             vet_meta_desc = f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}.'
             if vet.practice_description:
@@ -1792,11 +1848,14 @@ class SiteGenerator:
             self._render_and_write('vet_detail.html', f'vet/{vet.slug}/index.html', {
                 'page_title': f'Holistic Vet in {vet.city}, {vet.state} | {vet.practice_name}',
                 'page_description': vet_meta_desc,
+                'noindex': noindex,
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
                 'specialty_details': specialty_details,
             })
+
+        print(f"  Vet pages: {indexed_count} indexed, {noindexed_count} noindexed (threshold: {self.VET_NOINDEX_THRESHOLD})")
     
     def _generate_specialties_list(self):
         print("Generating specialties list...")
@@ -1958,13 +2017,17 @@ class SiteGenerator:
             if state.vet_count > 0:
                 urls.append({'loc': f'/vets/{state.slug}/', 'priority': '0.7', 'changefreq': 'weekly'})
 
-        # Add city pages
+        # Add city pages (only those above vet count threshold or with editorial)
         for state_code, city_dict in self.processor.vets_by_city.items():
             state = self.processor.state_by_code.get(state_code)
             if not state:
                 continue
             for city_slug, city_vets in city_dict.items():
-                if city_vets:
+                if not city_vets:
+                    continue
+                city_key = f"{state_code}:{city_slug}"
+                has_editorial = bool(self.CITY_EDITORIAL.get(city_key, ""))
+                if len(city_vets) >= self.CITY_NOINDEX_MIN_VETS or has_editorial:
                     urls.append({'loc': f'/vets/{state.slug}/{city_slug}/', 'priority': '0.6', 'changefreq': 'weekly'})
 
         # Add specialty pages
@@ -1972,9 +2035,10 @@ class SiteGenerator:
             if specialty.vet_count > 0:
                 urls.append({'loc': f'/specialty/{specialty.slug}/', 'priority': '0.7', 'changefreq': 'weekly'})
         
-        # Add vet detail pages
+        # Add vet detail pages (only those above quality threshold)
         for vet in self.processor.vets:
-            urls.append({'loc': f'/vet/{vet.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
+            if vet.quality_score >= self.VET_NOINDEX_THRESHOLD:
+                urls.append({'loc': f'/vet/{vet.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
         
         # Add blog pages
         if self.processor.blog_posts:
