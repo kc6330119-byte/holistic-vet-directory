@@ -101,9 +101,14 @@
             <div class="filter-section">
                 <h3 class="filter-section__title">Other Specialties</h3>
                 <ul class="filter-list">
-                    {% for other in states[:8] %}
+                    {% for other in specialties[:10] %}
                     {% if other.name != specialty.name %}
-                    <!-- This should be specialties not states - template will work when data is correct -->
+                    <li>
+                        <a href="/specialty/{{ other.slug }}/" class="filter-link">
+                            {{ other.name }}
+                            <span class="filter-count">{{ other.vet_count }}</span>
+                        </a>
+                    </li>
                     {% endif %}
                     {% endfor %}
                     <li><a href="/specialties/" class="filter-link">View All Specialties</a></li>

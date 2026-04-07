@@ -38,6 +38,7 @@
     },
     {% endif %}
     {% if vet.specialties %}
+    "medicalSpecialty": [{% for spec in vet.specialties %}"{{ spec }}"{% if not loop.last %}, {% endif %}{% endfor %}],
     {% endif %}
     "priceRange": "$$"
 }

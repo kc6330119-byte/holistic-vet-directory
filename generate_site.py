@@ -1011,6 +1011,18 @@ class SiteGenerator:
     def _pluralize(value: int, singular: str, plural: str) -> str:
         return singular if value == 1 else plural
 
+    @staticmethod
+    def _truncate_meta(text: str, max_length: int = 155) -> str:
+        """Truncate text for meta descriptions at a sentence boundary."""
+        if not text or len(text) <= max_length:
+            return text or ''
+        # Try to find a sentence boundary within the limit
+        for end in range(min(max_length, len(text)), 80, -1):
+            if text[end - 1] in '.!':
+                return text[:end]
+        # No sentence boundary; truncate at word boundary
+        return text[:max_length].rsplit(' ', 1)[0].rstrip('.,') + '.'
+
     def generate(self):
         """Generate the entire site."""
         print("Starting site generation...")
@@ -1764,9 +1776,22 @@ class SiteGenerator:
                 if spec:
                     specialty_details.append(spec)
             
+            # Build a meta description that ends at a sentence boundary
+            vet_meta_desc = f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}.'
+            if vet.practice_description:
+                # Try to find a sentence boundary within 155 chars
+                desc = vet.practice_description
+                for end in range(min(155, len(desc)), 80, -1):
+                    if desc[end - 1] in '.!':
+                        vet_meta_desc = desc[:end]
+                        break
+                else:
+                    # No sentence boundary found; truncate at word boundary and add suffix
+                    vet_meta_desc = desc[:120].rsplit(' ', 1)[0].rstrip('.,') + f'. Holistic vet in {vet.city}, {vet.state}.'
+
             self._render_and_write('vet_detail.html', f'vet/{vet.slug}/index.html', {
                 'page_title': f'Holistic Vet in {vet.city}, {vet.state} | {vet.practice_name}',
-                'page_description': (vet.practice_description[:118].rsplit(' ', 1)[0].rstrip('.,') + f' — holistic vet care in {vet.city}, {vet.state}.') if vet.practice_description else f'{vet.practice_name} offers holistic veterinary care in {vet.city}, {vet.state}. Book a consultation today.',
+                'page_description': vet_meta_desc,
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
@@ -1806,7 +1831,7 @@ class SiteGenerator:
 
             self._render_and_write('specialty_detail.html', f'specialty/{specialty.slug}/index.html', {
                 'page_title': f'{specialty.name} - Holistic Veterinary Care',
-                'page_description': f'Find veterinarians offering {specialty.name}. {specialty.description[:150]}...' if specialty.description else f'Find veterinarians offering {specialty.name}.',
+                'page_description': self._truncate_meta(f'Find veterinarians offering {specialty.name}. {specialty.description}') if specialty.description else f'Find veterinarians offering {specialty.name}.',
                 'specialty': specialty,
                 'vets': sorted(spec_vets, key=lambda v: (v.state, v.city, v.practice_name)),
                 'vets_by_state': dict(vets_by_state),
@@ -1817,6 +1842,7 @@ class SiteGenerator:
         self._render_and_write('search.html', 'search/index.html', {
             'page_title': 'Find Holistic Vets Near Me | Search by Location',
             'page_description': 'Search for holistic veterinarians by city, state, or ZIP code. Filter by specialty — acupuncture, herbal medicine, chiropractic, TCVM, and more. Find integrative pet care near you.',
+            'noindex': True,
         })
     
     def _generate_blog_list(self):
@@ -1851,7 +1877,7 @@ class SiteGenerator:
                 f'blog/{post.slug}/index.html',
                 {
                     'page_title': f'{post.title} | Holistic Vet Directory Blog',
-                    'page_description': post.meta_description or (post.excerpt[:130].rsplit(' ', 1)[0].rstrip('.,') + ' — read the full guide at Holistic Vet Directory.' if post.excerpt else f'{post.title} — Expert holistic pet care advice. Read the full guide at Holistic Vet Directory.'),
+                    'page_description': post.meta_description or self._truncate_meta(post.excerpt) if post.excerpt else f'{post.title} — Expert holistic pet care advice from Holistic Vet Directory.',
                     'post': post,
                     'request_path': f'/blog/{post.slug}/',
                     'related_posts': [p for p in self.processor.blog_posts if p.slug != post.slug][:3],
@@ -1922,7 +1948,6 @@ class SiteGenerator:
             {'loc': '/', 'priority': '1.0', 'changefreq': 'daily'},
             {'loc': '/vets/', 'priority': '0.9', 'changefreq': 'daily'},
             {'loc': '/specialties/', 'priority': '0.8', 'changefreq': 'weekly'},
-            {'loc': '/search/', 'priority': '0.8', 'changefreq': 'monthly'},
             {'loc': '/holistic-care-guide/', 'priority': '0.8', 'changefreq': 'weekly'},
             {'loc': '/about/', 'priority': '0.5', 'changefreq': 'monthly'},
             {'loc': '/submit/', 'priority': '0.5', 'changefreq': 'monthly'},
@@ -1932,7 +1957,16 @@ class SiteGenerator:
         for state in self.processor.states:
             if state.vet_count > 0:
                 urls.append({'loc': f'/vets/{state.slug}/', 'priority': '0.7', 'changefreq': 'weekly'})
-        
+
+        # Add city pages
+        for state_code, city_dict in self.processor.vets_by_city.items():
+            state = self.processor.state_by_code.get(state_code)
+            if not state:
+                continue
+            for city_slug, city_vets in city_dict.items():
+                if city_vets:
+                    urls.append({'loc': f'/vets/{state.slug}/{city_slug}/', 'priority': '0.6', 'changefreq': 'weekly'})
+
         # Add specialty pages
         for specialty in self.processor.specialties:
             if specialty.vet_count > 0:

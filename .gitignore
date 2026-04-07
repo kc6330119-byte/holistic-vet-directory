@@ -27,6 +27,10 @@ Thumbs.db
 
 # Claude Code
 .claude/
+
+# Analysis reports
+SITE_ANALYSIS_REPORT.md
+SEO_IMPROVEMENT_PLAN.md
 *.swp
 *.swo
 
