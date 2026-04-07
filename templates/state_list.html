@@ -74,6 +74,38 @@
     ]
 }
 </script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "How many holistic veterinarians are in {{ state.name }}?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our directory lists {{ vets | length }} holistic and integrative veterinarians across {{ state.name }}{% if cities %} in {{ cities | length }} cities{% endif %}. These practitioners offer modalities including acupuncture, herbal medicine, chiropractic care, and TCVM."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What holistic vet services are available in {{ state.name }}?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Holistic veterinarians in {{ state.name }} offer a range of integrative services including acupuncture, chiropractic care, herbal medicine, homeopathy, nutritional therapy, Traditional Chinese Veterinary Medicine (TCVM), laser therapy, and physical rehabilitation. Many practitioners combine these with conventional veterinary medicine."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How do I choose a holistic vet in {{ state.name }}?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Look for a licensed veterinarian with additional certifications from organizations like AHVMA, Chi Institute, or IVAS. Check their specialties to ensure they offer the modality your pet needs. Read Google reviews, verify they treat your type of pet, and confirm whether they offer telehealth consultations."
+            }
+        }
+    ]
+}
+</script>
 {% endblock %}
 
 {% block content %}

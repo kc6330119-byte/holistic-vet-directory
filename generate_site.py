@@ -752,10 +752,15 @@ class DataLoader:
         return states
 
     def load_blog_posts(self) -> List['BlogPost']:
-        """Load blog posts from Airtable or CSV."""
+        """Load blog posts from Airtable, CSV, or markdown files."""
+        posts = []
         if self.use_airtable and self._airtable_loader:
-            return self._load_blog_posts_from_airtable()
-        return self._load_blog_posts_from_csv()
+            posts = self._load_blog_posts_from_airtable()
+        if not posts:
+            posts = self._load_blog_posts_from_csv()
+        if not posts:
+            print("  Blog: No posts from Airtable or CSV, check content/blog/ markdown files")
+        return posts
     
     def _load_blog_posts_from_airtable(self) -> List['BlogPost']:
         """Load blog posts from Airtable."""
@@ -783,29 +788,72 @@ class DataLoader:
             return []
     
     def _load_blog_posts_from_csv(self) -> List['BlogPost']:
-        """Load blog posts from CSV file."""
+        """Load blog posts from CSV file, falling back to markdown files."""
         csv_path = self.data_dir / 'blog_posts.csv'
-        if not csv_path.exists():
-            return []  # Blog is optional
-        
+        if csv_path.exists():
+            posts = []
+            with open(csv_path, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row.get('Title') and row.get('Status', '').lower() == 'published':
+                        post = BlogPost(
+                            title=row.get('Title', ''),
+                            content=row.get('Content', ''),
+                            excerpt=row.get('Excerpt', ''),
+                            author=row.get('Author', ''),
+                            published_date=row.get('Published Date', ''),
+                            featured_image=row.get('Featured Image', ''),
+                            meta_description=row.get('Meta Description', ''),
+                            status=row.get('Status', 'Draft'),
+                            slug=row.get('Slug', ''),
+                        )
+                        posts.append(post)
+            return posts
+
+        # Fallback: load from content/blog/*.md markdown files
+        return self._load_blog_posts_from_markdown()
+
+    def _load_blog_posts_from_markdown(self) -> List['BlogPost']:
+        """Load blog posts from content/blog/*.md files."""
+        blog_dir = Path(__file__).parent / 'content' / 'blog'
+        if not blog_dir.exists():
+            return []
+
         posts = []
-        with open(csv_path, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row.get('Title') and row.get('Status', '').lower() == 'published':
-                    post = BlogPost(
-                        title=row.get('Title', ''),
-                        content=row.get('Content', ''),
-                        excerpt=row.get('Excerpt', ''),
-                        author=row.get('Author', ''),
-                        published_date=row.get('Published Date', ''),
-                        featured_image=row.get('Featured Image', ''),
-                        meta_description=row.get('Meta Description', ''),
-                        status=row.get('Status', 'Draft'),
-                        slug=row.get('Slug', ''),
-                    )
-                    posts.append(post)
-        
+        for md_file in sorted(blog_dir.glob('*.md')):
+            try:
+                text = md_file.read_text(encoding='utf-8')
+
+                # Parse frontmatter enclosed in triple backticks
+                meta = {}
+                content = text
+                if text.startswith('```'):
+                    parts = text.split('```', 2)
+                    if len(parts) >= 3:
+                        for line in parts[1].strip().splitlines():
+                            if ':' in line:
+                                key, val = line.split(':', 1)
+                                meta[key.strip()] = val.strip()
+                        content = parts[2].strip()
+
+                if meta.get('Status', '').lower() != 'published':
+                    continue
+
+                post = BlogPost(
+                    title=meta.get('Title', ''),
+                    content=content,
+                    excerpt=meta.get('Excerpt', ''),
+                    author=meta.get('Author', ''),
+                    published_date=meta.get('Published Date', ''),
+                    featured_image=meta.get('Featured Image', ''),
+                    meta_description=meta.get('Meta Description', ''),
+                    status=meta.get('Status', 'Draft'),
+                    slug=meta.get('Slug', '') or slugify(meta.get('Title', md_file.stem)),
+                )
+                posts.append(post)
+            except Exception as e:
+                print(f"  Warning: Could not load blog post {md_file.name}: {e}")
+
         return posts
 
 
@@ -1107,9 +1155,10 @@ class SiteGenerator:
         featured_post = next((p for p in published_posts if p.featured), None)
         if not featured_post and published_posts:
             featured_post = published_posts[0]
+        vet_count = len(self.processor.vets)
         self._render_and_write('index.html', 'index.html', {
-            'page_title': 'Find a Holistic Veterinarian Near You',
-            'page_description': 'The largest directory of holistic and integrative veterinarians in the U.S. Search 3,200+ practitioners offering acupuncture, herbal medicine, chiropractic, TCVM, and natural pet care — with Google ratings and reviews.',
+            'page_title': 'Find a Holistic Vet Near You | Holistic Vet Finder',
+            'page_description': f'The best holistic vet finder and directory in the U.S. Search {vet_count:,}+ integrative veterinarians offering acupuncture, herbal medicine, chiropractic, TCVM, and natural pet care.',
             'featured_states': self.processor.get_featured_states(8),
             'featured_specialties': self.processor.get_featured_specialties(8),
             'featured_vets': self.processor.get_featured_vets(6),
@@ -1667,15 +1716,20 @@ class SiteGenerator:
     # State-specific page title overrides for high-impression, low-click pages
     STATE_TITLE_OVERRIDES = {
         "CO": "Find a Holistic Veterinarian in Colorado | Integrative Vets Near Me",
+        "CA": "Find a Holistic Veterinarian in California | Integrative Vets Near Me",
+        "TX": "Find a Holistic Veterinarian in Texas | Integrative Vets Near Me",
+        "NY": "Find a Holistic Veterinarian in New York | Integrative Vets Near Me",
+        "PA": "Find a Holistic Veterinarian in Pennsylvania | Integrative Vets Near Me",
+        "AZ": "Find a Holistic Veterinarian in Arizona | Integrative Vets Near Me",
+        "WA": "Find a Holistic Veterinarian in Washington | Integrative Vets Near Me",
+        "FL": "Find a Holistic Veterinarian in Florida | Integrative Vets Near Me",
     }
 
     # State-specific meta description overrides
     STATE_DESCRIPTION_OVERRIDES = {
         "CO": (
-            "Looking for a holistic veterinarian in Colorado? Browse our directory of "
-            "integrative and holistic vets near you in Denver, Colorado Springs, and "
-            "across the state. Find practitioners offering acupuncture, chiropractic, "
-            "herbal medicine, and physical rehabilitation for dogs, cats, and horses."
+            "Looking for a holistic vet in Colorado? Browse integrative vets in Denver, "
+            "Colorado Springs, and across the state offering acupuncture, chiropractic, and herbal medicine."
         ),
     }
 
@@ -1734,7 +1788,7 @@ class SiteGenerator:
             )
             page_description = self.STATE_DESCRIPTION_OVERRIDES.get(
                 state.code,
-                f'Find {state.vet_count} holistic, homeopathic, and integrative veterinarians in {state.name}. Browse certified practitioners offering acupuncture, herbal medicine, chiropractic and natural pet care near you.'
+                f'Find {state.vet_count} holistic and integrative veterinarians in {state.name}. Browse vets offering acupuncture, herbal medicine, chiropractic, and natural pet care.'
             )
 
             self._render_and_write('state_list.html', f'vets/{state.slug}/index.html', {
