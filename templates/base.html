@@ -38,7 +38,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/main.css?v=2">
     {% block extra_css %}{% endblock %}
 
     <!-- Schema.org JSON-LD -->
@@ -90,7 +90,7 @@
         <div class="container">
             <h2 class="newsletter-section__title">Stay in the Loop</h2>
             <p class="newsletter-section__text">Get holistic pet care tips, new practitioner listings, and integrative medicine guides delivered to your inbox.</p>
-            <form action="https://doggroomerlocator.us12.list-manage.com/subscribe/post?u=21343a587fbb950d8b649ee6d&amp;id=d8ae307647&amp;f_id=0016dde3f0" method="post" class="newsletter-form">
+            <form action="https://doggroomerlocator.us12.list-manage.com/subscribe/post?u=21343a587fbb950d8b649ee6d&amp;id=d8ae307647&amp;f_id=0016dde3f0" method="post" target="_blank" class="newsletter-form">
                 <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_21343a587fbb950d8b649ee6d_d8ae307647" tabindex="-1" value=""></div>
                 <input type="email" name="EMAIL" required placeholder="Your email address" class="newsletter-form__input" aria-label="Email address">
                 <button type="submit" class="newsletter-form__button">Subscribe</button>
@@ -102,7 +102,7 @@
     {% include 'partials/footer.html' %}
 
     <!-- Scripts -->
-    <script src="/static/js/main.js" defer></script>
+    <script src="/static/js/main.js?v=2" defer></script>
     {% block extra_js %}{% endblock %}
 
     {% if config.enable_maps and config.google_maps_api_key %}
