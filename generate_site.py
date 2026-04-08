@@ -2370,6 +2370,12 @@ class SiteGenerator:
             'request_path': '/newsletter/',
         })
 
+        self._render_and_write('newsletter-success.html', 'newsletter/success/index.html', {
+            'page_title': 'Subscription Confirmed',
+            'page_description': 'Thank you for subscribing to the Holistic Vet Directory newsletter.',
+            'noindex': True,
+        })
+
     def _generate_search_index(self):
         print("Generating search index...")
         index = self.processor.get_search_index()
