@@ -40,6 +40,11 @@
   to = "/about/index.html"
   status = 200
 
+[[redirects]]
+  from = "/newsletter"
+  to = "/newsletter/index.html"
+  status = 200
+
 # 301 redirects for fixed blog slugs (typos in original slugs)
 [[redirects]]
   from = "/blog/hiropractic-care-for-pets/"
