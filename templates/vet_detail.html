@@ -40,9 +40,30 @@
     {% if vet.specialties %}
     "medicalSpecialty": [{% for spec in vet.specialties %}"{{ spec }}"{% if not loop.last %}, {% endif %}{% endfor %}],
     {% endif %}
+    {% if last_verified %}"dateModified": "{{ last_verified }}",{% endif %}
     "priceRange": "$$"
 }
 </script>
+{% if faq %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for item in faq %}
+        {
+            "@type": "Question",
+            "name": {{ item.q | tojson }},
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ item.a | tojson }}
+            }
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -223,6 +244,21 @@
             </section>
             {% endif %}
 
+            <!-- FAQ -->
+            {% if faq %}
+            <section class="vet-section">
+                <h2 class="vet-section__title">Frequently Asked Questions</h2>
+                <div class="vet-faq">
+                    {% for item in faq %}
+                    <details class="vet-faq__item">
+                        <summary class="vet-faq__question">{{ item.q }}</summary>
+                        <p class="vet-faq__answer">{{ item.a }}</p>
+                    </details>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
             <!-- Nearby Vets -->
             {% if nearby_vets %}
             <section class="vet-section">
@@ -336,6 +372,27 @@
                 <h3 class="info-card__title">Established</h3>
                 <p class="info-card__value">{{ vet.year_established }}</p>
                 <p class="info-card__note">{{ now.year - vet.year_established }} years serving the community</p>
+            </div>
+            {% endif %}
+
+            {% if last_verified %}
+            <div class="info-card">
+                <h3 class="info-card__title">Last Verified</h3>
+                <p class="info-card__value">{{ last_verified }}</p>
+                <p class="info-card__note">Listing details checked against our records.</p>
+            </div>
+            {% endif %}
+
+            <!-- Things Nearby -->
+            {% if vet.has_coordinates %}
+            <div class="info-card nearby-card">
+                <h3 class="info-card__title">Things Nearby</h3>
+                <ul class="nearby-list">
+                    <li><a href="https://www.google.com/maps/search/pet+store/@{{ vet.latitude }},{{ vet.longitude }},14z" target="_blank" rel="noopener noreferrer">Pet Stores</a></li>
+                    <li><a href="https://www.google.com/maps/search/dog+park/@{{ vet.latitude }},{{ vet.longitude }},14z" target="_blank" rel="noopener noreferrer">Dog Parks</a></li>
+                    <li><a href="https://www.google.com/maps/search/pharmacy/@{{ vet.latitude }},{{ vet.longitude }},14z" target="_blank" rel="noopener noreferrer">Pharmacies</a></li>
+                    <li><a href="https://www.google.com/maps/search/natural+health+store/@{{ vet.latitude }},{{ vet.longitude }},14z" target="_blank" rel="noopener noreferrer">Natural Health Stores</a></li>
+                </ul>
             </div>
             {% endif %}
 

@@ -50,6 +50,76 @@
   to = "/newsletter/success/index.html"
   status = 200
 
+# --- 301 redirects: .html URLs → extensionless canonical URLs ---
+# force=true is required; without it Netlify serves the .html file directly
+# and bypasses the redirect, leaving duplicate URLs indexable.
+
+[[redirects]]
+  from = "/vet/*.html"
+  to = "/vet/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/vets/*.html"
+  to = "/vets/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/specialty/*.html"
+  to = "/specialty/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/blog/*.html"
+  to = "/blog/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/about.html"
+  to = "/about"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/contact.html"
+  to = "/contact"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/privacy.html"
+  to = "/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/terms.html"
+  to = "/terms"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/submit.html"
+  to = "/submit"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/search.html"
+  to = "/search"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/newsletter.html"
+  to = "/newsletter"
+  status = 301
+  force = true
+
 # 301 redirects for fixed blog slugs (typos in original slugs)
 [[redirects]]
   from = "/blog/hiropractic-care-for-pets/"
