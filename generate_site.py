@@ -1158,8 +1158,8 @@ class SiteGenerator:
             featured_post = published_posts[0]
         vet_count = len(self.processor.vets)
         self._render_and_write('index.html', 'index.html', {
-            'page_title': 'Find a Holistic Vet Near You | Holistic Vet Finder',
-            'page_description': f'The best holistic vet finder and directory in the U.S. Search {vet_count:,}+ integrative veterinarians offering acupuncture, herbal medicine, chiropractic, TCVM, and natural pet care.',
+            'page_title': 'Holistic Vet Directory — Find a Holistic or Integrative Vet Near You',
+            'page_description': f'The leading U.S. directory of holistic and integrative veterinarians. Find {vet_count:,}+ vets offering acupuncture, herbal medicine, TCVM, and natural pet care.',
             'featured_states': self.processor.get_featured_states(8),
             'featured_specialties': self.processor.get_featured_specialties(8),
             'featured_vets': self.processor.get_featured_vets(6),

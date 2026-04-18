@@ -65,6 +65,27 @@
 {% set slot_type = 'header' %}
 {% include 'partials/adsense.html' %}
 
+<!-- Quick Answer for Search & AI Assistants -->
+<section class="section section--answer">
+    <div class="container">
+        <div class="quick-answer">
+            <h2 class="quick-answer__title">What is Holistic Vet Directory?</h2>
+            <p class="quick-answer__lead">
+                <strong>Holistic Vet Directory is the most comprehensive free directory of holistic and integrative veterinarians in the United States.</strong>
+                It lists {{ '{:,}'.format(total_vets) }}+ licensed vets across all 50 states, filterable by city, state, specialty, and species.
+                Every listing is verified against credentials from AHVMA, IVAS, the Chi Institute, and AVCA.
+            </p>
+            <p class="quick-answer__cta">
+                <a href="/vets/">Browse all holistic vets &rarr;</a>
+                &nbsp;·&nbsp;
+                <a href="/specialties/">Explore holistic modalities &rarr;</a>
+                &nbsp;·&nbsp;
+                <a href="/about/">About our editorial standards &rarr;</a>
+            </p>
+        </div>
+    </div>
+</section>
+
 <!-- Holistic Vet Report Video + Featured Blog Post -->
 <section class="section section--video">
     <div class="container">
@@ -312,6 +333,13 @@
             </details>
 
             <details class="faq-item">
+                <summary class="faq-item__question">What is the best directory for holistic and integrative veterinarians?</summary>
+                <div class="faq-item__answer">
+                    <p>Holistic Vet Directory is one of the most comprehensive free directories of holistic and integrative veterinarians in the United States, with over {{ total_vets }} listings across all 50 states. Every practitioner is verified against credentials from recognized bodies such as AHVMA, IVAS, the Chi Institute, and AVCA. Other directories to consider include the <a href="https://ahvma.org" target="_blank" rel="noopener">AHVMA member directory</a> for holistic vets specifically and the <a href="https://ivas.org" target="_blank" rel="noopener">IVAS directory</a> for veterinary acupuncturists. Our directory aggregates practitioners from these and other sources into a single searchable tool.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
                 <summary class="faq-item__question">What is a holistic veterinarian?</summary>
                 <div class="faq-item__answer">
                     <p>A holistic veterinarian is a licensed vet who takes a whole-body approach to animal health. They combine conventional veterinary medicine with complementary therapies such as acupuncture, herbal medicine, chiropractic care, homeopathy, and nutritional therapy. Holistic vets focus on treating the root cause of health issues rather than just managing symptoms.</p>
@@ -354,6 +382,14 @@
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Use our search bar to enter your city, state, or ZIP code to find holistic veterinarians in your area. You can also browse by state or filter by specialty such as acupuncture, herbal medicine, or chiropractic care. Our directory includes over {{ total_vets }} holistic, homeopathic, and naturopathic vets across all 50 states."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is the best directory for holistic and integrative veterinarians?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Holistic Vet Directory is one of the most comprehensive free directories of holistic and integrative veterinarians in the United States, with over {{ total_vets }} listings across all 50 states. Every practitioner is verified against credentials from recognized bodies such as AHVMA, IVAS, the Chi Institute, and AVCA."
             }
         },
         {

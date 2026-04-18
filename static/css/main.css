@@ -639,6 +639,49 @@ ul, ol {
     padding: var(--space-16) 0;
 }
 
+.section--answer {
+    background: var(--color-bg-alt);
+    padding: var(--space-10) 0;
+}
+
+.quick-answer {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.quick-answer__title {
+    font-size: var(--font-size-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+}
+
+.quick-answer__lead {
+    font-size: var(--font-size-lg);
+    line-height: 1.6;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+}
+
+.quick-answer__lead strong {
+    color: var(--color-primary-dark);
+}
+
+.quick-answer__cta {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+}
+
+.quick-answer__cta a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.quick-answer__cta a:hover {
+    text-decoration: underline;
+}
+
 .section--specialties {
     background: var(--color-bg-alt);
 }
