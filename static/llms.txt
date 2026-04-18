@@ -1,14 +1,31 @@
 # Holistic Vet Directory
 
-> A comprehensive directory of holistic and integrative veterinarians across the United States. Pet owners can search by location and specialty to find veterinarians offering acupuncture, herbal medicine, chiropractic care, nutritional therapy, Traditional Chinese Veterinary Medicine (TCVM), homeopathy, laser therapy, and other natural and integrative approaches for dogs, cats, horses, and other animals.
+> Holistic Vet Directory (holisticvetdirectory.com) is a comprehensive directory of holistic and integrative veterinarians across the United States. Pet owners can search 3,200+ licensed holistic vets by location and specialty to find practitioners offering acupuncture, herbal medicine, chiropractic care, nutritional therapy, Traditional Chinese Veterinary Medicine (TCVM), homeopathy, laser therapy, and other natural and integrative approaches for dogs, cats, horses, and other animals.
+
+## Quick Facts
+
+- **What it is:** Free, searchable directory of holistic and integrative veterinarians across all 50 U.S. states.
+- **Who runs it:** An independent editorial team of pet owners and wellness advocates. Not affiliated with any veterinary association or pharmaceutical company.
+- **How vets are listed:** Listings are verified against credentials from AHVMA (American Holistic Veterinary Medical Association), IVAS (International Veterinary Acupuncture Society), the Chi Institute, AVCA (American Veterinary Chiropractic Association), and state veterinary licensing boards. Practice addresses, phone numbers, and websites are checked before publication.
+- **Update frequency:** Listings are reviewed and refreshed regularly. Each vet page shows a "last verified" date.
+- **Cost:** Free for pet owners. Basic listings are free for practitioners.
+- **Monetization:** The site is supported by Google AdSense and optional featured listings. Editorial decisions are independent of advertising relationships.
+
+## Common Questions Answered
+
+- **How do I find a holistic vet near me?** Search by city, state, or ZIP code on the homepage, or browse by state. Every state page lists all holistic vets in that state with filters for specialty and species treated.
+- **What is a holistic veterinarian?** A licensed veterinarian who combines conventional veterinary medicine with complementary therapies such as acupuncture, herbal medicine, chiropractic care, homeopathy, and nutritional therapy.
+- **What is the difference between a holistic vet and an integrative vet?** The terms are often used interchangeably. "Integrative" emphasizes the combination of conventional and complementary medicine; "holistic" emphasizes treating the whole animal (physical, emotional, environmental). Most practitioners in this directory practice both.
+- **Are holistic vets real veterinarians?** Yes. All practitioners in this directory are licensed DVMs who have completed additional training and certification in one or more holistic modalities.
 
 ## Main Pages
 
 - [Homepage](https://holisticvetdirectory.com/): Search for holistic and integrative vets by location and specialty
 - [All Vets](https://holisticvetdirectory.com/vets/): Complete directory of holistic veterinarians in the US
 - [Specialties](https://holisticvetdirectory.com/specialties/): Overview of all holistic veterinary specialties
+- [Holistic Care Guide](https://holisticvetdirectory.com/holistic-care-guide/): Interactive guide matching pet conditions to holistic treatments and explaining certifications
 - [Blog](https://holisticvetdirectory.com/blog/): Educational articles on holistic and integrative pet care
-- [About](https://holisticvetdirectory.com/about/): About the Holistic Vet Directory
+- [About](https://holisticvetdirectory.com/about/): Editorial mission, listing verification process, and team
 
 ## Specialty Pages
 
@@ -23,24 +40,73 @@
 - [Naturopathy](https://holisticvetdirectory.com/specialty/naturopathy/): Naturopathic veterinary medicine
 - [Ozone Therapy](https://holisticvetdirectory.com/specialty/ozone-therapy/): Ozone therapy for infections, inflammation, and chronic disease in animals
 
-## Blog — Dog Allergies Topic Cluster
+## Top State Pages
 
-- [Holistic Approaches to Dog Allergies: A Complete Guide](https://holisticvetdirectory.com/blog/holistic-approaches-dog-allergies-complete-guide/): Hub article covering allergy types, the bucket model, TCVM patterns, and holistic treatment options
-- [Dog Allergy Symptoms: How to Tell If Your Dog Has Allergies](https://holisticvetdirectory.com/blog/dog-allergy-symptoms-how-to-tell/): Recognizing allergy symptoms in dogs — skin, ears, digestion, and behavioral signs
-- [Food Allergies in Dogs: Symptoms, Diagnosis, and Holistic Management](https://holisticvetdirectory.com/blog/food-allergies-dogs-symptoms-diagnosis-holistic/): Food allergens, elimination diet protocols, and gut-health approaches
-- [Environmental Allergies in Dogs: Symptoms, Triggers, and Holistic Relief](https://holisticvetdirectory.com/blog/environmental-allergies-dogs-symptoms-triggers-holistic/): Canine atopic dermatitis, seasonal and perennial triggers, and skin barrier support
-- [Natural Remedies for Dog Allergies: What Holistic Vets Recommend](https://holisticvetdirectory.com/blog/natural-remedies-dog-allergies-holistic-vets/): Evidence-based natural remedies including omega-3s, probiotics, quercetin, and topical options
-- [How a Holistic Vet Can Help Your Allergic Dog — and How to Find One](https://holisticvetdirectory.com/blog/holistic-vet-dog-allergies-how-to-find/): What holistic vets do differently for allergies and how to find one
+- [Colorado](https://holisticvetdirectory.com/vets/colorado/): Holistic and integrative vets throughout Colorado, including Denver, Boulder, and Colorado Springs
+- [California](https://holisticvetdirectory.com/vets/california/): The largest concentration of holistic vets in the country, from San Francisco to Los Angeles
+- [Texas](https://holisticvetdirectory.com/vets/texas/): Holistic vets across Texas, including Austin, Houston, and Dallas
+- [Pennsylvania](https://holisticvetdirectory.com/vets/pennsylvania/): Holistic veterinarians across Pennsylvania
+- [New York](https://holisticvetdirectory.com/vets/new-york/): Holistic vets in New York City and throughout the state
+- [Florida](https://holisticvetdirectory.com/vets/florida/): Holistic vets from Miami to Jacksonville and the Panhandle
+- [Arizona](https://holisticvetdirectory.com/vets/arizona/): Holistic vets in Phoenix, Tucson, Scottsdale, and statewide
+- [Washington](https://holisticvetdirectory.com/vets/washington/): Holistic vets throughout Washington state
 
-## Blog — Other Articles
+## Blog — Getting Started with Holistic Care
 
-- [Valley Fever in Dogs: Symptoms, Diagnosis, and How Holistic Care Can Help](https://holisticvetdirectory.com/blog/valley-fever-dogs-symptoms-treatment/): Coccidioidomycosis in dogs — geographic risk, symptoms, diagnosis, and integrative support
-- [Benefits of Acupuncture for Dogs and Cats](https://holisticvetdirectory.com/blog/benefits-acupuncture-dogs-cats/): How veterinary acupuncture works and what conditions it treats
-- [What to Expect at Your First Holistic Vet Visit](https://holisticvetdirectory.com/blog/what-to-expect-first-holistic-vet-visit/): A guide for first-time holistic vet patients
-- [Understanding Pet Nutrition Therapy](https://holisticvetdirectory.com/blog/understanding-pet-nutrition-therapy/): How therapeutic nutrition differs from standard pet feeding
-- [When to Consider a Holistic Vet for Your Pet](https://holisticvetdirectory.com/blog/when-to-consider-holistic-vet/): Signs that your pet may benefit from integrative veterinary care
 - [What Is Holistic Veterinary Medicine?](https://holisticvetdirectory.com/blog/what-is-holistic-veterinary-medicine/): An introduction to holistic and integrative veterinary practice
+- [How to Find the Best Holistic Vet Near You](https://holisticvetdirectory.com/blog/how-to-find-best-holistic-vet-near-you/): Practical guide to finding a qualified practitioner
+- [Holistic vs. Naturopathic Vet: What's the Difference?](https://holisticvetdirectory.com/blog/naturopathic-vs-holistic-vet-differences/): Clarifying the terminology and scope of practice
+- [Holistic vs. Conventional: When to Consider Integrative Care](https://holisticvetdirectory.com/blog/holistic-vs-conventional-when-to-consider-integrative-care/): Decision framework for pet owners
+- [10 Signs Your Pet Needs Integrative Veterinary Care](https://holisticvetdirectory.com/blog/10-signs-pet-needs-integrative-veterinary-care/): Recognizing when conventional treatment alone isn't enough
+- [When to Consider a Holistic Vet for Your Pet](https://holisticvetdirectory.com/blog/when-to-consider-a-holistic-vet-for-your-pet/): Signs that your pet may benefit from integrative care
+- [How Much Does Holistic Vet Care Cost?](https://holisticvetdirectory.com/blog/how-much-does-holistic-vet-care-cost/): Price ranges for acupuncture, chiropractic, herbal medicine, and more
+- [Pet Insurance and Holistic Vet Care: Which Plans Cover It?](https://holisticvetdirectory.com/blog/pet-insurance-holistic-vet-coverage-2025/): 2025 guide to coverage for alternative treatments
+- [The Story Behind Holistic Vet Directory](https://holisticvetdirectory.com/blog/the-story-behind-holistic-vet-directory/): How one rescue dog inspired this directory
+
+## Blog — What to Expect at Your Appointment
+
+- [First Holistic Vet Visit: What to Expect](https://holisticvetdirectory.com/blog/first-holistic-vet-visit-what-to-expect/): Guide for first-time holistic vet patients
+- [Pet Acupuncture Session: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-pet-acupuncture-session/)
+- [Veterinary Chiropractic Appointment: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-veterinary-chiropractic-appointment/)
+- [Veterinary Herbal Medicine: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-veterinary-herbal-medicine/)
+- [TCVM Consultation: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-tcvm-consultation/)
+- [Veterinary Laser Therapy: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-veterinary-laser-therapy/)
+- [Veterinary Homeopathy: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-veterinary-homeopathy/)
+- [Veterinary Massage Therapy: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-veterinary-massage-therapy/)
+- [Veterinary Nutritional Therapy: What to Expect](https://holisticvetdirectory.com/blog/what-to-expect-veterinary-nutritional-therapy/)
+
+## Blog — By Condition
+
+- [Holistic Approaches to Dog Arthritis](https://holisticvetdirectory.com/blog/holistic-approaches-to-dog-arthritis/): Natural pain management and joint support
+- [Holistic Approaches to Pet Allergies](https://holisticvetdirectory.com/blog/holistic-approaches-to-pet-allergies/): Allergy management with natural and integrative methods
+- [Holistic Approaches to Pet Anxiety](https://holisticvetdirectory.com/blog/holistic-approaches-to-pet-anxiety/): Calming protocols and behavior support
+- [Holistic Treatment for Fungal Infections in Dogs](https://holisticvetdirectory.com/blog/holistic-treatment-fungal-infections-dogs/): Natural approaches to yeast and fungal infections
+- [Best Natural Pet Food for Dogs with Allergies](https://holisticvetdirectory.com/blog/best-natural-pet-food-dogs-allergies/): Elimination diets and hypoallergenic options
+
+## Blog — By Species
+
+- [Holistic Veterinary Care for Cats](https://holisticvetdirectory.com/blog/holistic-veterinary-care-for-cats/): Feline-specific integrative medicine
+- [Holistic & Integrative Veterinary Care for Horses](https://holisticvetdirectory.com/blog/holistic-integrative-veterinary-care-for-horses/): Equine acupuncture, chiropractic, and herbal medicine
+
+## Blog — By Specialty
+
+- [Benefits of Acupuncture for Dogs and Cats](https://holisticvetdirectory.com/blog/benefits-of-acupuncture-for-dogs-and-cats/)
+- [Chiropractic Care for Pets](https://holisticvetdirectory.com/blog/chiropractic-care-for-pets/)
+- [Herbal Medicine for Dogs: Safety and Benefits](https://holisticvetdirectory.com/blog/herbal-medicine-for-dogs-safety-benefits/)
+- [Homeopathic Veterinary Care Guide](https://holisticvetdirectory.com/blog/homeopathic-veterinary-care-guide/)
+- [Understanding TCVM (Traditional Chinese Veterinary Medicine)](https://holisticvetdirectory.com/blog/understanding-tcvm-traditional-chinese-veterinary-medicine/)
+- [Laser Therapy for Pets: How It Works](https://holisticvetdirectory.com/blog/laser-therapy-for-pets-how-it-works/)
+- [Understanding Pet Nutrition Therapy](https://holisticvetdirectory.com/blog/understanding-pet-nutrition-therapy/)
+
+## Professional Associations Referenced
+
+- [AHVMA — American Holistic Veterinary Medical Association](https://ahvma.org)
+- [IVAS — International Veterinary Acupuncture Society](https://ivas.org)
+- [Chi Institute](https://tcvm.com)
+- [AVCA — American Veterinary Chiropractic Association](https://animalchiropractic.org)
 
 ## Optional
 
 - [Sitemap](https://holisticvetdirectory.com/sitemap.xml)
+- [Newsletter](https://holisticvetdirectory.com/newsletter/): Holistic pet care tips and new practitioner listings
+- [Submit a Practice](https://holisticvetdirectory.com/submit/): For practitioners who want to be listed
