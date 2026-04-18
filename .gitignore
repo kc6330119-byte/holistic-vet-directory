@@ -70,6 +70,7 @@ data/Queries.csv
 
 # Internal planning docs
 ADSENSE_RESUBMISSION_PLAN.md
+ADSENSE_RESUBMISSION_PREP.md
 
 # Airtable CSV exports (root-level, contain personal data)
 Veterinarians-*.csv
