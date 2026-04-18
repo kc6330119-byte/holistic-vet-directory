@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>{{ page_title }} | {{ config.site_name }}</title>
-    <meta name="description" content="{{ page_description }}">
+    <meta name="description" content="{{ page_description | meta_trunc }}">
     <meta name="msvalidate.01" content="50902EDCBFD78D0B3059F505F0C6E108" />
     {% if noindex %}<meta name="robots" content="noindex, follow">{% endif %}
 
@@ -16,7 +16,7 @@
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ page_title }}">
-    <meta property="og:description" content="{{ page_description }}">
+    <meta property="og:description" content="{{ page_description | meta_trunc }}">
     <meta property="og:site_name" content="{{ config.site_name }}">
     <meta property="og:url" content="{{ config.site_url }}{{ request_path | default('/') }}">
     <meta property="og:image" content="{{ config.site_url }}/static/images/og-image.png">
@@ -27,7 +27,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="{{ config.site_url }}/static/images/og-image.png">
     <meta name="twitter:title" content="{{ page_title }}">
-    <meta name="twitter:description" content="{{ page_description }}">
+    <meta name="twitter:description" content="{{ page_description | meta_trunc }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">

@@ -1056,6 +1056,7 @@ class SiteGenerator:
         self.env.filters['truncate_words'] = self._truncate_words
         self.env.filters['format_phone'] = self._format_phone
         self.env.filters['pluralize'] = self._pluralize
+        self.env.filters['meta_trunc'] = self._truncate_meta
         
         # Common context
         self.common_context = {
@@ -2348,7 +2349,7 @@ class SiteGenerator:
         print("Generating search page...")
         self._render_and_write('search.html', 'search/index.html', {
             'page_title': 'Find Holistic Vets Near Me | Search by Location',
-            'page_description': 'Search for holistic veterinarians by city, state, or ZIP code. Filter by specialty — acupuncture, herbal medicine, chiropractic, TCVM, and more. Find integrative pet care near you.',
+            'page_description': 'Search holistic veterinarians by city, state, or ZIP code. Filter by specialty — acupuncture, herbal medicine, chiropractic, TCVM, and more.',
             'noindex': True,
         })
     
@@ -2384,7 +2385,7 @@ class SiteGenerator:
                 f'blog/{post.slug}/index.html',
                 {
                     'page_title': f'{post.title} | Holistic Vet Directory Blog',
-                    'page_description': post.meta_description or self._truncate_meta(post.excerpt) if post.excerpt else f'{post.title} — Expert holistic pet care advice from Holistic Vet Directory.',
+                    'page_description': post.meta_description or post.excerpt or f'{post.title} — Expert holistic pet care advice from Holistic Vet Directory.',
                     'post': post,
                     'request_path': f'/blog/{post.slug}/',
                     'related_posts': [p for p in self.processor.blog_posts if p.slug != post.slug][:3],
@@ -2396,7 +2397,7 @@ class SiteGenerator:
         print("Generating holistic care guide...")
         self._render_and_write('holistic_care_guide.html', 'holistic-care-guide/index.html', {
             'page_title': 'Holistic Pet Care Guide — Conditions, Specialties & Certifications',
-            'page_description': 'Find the right holistic treatment for your pet. Match conditions to specialties, understand vet certifications like AHVMA, IVAS, and Chi Institute, and make informed choices about integrative veterinary care.',
+            'page_description': 'Match your pet\'s condition to the right holistic treatment. Learn what AHVMA, IVAS, and Chi Institute certifications mean for integrative vet care.',
             'specialties': self.processor.specialties,
             'total_vets': len(self.processor.vets),
             'request_path': '/holistic-care-guide/',
