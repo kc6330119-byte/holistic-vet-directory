@@ -2037,7 +2037,7 @@ class SiteGenerator:
     
     # Minimum number of vets for a city page to be indexed.
     # City pages with fewer vets are thin doorway pages that dilute quality signals.
-    CITY_NOINDEX_MIN_VETS = 3
+    CITY_NOINDEX_MIN_VETS = 5
 
     def _generate_city_pages(self):
         print("Generating city pages...")
