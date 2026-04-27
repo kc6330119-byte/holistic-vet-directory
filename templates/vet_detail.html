@@ -44,26 +44,6 @@
     "priceRange": "$$"
 }
 </script>
-{% if faq %}
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {% for item in faq %}
-        {
-            "@type": "Question",
-            "name": {{ item.q | tojson }},
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": {{ item.a | tojson }}
-            }
-        }{% if not loop.last %},{% endif %}
-        {% endfor %}
-    ]
-}
-</script>
-{% endif %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -187,29 +167,6 @@
             </section>
             {% endif %}
 
-            <!-- Specialty Details -->
-            {% if specialty_details %}
-            <section class="vet-section">
-                <h2 class="vet-section__title">About Our Specialties</h2>
-                <div class="specialty-details">
-                    {% for spec in specialty_details %}
-                    <div class="specialty-detail">
-                        <h3>{{ spec.name }}</h3>
-                        <p>{{ spec.description | truncate_words(50) }}</p>
-                        {% if spec.related_conditions %}
-                        <p class="specialty-detail__conditions">
-                            <strong>Commonly treats:</strong> {{ spec.related_conditions }}
-                        </p>
-                        {% endif %}
-                        <a href="/specialty/{{ spec.slug }}/" class="text-link">
-                            Learn more about {{ spec.name }} &rarr;
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-            {% endif %}
-
             <!-- Ad: Middle -->
             {% set slot_type = 'infeed' %}
             {% include 'partials/adsense.html' %}
@@ -241,21 +198,6 @@
                     </li>
                     {% endfor %}
                 </ul>
-            </section>
-            {% endif %}
-
-            <!-- FAQ -->
-            {% if faq %}
-            <section class="vet-section">
-                <h2 class="vet-section__title">Frequently Asked Questions</h2>
-                <div class="vet-faq">
-                    {% for item in faq %}
-                    <details class="vet-faq__item">
-                        <summary class="vet-faq__question">{{ item.q }}</summary>
-                        <p class="vet-faq__answer">{{ item.a }}</p>
-                    </details>
-                    {% endfor %}
-                </div>
             </section>
             {% endif %}
 

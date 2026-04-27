@@ -2095,77 +2095,6 @@ class SiteGenerator:
     # Google rating (+2), coordinates (+1), certifications (+1), email (+1).
     VET_NOINDEX_THRESHOLD = 5
 
-    @staticmethod
-    def _generate_vet_faq(vet: 'Veterinarian') -> List[Dict[str, str]]:
-        """Build 2-4 Q&A pairs for a vet from available data fields.
-
-        Powers FAQPage JSON-LD and an optional on-page accordion. Questions
-        are skipped when the underlying field is empty so answers never read
-        as boilerplate.
-        """
-        faq: List[Dict[str, str]] = []
-        name = vet.practice_name
-
-        if vet.specialties:
-            specs = vet.specialties
-            if len(specs) == 1:
-                spec_text = specs[0]
-            elif len(specs) == 2:
-                spec_text = f"{specs[0]} and {specs[1]}"
-            else:
-                spec_text = ", ".join(specs[:-1]) + f", and {specs[-1]}"
-            faq.append({
-                "q": f"What holistic services does {name} offer?",
-                "a": f"{name} offers {spec_text}. Services are tailored to each pet's individual needs, often combining holistic modalities with conventional veterinary care.",
-            })
-
-        if vet.species_treated:
-            species = [s.lower() for s in vet.species_treated]
-            if len(species) == 1:
-                species_text = species[0]
-            elif len(species) == 2:
-                species_text = f"{species[0]} and {species[1]}"
-            else:
-                species_text = ", ".join(species[:-1]) + f", and {species[-1]}"
-            faq.append({
-                "q": f"What types of animals does {name} treat?",
-                "a": f"{name} treats {species_text}. Contact the practice directly to confirm they can accommodate your specific pet and condition.",
-            })
-
-        if vet.certification_bodies:
-            certs = vet.certification_bodies
-            if len(certs) == 1:
-                cert_text = certs[0]
-            elif len(certs) == 2:
-                cert_text = f"{certs[0]} and {certs[1]}"
-            else:
-                cert_text = ", ".join(certs[:-1]) + f", and {certs[-1]}"
-            faq.append({
-                "q": f"Is {name} certified in holistic veterinary medicine?",
-                "a": f"Yes. {name} holds certifications or memberships with {cert_text}, recognized credentialing bodies in integrative and holistic veterinary care.",
-            })
-
-        if vet.city and vet.state:
-            location_parts = []
-            if vet.address:
-                location_parts.append(vet.address)
-            location_parts.append(f"{vet.city}, {vet.state}")
-            if vet.zip_code:
-                location_parts[-1] = f"{vet.city}, {vet.state} {vet.zip_code}"
-            full_loc = ", ".join(location_parts)
-            faq.append({
-                "q": f"Where is {name} located?",
-                "a": f"{name} is located at {full_loc}. See the map and directions on this page for turn-by-turn navigation.",
-            })
-
-        if vet.telehealth_available:
-            faq.append({
-                "q": f"Does {name} offer telehealth or virtual consultations?",
-                "a": f"Yes. {name} offers telehealth consultations in addition to in-person visits. Contact the practice to learn how virtual appointments work and whether they're a fit for your pet's needs.",
-            })
-
-        return faq[:4]
-
     def _generate_vet_detail_pages(self):
         print("Generating vet detail pages...")
         indexed_count = 0
@@ -2174,14 +2103,6 @@ class SiteGenerator:
         for vet in self.processor.vets:
             state = self.processor.state_by_code.get(vet.state)
             nearby_vets = self.processor.get_nearby_vets(vet, limit=5)
-
-            # Get specialty details for this vet
-            specialty_details = []
-            for spec_name in vet.specialties:
-                spec_slug = slugify(spec_name)
-                spec = self.processor.specialty_by_slug.get(spec_slug)
-                if spec:
-                    specialty_details.append(spec)
 
             # Noindex thin vet pages to improve overall site quality signals.
             # Pages still exist at the same URL (no redirects) but tell Google
@@ -2205,7 +2126,6 @@ class SiteGenerator:
                     # No sentence boundary found; truncate at word boundary and add suffix
                     vet_meta_desc = desc[:120].rsplit(' ', 1)[0].rstrip('.,') + f'. Holistic vet in {vet.city}, {vet.state}.'
 
-            faq = self._generate_vet_faq(vet)
             last_verified = datetime.now().date().isoformat()
 
             self._render_and_write('vet_detail.html', f'vet/{vet.slug}/index.html', {
@@ -2215,8 +2135,6 @@ class SiteGenerator:
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
-                'specialty_details': specialty_details,
-                'faq': faq,
                 'last_verified': last_verified,
             })
 
