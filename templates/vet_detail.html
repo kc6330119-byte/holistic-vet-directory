@@ -40,7 +40,6 @@
     {% if vet.specialties %}
     "medicalSpecialty": [{% for spec in vet.specialties %}"{{ spec }}"{% if not loop.last %}, {% endif %}{% endfor %}],
     {% endif %}
-    {% if last_verified %}"dateModified": "{{ last_verified }}",{% endif %}
     "priceRange": "$$"
 }
 </script>
@@ -314,14 +313,6 @@
                 <h3 class="info-card__title">Established</h3>
                 <p class="info-card__value">{{ vet.year_established }}</p>
                 <p class="info-card__note">{{ now.year - vet.year_established }} years serving the community</p>
-            </div>
-            {% endif %}
-
-            {% if last_verified %}
-            <div class="info-card">
-                <h3 class="info-card__title">Last Verified</h3>
-                <p class="info-card__value">{{ last_verified }}</p>
-                <p class="info-card__note">Listing details checked against our records.</p>
             </div>
             {% endif %}
 

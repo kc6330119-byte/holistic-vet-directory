@@ -2093,7 +2093,9 @@ class SiteGenerator:
     # Minimum quality score for a vet page to be indexed.
     # Score is 0-10 based on: real description (+3), phone (+1), website (+1),
     # Google rating (+2), coordinates (+1), certifications (+1), email (+1).
-    VET_NOINDEX_THRESHOLD = 5
+    # Pages must ALSO have a real human-written description (>=150 chars in
+    # Airtable) — auto-generated descriptions never satisfy the index gate.
+    VET_NOINDEX_THRESHOLD = 7
 
     def _generate_vet_detail_pages(self):
         print("Generating vet detail pages...")
@@ -2107,7 +2109,10 @@ class SiteGenerator:
             # Noindex thin vet pages to improve overall site quality signals.
             # Pages still exist at the same URL (no redirects) but tell Google
             # not to include them in search results until content is enriched.
-            noindex = vet.quality_score < self.VET_NOINDEX_THRESHOLD
+            noindex = (
+                not vet.has_real_description
+                or vet.quality_score < self.VET_NOINDEX_THRESHOLD
+            )
             if noindex:
                 noindexed_count += 1
             else:
@@ -2126,8 +2131,6 @@ class SiteGenerator:
                     # No sentence boundary found; truncate at word boundary and add suffix
                     vet_meta_desc = desc[:120].rsplit(' ', 1)[0].rstrip('.,') + f'. Holistic vet in {vet.city}, {vet.state}.'
 
-            last_verified = datetime.now().date().isoformat()
-
             self._render_and_write('vet_detail.html', f'vet/{vet.slug}/index.html', {
                 'page_title': f'Holistic Vet in {vet.city}, {vet.state} | {vet.practice_name}',
                 'page_description': vet_meta_desc,
@@ -2135,7 +2138,6 @@ class SiteGenerator:
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
-                'last_verified': last_verified,
             })
 
         print(f"  Vet pages: {indexed_count} indexed, {noindexed_count} noindexed (threshold: {self.VET_NOINDEX_THRESHOLD})")
@@ -2415,9 +2417,9 @@ class SiteGenerator:
             if specialty.vet_count > 0:
                 urls.append({'loc': f'/specialty/{specialty.slug}/', 'priority': '0.7', 'changefreq': 'weekly'})
         
-        # Add vet detail pages (only those above quality threshold)
+        # Add vet detail pages (only those above quality threshold AND with a real description)
         for vet in self.processor.vets:
-            if vet.quality_score >= self.VET_NOINDEX_THRESHOLD:
+            if vet.has_real_description and vet.quality_score >= self.VET_NOINDEX_THRESHOLD:
                 urls.append({'loc': f'/vet/{vet.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
         
         # Add blog pages

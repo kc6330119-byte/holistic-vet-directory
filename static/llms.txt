@@ -7,7 +7,7 @@
 - **What it is:** Free, searchable directory of holistic and integrative veterinarians across all 50 U.S. states.
 - **Who runs it:** An independent editorial team of pet owners and wellness advocates. Not affiliated with any veterinary association or pharmaceutical company.
 - **How vets are listed:** Listings are verified against credentials from AHVMA (American Holistic Veterinary Medical Association), IVAS (International Veterinary Acupuncture Society), the Chi Institute, AVCA (American Veterinary Chiropractic Association), and state veterinary licensing boards. Practice addresses, phone numbers, and websites are checked before publication.
-- **Update frequency:** Listings are reviewed and refreshed regularly. Each vet page shows a "last verified" date.
+- **Update frequency:** Listings are reviewed at least annually; high-traffic and featured listings are reviewed more frequently. Closed or relocated practices are removed within 30 days of being reported.
 - **Cost:** Free for pet owners. Basic listings are free for practitioners.
 - **Monetization:** The site is supported by Google AdSense and optional featured listings. Editorial decisions are independent of advertising relationships.
 
