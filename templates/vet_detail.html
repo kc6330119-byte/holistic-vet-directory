@@ -29,14 +29,6 @@
         "longitude": {{ vet.longitude }}
     },
     {% endif %}
-    {% if vet.google_rating and vet.google_reviews %}
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "{{ vet.google_rating }}",
-        "reviewCount": "{{ vet.google_reviews }}",
-        "bestRating": "5"
-    },
-    {% endif %}
     {% if vet.specialties %}
     "medicalSpecialty": [{% for spec in vet.specialties %}"{{ spec }}"{% if not loop.last %}, {% endif %}{% endfor %}],
     {% endif %}

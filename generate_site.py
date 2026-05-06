@@ -2477,6 +2477,12 @@ Sitemap: {self.config.site_url}/sitemap.xml
             shutil.copy(llms_txt_src, self.output_dir / 'llms.txt')
             print(f"  Copied: llms.txt")
 
+        # Copy favicon.ico to root — reviewers and crawlers fetch /favicon.ico directly
+        favicon_ico_src = static_src / 'favicon.ico'
+        if favicon_ico_src.exists():
+            shutil.copy(favicon_ico_src, self.output_dir / 'favicon.ico')
+            print(f"  Copied: favicon.ico")
+
 
 def main():
     # Configuration
