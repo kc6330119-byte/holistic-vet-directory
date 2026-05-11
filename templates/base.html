@@ -87,36 +87,6 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Newsletter Signup -->
-    <section class="newsletter-section">
-        <div class="container">
-            <h2 class="newsletter-section__title">Stay in the Loop</h2>
-            <p class="newsletter-section__text">Get holistic pet care tips, new practitioner listings, and integrative medicine guides delivered to your inbox.</p>
-            <form action="https://doggroomerlocator.us12.list-manage.com/subscribe/post?u=21343a587fbb950d8b649ee6d&amp;id=d8ae307647&amp;f_id=0016dde3f0" method="post" class="newsletter-form" data-newsletter-form>
-                <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_21343a587fbb950d8b649ee6d_d8ae307647" tabindex="-1" value=""></div>
-                <input type="email" name="EMAIL" required placeholder="Your email address" class="newsletter-form__input" aria-label="Email address">
-                <button type="submit" class="newsletter-form__button">Subscribe</button>
-            </form>
-            <p class="newsletter-section__disclaimer">No spam, ever. Unsubscribe anytime. <a href="/newsletter/">Learn more</a></p>
-        </div>
-    </section>
-    <script>
-    document.querySelectorAll('[data-newsletter-form]').forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            var email = form.querySelector('[name="EMAIL"]').value;
-            if (!email) return;
-            var url = form.action.replace('/post?', '/post-json?') + '&EMAIL=' + encodeURIComponent(email) + '&c=newsletterCallback';
-            var honeypot = form.querySelector('[name^="b_"]');
-            if (honeypot && honeypot.value) return;
-            window.newsletterCallback = function() { window.location.href = '/newsletter/success'; };
-            var s = document.createElement('script');
-            s.src = url;
-            document.body.appendChild(s);
-        });
-    });
-    </script>
-
     {% include 'partials/footer.html' %}
 
     <!-- Scripts -->

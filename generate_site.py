@@ -2361,18 +2361,6 @@ class SiteGenerator:
             'page_description': 'The page you requested could not be found.',
         })
 
-        self._render_and_write('newsletter.html', 'newsletter/index.html', {
-            'page_title': 'Newsletter - Holistic Pet Care Tips & Updates',
-            'page_description': 'Subscribe to the Holistic Vet Directory newsletter for monthly holistic pet care tips, new practitioner listings, and integrative medicine guides.',
-            'request_path': '/newsletter/',
-        })
-
-        self._render_and_write('newsletter-success.html', 'newsletter/success/index.html', {
-            'page_title': 'Subscription Confirmed',
-            'page_description': 'Thank you for subscribing to the Holistic Vet Directory newsletter.',
-            'noindex': True,
-        })
-
     def _generate_search_index(self):
         print("Generating search index...")
         index = self.processor.get_search_index()
@@ -2390,7 +2378,6 @@ class SiteGenerator:
             {'loc': '/specialties/', 'priority': '0.8', 'changefreq': 'weekly'},
             {'loc': '/holistic-care-guide/', 'priority': '0.8', 'changefreq': 'weekly'},
             {'loc': '/about/', 'priority': '0.5', 'changefreq': 'monthly'},
-            {'loc': '/newsletter/', 'priority': '0.5', 'changefreq': 'monthly'},
             {'loc': '/submit/', 'priority': '0.5', 'changefreq': 'monthly'},
         ]
         

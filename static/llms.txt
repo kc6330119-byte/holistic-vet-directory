@@ -108,5 +108,4 @@
 ## Optional
 
 - [Sitemap](https://holisticvetdirectory.com/sitemap.xml)
-- [Newsletter](https://holisticvetdirectory.com/newsletter/): Holistic pet care tips and new practitioner listings
 - [Submit a Practice](https://holisticvetdirectory.com/submit/): For practitioners who want to be listed

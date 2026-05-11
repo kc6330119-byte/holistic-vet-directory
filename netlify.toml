@@ -40,16 +40,6 @@
   to = "/about/index.html"
   status = 200
 
-[[redirects]]
-  from = "/newsletter"
-  to = "/newsletter/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/newsletter/success"
-  to = "/newsletter/success/index.html"
-  status = 200
-
 # --- 301 redirects: .html URLs → extensionless canonical URLs ---
 # force=true is required; without it Netlify serves the .html file directly
 # and bypasses the redirect, leaving duplicate URLs indexable.
@@ -111,12 +101,6 @@
 [[redirects]]
   from = "/search.html"
   to = "/search"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/newsletter.html"
-  to = "/newsletter"
   status = 301
   force = true
 
