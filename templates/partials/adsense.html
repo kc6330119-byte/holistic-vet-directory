@@ -2,7 +2,7 @@
    Usage: {% include 'partials/adsense.html' with context %}
    Required: slot_type (header, sidebar, infeed, footer)
 #}
-{% if config.enable_adsense and config.is_production %}
+{% if config.enable_adsense and config.is_production and not (noindex | default(false)) and (ads_allowed | default(true)) %}
 <div class="ad-unit ad-unit--{{ slot_type }}" aria-label="Advertisement">
     {% if slot_type == 'header' and config.adsense_slot_header %}
     <!-- Header Ad (728x90 leaderboard) -->
@@ -47,7 +47,7 @@
     </div>
     {% endif %}
 </div>
-{% elif not config.is_production %}
+{% elif not config.is_production and not (noindex | default(false)) and (ads_allowed | default(true)) %}
 <!-- Ad placeholder ({{ slot_type }}) - disabled in development -->
 <div class="ad-placeholder ad-placeholder--{{ slot_type }}">
     <span>Ad: {{ slot_type }}</span>

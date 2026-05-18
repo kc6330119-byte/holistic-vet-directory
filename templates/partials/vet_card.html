@@ -82,7 +82,7 @@
         {% endif %}
 
         <!-- Description -->
-        {% if show_description and vet.practice_description %}
+        {% if show_description and vet.practice_description and vet.has_real_description %}
         <p class="vet-card__description">
             {{ vet.practice_description | truncate_words(25) }}
         </p>

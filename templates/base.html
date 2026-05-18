@@ -61,7 +61,7 @@
     </script>
     {% endblock %}
 
-    {% if config.enable_adsense and config.is_production %}
+    {% if config.enable_adsense and config.is_production and not (noindex | default(false)) and (ads_allowed | default(true)) %}
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ config.adsense_client_id }}" crossorigin="anonymous"></script>
     {% endif %}

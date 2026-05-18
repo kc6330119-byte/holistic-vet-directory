@@ -58,11 +58,11 @@ This isn't about replacing conventional medicine — it's about **expanding the 
 
 ## Where the Site Stands Today
 
-Since launching, the site has continued to grow in ways that make me genuinely grateful. We now have over **28 blog posts** and counting, and we are actively working with knowledgeable experts who are contributing valuable insights and educational content. The directory itself lists thousands of holistic and integrative veterinary practices across all 50 states.
+Since launching, the site has continued to grow in ways that make me genuinely grateful. The directory now lists thousands of holistic and integrative veterinary practices across all 50 states, and the site includes practical guides for pet owners who are just beginning to explore integrative care.
 
 Another important part of the mission is community involvement. While I spend a great deal of time researching and adding veterinarians to the directory, I know there are many incredible practitioners across the country who may not yet be listed. That's why we created a **[Submit Listing](/submit/) form**, allowing veterinarians and contributors to help expand the directory so more pet owners can find the support they need.
 
-The hope is that over time, this site becomes more than just a directory — it becomes a **trusted resource for holistic pet care education and discovery**.
+The hope is that over time, this site becomes more than just a directory — it becomes a practical starting point for holistic pet care discovery.
 
 ## Zoe's Legacy
 

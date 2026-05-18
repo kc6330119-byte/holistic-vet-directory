@@ -32,11 +32,11 @@ One of the most reliable ways to evaluate a holistic vet is by checking their ce
 
 **Chi Institute:** The Chi Institute is one of the most respected training programs for Traditional Chinese Veterinary Medicine. Certification from the Chi Institute indicates advanced training in acupuncture, Chinese herbal medicine, food therapy, and Tui-na massage.
 
-**AVCA (American Veterinary Chiropractic Association):** AVCA certification is the gold standard for animal chiropractic care. Certified practitioners have completed a rigorous program of study and passed comprehensive examinations.
+**AVCA (American Veterinary Chiropractic Association):** AVCA certification is a commonly referenced credential for animal chiropractic care. Certified practitioners have completed a program of study and passed examinations.
 
 **VBMA (Veterinary Botanical Medicine Association):** The VBMA focuses specifically on herbal and botanical medicine for animals. Members have specialized knowledge in plant-based treatments.
 
-When evaluating a holistic vet, look for one or more of these certifications. They demonstrate that the practitioner has invested significant time and effort in learning complementary therapies beyond their standard veterinary degree.
+When evaluating a holistic vet, look for relevant training, certifications, memberships, or continuing education in the modalities they offer. Credentials are useful signals, but they should be confirmed directly with the practice or credentialing organization.
 
 ## Questions to Ask During Your First Visit
 
@@ -79,7 +79,7 @@ Finding a holistic vet near you is straightforward with our directory:
 1. **Search by location:** Enter your city, state, or ZIP code on our homepage to find practitioners in your area.
 2. **Filter by specialty:** If you know which modality you are interested in, browse our specialty pages to find vets with specific training.
 3. **Review practice details:** Each listing includes the practice's specialties, species treated, contact information, and a description of their approach.
-4. **Check credentials:** Look for the certification badges on each listing to verify the practitioner's qualifications.
+4. **Review credentials:** Look for any credentials listed, then confirm training, licensure, and services directly with the practice.
 5. **Reach out directly:** Contact practices that interest you to schedule a consultation.
 
 ## Making Your Decision
@@ -98,6 +98,6 @@ Remember, it is perfectly acceptable to visit more than one holistic vet before 
 
 The interest in holistic and integrative veterinary medicine has grown significantly in recent years. Pet owners are increasingly aware that conventional medicine, while powerful, does not always have all the answers—particularly for chronic conditions, age-related issues, and quality-of-life concerns.
 
-Holistic veterinary care offers additional tools and perspectives that can make a real difference in your pet's health and happiness. By taking the time to find a qualified, compassionate holistic vet, you are investing in a more complete approach to your pet's well-being.
+Holistic veterinary care can offer additional tools and perspectives, especially when it is coordinated with conventional veterinary care. Taking the time to evaluate training, communication style, and fit can help you choose a practitioner more confidently.
 
 Start your search today using our directory, and take the first step toward a more integrative approach to your pet's health care.

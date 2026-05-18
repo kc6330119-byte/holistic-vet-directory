@@ -10,6 +10,7 @@ import sys
 import json
 import csv
 import hashlib
+import re
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -117,9 +118,10 @@ class Veterinarian:
         self.certification_bodies = self._ensure_list(self.certification_bodies)
         self.species_treated = self._ensure_list(self.species_treated)
 
-        # Auto-generate a description only when Airtable has none or a very thin one (<150 chars).
-        # Any description 150+ characters is treated as real content and left untouched.
-        self.has_real_description = len(self.practice_description.strip()) >= 150
+        # Auto-generate a description when Airtable has none, very thin text, or
+        # scraped navigation/boilerplate from a practice website. Weak pages are
+        # noindexed later, so generated copy is for users who still land there.
+        self.has_real_description = self._looks_like_real_description(self.practice_description)
         if not self.has_real_description:
             self.practice_description = self._generate_auto_description()
     
@@ -131,6 +133,73 @@ class Veterinarian:
         if isinstance(value, str) and value:
             return [item.strip() for item in value.split('|') if item.strip()]
         return []
+
+    @staticmethod
+    def _looks_like_real_description(description: str) -> bool:
+        """Reject thin or scraped website-navigation text masquerading as copy."""
+        normalized = re.sub(r'\s+', ' ', (description or '')).strip()
+        if len(normalized) < 150:
+            return False
+
+        lowered = normalized.lower()
+        high_signal_boilerplate = [
+            'skip to main content',
+            'skip to footer',
+            'services all services',
+            'javascript must be enabled',
+            'medication request form',
+            'shop our online pharmacy',
+            'contact contact',
+            'privacy policy',
+            'find our app',
+            'app store',
+            'google play',
+        ]
+        if any(phrase in lowered for phrase in high_signal_boilerplate):
+            return False
+
+        boilerplate_phrases = [
+            'patient portal',
+            'pet portal',
+            'online pharmacy',
+            'online forms',
+            'book an appointment',
+            'request appointment',
+            'call us today',
+            'menu home',
+            'home about us',
+            'clinic hours',
+            'hours & contact',
+            'new clients',
+            'careers',
+            'employment',
+            'testimonials',
+            'directions appointments',
+        ]
+        phrase_hits = sum(1 for phrase in boilerplate_phrases if phrase in lowered)
+        if phrase_hits >= 2:
+            return False
+
+        tokens = re.findall(r'[a-z]+', lowered)
+        if len(tokens) >= 40:
+            unique_ratio = len(set(tokens)) / len(tokens)
+            if unique_ratio < 0.35:
+                return False
+
+            nav_terms = {
+                'home', 'about', 'services', 'contact', 'menu', 'appointments',
+                'appointment', 'pharmacy', 'careers', 'team', 'forms', 'portal',
+                'privacy', 'policy', 'faq', 'hours', 'location', 'news', 'blog',
+                'shop', 'clients', 'directions', 'reviews', 'resources'
+            }
+            nav_hits = sum(1 for token in tokens if token in nav_terms)
+            if nav_hits >= 10 and (nav_hits / len(tokens)) > 0.08:
+                return False
+
+        if '‚ä' in lowered or 'ï¿½' in lowered:
+            return False
+
+        return True
 
     def _generate_auto_description(self) -> str:
         """Build a varied, detailed description from available fields."""
@@ -1038,6 +1107,25 @@ class DataProcessor:
 
 class SiteGenerator:
     """Generates the static site."""
+
+    # Minimum quality score for a vet page to be indexed.
+    # Score is 0-10 based on: real description (+3), phone (+1), website (+1),
+    # Google rating (+2), coordinates (+1), certifications (+1), email (+1).
+    VET_NOINDEX_THRESHOLD = 7
+
+    # Directory/listing pages should only be indexable when they have enough
+    # strong underlying listings or custom editorial copy.
+    CITY_NOINDEX_MIN_VETS = 5
+    STATE_NOINDEX_MIN_QUALITY_VETS = 5
+
+    # Keep the public/indexed blog footprint to lower-risk, non-treatment pages.
+    # The other AI-written medical/advice posts still build at the same URLs,
+    # but are noindexed and ad-free.
+    INDEXABLE_BLOG_SLUGS = frozenset({
+        'the-story-behind-holistic-vet-directory',
+        'how-to-find-best-holistic-vet-near-you',
+        'how-much-does-holistic-vet-care-cost',
+    })
     
     def __init__(self, config: SiteConfig, processor: DataProcessor, output_dir: Path):
         self.config = config
@@ -1057,6 +1145,8 @@ class SiteGenerator:
         self.env.filters['format_phone'] = self._format_phone
         self.env.filters['pluralize'] = self._pluralize
         self.env.filters['meta_trunc'] = self._truncate_meta
+
+        indexable_blog_posts = self._indexable_blog_posts(processor.blog_posts)
         
         # Common context
         self.common_context = {
@@ -1064,9 +1154,27 @@ class SiteGenerator:
             'now': datetime.now(),
             'states': sorted([s for s in processor.states if s.vet_count > 0], key=lambda s: s.name),
             'specialties': sorted([s for s in processor.specialties if s.vet_count > 0], key=lambda s: s.name),
-            'blog_posts': processor.blog_posts[:3],  # Recent posts for sidebar/footer
-            'has_blog': len(processor.blog_posts) > 0,
+            'blog_posts': indexable_blog_posts[:3],
+            'has_blog': len(indexable_blog_posts) > 0,
         }
+
+    def _is_indexable_vet(self, vet: Veterinarian) -> bool:
+        return vet.has_real_description and vet.quality_score >= self.VET_NOINDEX_THRESHOLD
+
+    def _quality_vet_count(self, vets: List[Veterinarian]) -> int:
+        return sum(1 for vet in vets if self._is_indexable_vet(vet))
+
+    def _is_indexable_city(self, city_vets: List[Veterinarian], city_editorial: str = "") -> bool:
+        return bool(city_editorial) or self._quality_vet_count(city_vets) >= self.CITY_NOINDEX_MIN_VETS
+
+    def _is_indexable_state(self, state_vets: List[Veterinarian], state_editorial: str = "") -> bool:
+        return bool(state_editorial) or self._quality_vet_count(state_vets) >= self.STATE_NOINDEX_MIN_QUALITY_VETS
+
+    def _is_indexable_blog_post(self, post: BlogPost) -> bool:
+        return post.slug in self.INDEXABLE_BLOG_SLUGS
+
+    def _indexable_blog_posts(self, posts: List[BlogPost]) -> List[BlogPost]:
+        return [post for post in posts if self._is_indexable_blog_post(post)]
     
     @staticmethod
     def _truncate_words(text: str, num_words: int = 30) -> str:
@@ -1153,9 +1261,10 @@ class SiteGenerator:
     def _generate_homepage(self):
         print("Generating homepage...")
         published_posts = [p for p in self.processor.blog_posts if p.status == 'Published']
-        featured_post = next((p for p in published_posts if p.featured), None)
-        if not featured_post and published_posts:
-            featured_post = published_posts[0]
+        indexable_posts = self._indexable_blog_posts(published_posts)
+        featured_post = next((p for p in indexable_posts if p.featured), None)
+        if not featured_post and indexable_posts:
+            featured_post = indexable_posts[0]
         vet_count = len(self.processor.vets)
         self._render_and_write('index.html', 'index.html', {
             'page_title': 'Holistic Vet Directory — Find a Holistic or Integrative Vet Near You',
@@ -1166,7 +1275,7 @@ class SiteGenerator:
             'recent_vets': sorted(self.processor.vets, key=lambda v: v.practice_name)[:6],
             'total_vets': len(self.processor.vets),
             'total_states': len([s for s in self.processor.states if s.vet_count > 0]),
-            'total_posts': len(published_posts),
+            'total_posts': len(indexable_posts),
             'featured_post': featured_post,
         })
     
@@ -1182,6 +1291,7 @@ class SiteGenerator:
             'total_pages': 1,
             'has_prev': False,
             'has_next': False,
+            'ads_allowed': False,
         })
     
     # Unique editorial paragraphs for each state page
@@ -2016,6 +2126,7 @@ class SiteGenerator:
             state_vets = self.processor.vets_by_state.get(state.code, [])
             cities = self.processor.cities_by_state.get(state.code, [])
             editorial = self.STATE_EDITORIAL.get(state.code, "")
+            noindex = not self._is_indexable_state(state_vets, editorial)
 
             page_title = self.STATE_TITLE_OVERRIDES.get(
                 state.code,
@@ -2033,12 +2144,10 @@ class SiteGenerator:
                 'vets': sorted(state_vets, key=lambda v: (v.city, v.practice_name)),
                 'cities': cities,
                 'state_editorial': editorial,
+                'noindex': noindex,
+                'ads_allowed': False,
             })
     
-    # Minimum number of vets for a city page to be indexed.
-    # City pages with fewer vets are thin doorway pages that dilute quality signals.
-    CITY_NOINDEX_MIN_VETS = 5
-
     def _generate_city_pages(self):
         print("Generating city pages...")
         city_indexed = 0
@@ -2058,7 +2167,8 @@ class SiteGenerator:
                 city_editorial = self.CITY_EDITORIAL.get(city_key, "")
 
                 # Noindex thin city pages unless they have custom editorial content
-                noindex = len(city_vets) < self.CITY_NOINDEX_MIN_VETS and not city_editorial
+                # or enough strong underlying listings.
+                noindex = not self._is_indexable_city(city_vets, city_editorial)
                 if noindex:
                     city_noindexed += 1
                 else:
@@ -2083,19 +2193,13 @@ class SiteGenerator:
                     'city_slug': city_slug,
                     'vets': sorted(city_vets, key=lambda v: v.practice_name),
                     'noindex': noindex,
+                    'ads_allowed': False,
                     'dominant_specialty': dominant_specialty,
                     'listing_count': len(city_vets),
                     'city_editorial': city_editorial,
                 })
 
         print(f"  City pages: {city_indexed} indexed, {city_noindexed} noindexed (min vets: {self.CITY_NOINDEX_MIN_VETS})")
-
-    # Minimum quality score for a vet page to be indexed.
-    # Score is 0-10 based on: real description (+3), phone (+1), website (+1),
-    # Google rating (+2), coordinates (+1), certifications (+1), email (+1).
-    # Pages must ALSO have a real human-written description (>=150 chars in
-    # Airtable) — auto-generated descriptions never satisfy the index gate.
-    VET_NOINDEX_THRESHOLD = 7
 
     def _generate_vet_detail_pages(self):
         print("Generating vet detail pages...")
@@ -2109,10 +2213,7 @@ class SiteGenerator:
             # Noindex thin vet pages to improve overall site quality signals.
             # Pages still exist at the same URL (no redirects) but tell Google
             # not to include them in search results until content is enriched.
-            noindex = (
-                not vet.has_real_description
-                or vet.quality_score < self.VET_NOINDEX_THRESHOLD
-            )
+            noindex = not self._is_indexable_vet(vet)
             if noindex:
                 noindexed_count += 1
             else:
@@ -2135,6 +2236,7 @@ class SiteGenerator:
                 'page_title': f'Holistic Vet in {vet.city}, {vet.state} | {vet.practice_name}',
                 'page_description': vet_meta_desc,
                 'noindex': noindex,
+                'ads_allowed': not noindex,
                 'vet': vet,
                 'state': state,
                 'nearby_vets': nearby_vets,
@@ -2161,6 +2263,7 @@ class SiteGenerator:
             'page_description': 'Learn about holistic veterinary modalities including acupuncture, herbal medicine, chiropractic care, and more.',
             'specialties': sorted(self.processor.specialties, key=lambda s: s.name),
             'top_rated_by_specialty': top_rated_by_specialty,
+            'ads_allowed': False,
         })
     
     # Maps specialty slugs to relevant blog post slugs for cross-linking
@@ -2261,8 +2364,9 @@ class SiteGenerator:
                 'specialty': specialty,
                 'vets': sorted(spec_vets, key=lambda v: (v.state, v.city, v.practice_name)),
                 'vets_by_state': dict(vets_by_state),
-                'related_blog_posts': related_blog_posts,
+                'related_blog_posts': [p for p in related_blog_posts if self._is_indexable_blog_post(p)],
                 'related_specialties': related_specialties,
+                'ads_allowed': False,
             })
     
     def _generate_search_page(self):
@@ -2275,7 +2379,8 @@ class SiteGenerator:
     
     def _generate_blog_list(self):
         """Generate blog listing page."""
-        if not self.processor.blog_posts:
+        indexable_posts = self._indexable_blog_posts(self.processor.blog_posts)
+        if not indexable_posts:
             print("Skipping blog list (no published posts)...")
             return
             
@@ -2284,10 +2389,11 @@ class SiteGenerator:
             'blog_list.html',
             'blog/index.html',
             {
-                'page_title': 'Blog - Holistic Pet Care Articles',
-                'page_description': 'Expert articles on holistic veterinary care, natural pet health, and integrative medicine for your pets.',
-                'posts': self.processor.blog_posts,
+                'page_title': 'Blog - Holistic Pet Care Guides and Site Updates',
+                'page_description': 'Practical guides and updates from Holistic Vet Directory, including how to find holistic vets and compare care costs.',
+                'posts': indexable_posts,
                 'request_path': '/blog/',
+                'ads_allowed': False,
             }
         )
         print("  Generated: blog/index.html")
@@ -2299,16 +2405,20 @@ class SiteGenerator:
             return
             
         print("Generating blog post pages...")
+        indexable_posts = self._indexable_blog_posts(self.processor.blog_posts)
         for post in self.processor.blog_posts:
+            noindex = not self._is_indexable_blog_post(post)
             self._render_and_write(
                 'blog_detail.html',
                 f'blog/{post.slug}/index.html',
                 {
                     'page_title': f'{post.title} | Holistic Vet Directory Blog',
-                    'page_description': post.meta_description or post.excerpt or f'{post.title} — Expert holistic pet care advice from Holistic Vet Directory.',
+                    'page_description': post.meta_description or post.excerpt or f'{post.title} — Informational guide from Holistic Vet Directory.',
                     'post': post,
                     'request_path': f'/blog/{post.slug}/',
-                    'related_posts': [p for p in self.processor.blog_posts if p.slug != post.slug][:3],
+                    'related_posts': [p for p in indexable_posts if p.slug != post.slug][:3],
+                    'noindex': noindex,
+                    'ads_allowed': not noindex,
                 }
             )
             print(f"  Generated: blog/{post.slug}/index.html")
@@ -2321,6 +2431,8 @@ class SiteGenerator:
             'specialties': self.processor.specialties,
             'total_vets': len(self.processor.vets),
             'request_path': '/holistic-care-guide/',
+            'noindex': True,
+            'ads_allowed': False,
         })
 
     def _generate_static_pages(self):
@@ -2329,36 +2441,43 @@ class SiteGenerator:
         self._render_and_write('about.html', 'about/index.html', {
             'page_title': 'About Holistic Vet Directory',
             'page_description': 'Learn about our mission to connect pet owners with holistic and integrative veterinary care.',
+            'ads_allowed': False,
         })
         
         self._render_and_write('submit.html', 'submit/index.html', {
             'page_title': 'Submit Your Practice',
             'page_description': 'Submit your holistic veterinary practice to our directory.',
+            'ads_allowed': False,
         })
         
         self._render_and_write('privacy.html', 'privacy/index.html', {
             'page_title': 'Privacy Policy',
             'page_description': 'Privacy policy for Holistic Vet Directory.',
+            'ads_allowed': False,
         })
         
         self._render_and_write('terms.html', 'terms/index.html', {
             'page_title': 'Terms of Service',
             'page_description': 'Terms of service for Holistic Vet Directory.',
+            'ads_allowed': False,
         })
         
         self._render_and_write('contact.html', 'contact/index.html', {
             'page_title': 'Contact Us',
             'page_description': 'Contact us with questions about holistic veterinary care or to suggest a veterinarian.',
+            'ads_allowed': False,
         })
         
         self._render_and_write('success.html', 'success/index.html', {
             'page_title': 'Thank You',
             'page_description': 'Your message has been sent successfully.',
+            'ads_allowed': False,
         })
         
         self._render_and_write('404.html', '404.html', {
             'page_title': 'Page Not Found',
             'page_description': 'The page you requested could not be found.',
+            'ads_allowed': False,
         })
 
     def _generate_search_index(self):
@@ -2376,14 +2495,15 @@ class SiteGenerator:
             {'loc': '/', 'priority': '1.0', 'changefreq': 'daily'},
             {'loc': '/vets/', 'priority': '0.9', 'changefreq': 'daily'},
             {'loc': '/specialties/', 'priority': '0.8', 'changefreq': 'weekly'},
-            {'loc': '/holistic-care-guide/', 'priority': '0.8', 'changefreq': 'weekly'},
             {'loc': '/about/', 'priority': '0.5', 'changefreq': 'monthly'},
             {'loc': '/submit/', 'priority': '0.5', 'changefreq': 'monthly'},
         ]
         
         # Add state pages
         for state in self.processor.states:
-            if state.vet_count > 0:
+            state_vets = self.processor.vets_by_state.get(state.code, [])
+            editorial = self.STATE_EDITORIAL.get(state.code, "")
+            if state.vet_count > 0 and self._is_indexable_state(state_vets, editorial):
                 urls.append({'loc': f'/vets/{state.slug}/', 'priority': '0.7', 'changefreq': 'weekly'})
 
         # Add city pages (only those above vet count threshold or with editorial)
@@ -2395,8 +2515,8 @@ class SiteGenerator:
                 if not city_vets:
                     continue
                 city_key = f"{state_code}:{city_slug}"
-                has_editorial = bool(self.CITY_EDITORIAL.get(city_key, ""))
-                if len(city_vets) >= self.CITY_NOINDEX_MIN_VETS or has_editorial:
+                city_editorial = self.CITY_EDITORIAL.get(city_key, "")
+                if self._is_indexable_city(city_vets, city_editorial):
                     urls.append({'loc': f'/vets/{state.slug}/{city_slug}/', 'priority': '0.6', 'changefreq': 'weekly'})
 
         # Add specialty pages
@@ -2406,13 +2526,14 @@ class SiteGenerator:
         
         # Add vet detail pages (only those above quality threshold AND with a real description)
         for vet in self.processor.vets:
-            if vet.has_real_description and vet.quality_score >= self.VET_NOINDEX_THRESHOLD:
+            if self._is_indexable_vet(vet):
                 urls.append({'loc': f'/vet/{vet.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
         
         # Add blog pages
-        if self.processor.blog_posts:
+        indexable_posts = self._indexable_blog_posts(self.processor.blog_posts)
+        if indexable_posts:
             urls.append({'loc': '/blog/', 'priority': '0.7', 'changefreq': 'weekly'})
-            for post in self.processor.blog_posts:
+            for post in indexable_posts:
                 urls.append({'loc': f'/blog/{post.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
         
         sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
