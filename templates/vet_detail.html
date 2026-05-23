@@ -124,10 +124,6 @@
                 {% endif %}
             </header>
 
-            <!-- Ad: Top -->
-            {% set slot_type = 'header' %}
-            {% include 'partials/adsense.html' %}
-
             <!-- Specialties -->
             {% if vet.specialties %}
             <section class="vet-section">
@@ -158,10 +154,6 @@
             </section>
             {% endif %}
 
-            <!-- Ad: Middle -->
-            {% set slot_type = 'infeed' %}
-            {% include 'partials/adsense.html' %}
-
             <!-- Species Treated -->
             {% if vet.species_treated %}
             <section class="vet-section">
@@ -191,6 +183,10 @@
                 </ul>
             </section>
             {% endif %}
+
+            <!-- Ad: After primary vet content -->
+            {% set slot_type = 'infeed' %}
+            {% include 'partials/adsense.html' %}
 
             <!-- Nearby Vets -->
             {% if nearby_vets %}

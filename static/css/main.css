@@ -1319,19 +1319,9 @@ ul, ol {
     padding: var(--space-8) 0;
 }
 
-/* On mobile, show sidebar (contact/map) before main content */
-.vet-detail-sidebar {
-    order: -1;
-}
-
 @media (min-width: 1024px) {
     .vet-detail-layout {
         grid-template-columns: 1fr 350px;
-    }
-
-    /* Restore natural order on desktop */
-    .vet-detail-sidebar {
-        order: 0;
     }
 }
 
@@ -1369,9 +1359,41 @@ ul, ol {
 
 .vet-detail-header__location {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-2);
     color: var(--color-text-light);
+}
+
+@media (max-width: 640px) {
+    .vet-detail-layout {
+        gap: var(--space-5);
+        padding: var(--space-5) 0;
+    }
+
+    .vet-detail-header {
+        flex-direction: column;
+        gap: var(--space-3);
+        margin-bottom: var(--space-5);
+    }
+
+    .vet-detail-header__logo {
+        order: -1;
+        max-width: 160px;
+        max-height: 64px;
+    }
+
+    .vet-detail-header__title {
+        font-size: var(--font-size-2xl);
+        line-height: 1.15;
+    }
+
+    .contact-card {
+        padding: var(--space-4);
+    }
+
+    .map-container {
+        height: 180px;
+    }
 }
 
 .featured-badge {
@@ -2806,6 +2828,13 @@ ul, ol {
     max-width: 728px;
     height: 90px;
     margin: var(--space-4) auto;
+}
+
+@media (max-width: 1023px) {
+    .page-vet-detail .vet-detail-sidebar .ad-unit,
+    .page-vet-detail .vet-detail-sidebar .ad-placeholder {
+        display: none;
+    }
 }
 
 /* -----------------------------------------------------------------------------

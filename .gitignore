@@ -55,6 +55,7 @@ data/airtable_update_log.json
 data/validation_results.csv
 data/validation_flagged.csv
 data/validation_progress.json
+data/description_enrichment_review*.csv
 
 # Google ratings script output
 data/google_ratings.csv
