@@ -877,7 +877,9 @@ class SiteGenerator:
         self.processor = processor
         self.output_dir = output_dir
         self.template_dir = Path(__file__).parent / 'templates'
-        
+        self.protected_paths = self._load_protected_paths()
+        self._protected_applied = 0
+
         # Set up Jinja2 environment
         self.env = Environment(
             loader=FileSystemLoader(self.template_dir),
@@ -904,8 +906,33 @@ class SiteGenerator:
             'authors': self.AUTHORS,
         }
 
+    def _load_protected_paths(self) -> set:
+        """URL paths that stay indexable regardless of the quality gate.
+
+        Seeded from a Google Search Console export (see data/protected_urls.txt):
+        pages that already earn Google impressions/clicks should not be dropped
+        by a noindex gate just because they fall below the quality threshold.
+        """
+        path = Path(__file__).parent / 'data' / 'protected_urls.txt'
+        if not path.exists():
+            return set()
+        paths = set()
+        for line in path.read_text(encoding='utf-8').splitlines():
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            if not line.startswith('/'):
+                line = '/' + line
+            if not line.endswith('/'):
+                line += '/'
+            paths.add(line)
+        return paths
+
+    def _is_protected(self, path: str) -> bool:
+        return bool(path) and path in self.protected_paths
+
     def _is_indexable_vet(self, vet: Veterinarian) -> bool:
-        return (
+        return self._is_protected(f'/vet/{vet.slug}/') or (
             vet.has_real_description
             and vet.quality_score >= self.VET_NOINDEX_THRESHOLD
             and vet.has_differentiating_facts
@@ -982,7 +1009,10 @@ class SiteGenerator:
         self._generate_sitemap()
         self._generate_robots_txt()
         self._copy_static_assets()
-        
+
+        if self.protected_paths:
+            print(f"Protected URLs: {len(self.protected_paths)} in grandfather list; "
+                  f"{self._protected_applied} non-vet page(s) force-indexed by it")
         print(f"Site generation complete! Output: {self.output_dir}")
     
     def _render_and_write(self, template_name: str, output_path: str, context: Dict[str, Any]):
@@ -999,7 +1029,14 @@ class SiteGenerator:
                 context['request_path'] = '/' + output_path.replace('/index.html', '/').replace('index.html', '')
             else:
                 context['request_path'] = '/' + output_path
-        
+
+        # Grandfather: pages with proven Google traction stay indexable even if a
+        # gate marked them noindex. Vet pages already get this via _is_indexable_vet;
+        # this catches the other page types (city, specialty, guide, etc.).
+        if context.get('noindex') and self._is_protected(context['request_path']):
+            context['noindex'] = False
+            self._protected_applied += 1
+
         full_context = {**self.common_context, **context}
         html = template.render(**full_context)
         
@@ -2302,7 +2339,16 @@ class SiteGenerator:
             urls.append({'loc': '/blog/', 'priority': '0.7', 'changefreq': 'weekly'})
             for post in indexable_posts:
                 urls.append({'loc': f'/blog/{post.slug}/', 'priority': '0.6', 'changefreq': 'monthly'})
-        
+
+        # Ensure grandfathered (protected) pages are in the sitemap even if a gate
+        # would otherwise exclude them. Only include paths that actually built.
+        present = {u['loc'] for u in urls}
+        for path in sorted(self.protected_paths):
+            if path in present:
+                continue
+            if (self.output_dir / path.lstrip('/') / 'index.html').exists():
+                urls.append({'loc': path, 'priority': '0.5', 'changefreq': 'weekly'})
+
         sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
         sitemap_xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         

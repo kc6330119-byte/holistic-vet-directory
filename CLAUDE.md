@@ -67,6 +67,8 @@ Both scripts: dry-run by default, `--apply` to write, `--limit N` to sample. The
 
 **Index gate** (in `generate_site.py`): a vet page is indexed only if `has_real_description AND quality_score >= VET_NOINDEX_THRESHOLD (7) AND has_differentiating_facts`. Listings below the gate are noindexed and their ads suppressed, deliberately shrinking the indexed surface to genuinely fact-rich pages (~56% indexed).
 
+**Protected URLs (grandfather list)**: `data/protected_urls.txt` lists URL paths that stay indexable regardless of the gate, so pages with proven Search traction can't be deindexed by a future gate change. It is seeded from a Google Search Console export (paths with clicks>=1 OR impressions>=10). At build time `generate_site.py` loads it: `_is_indexable_vet` ORs in protection (covers vet page noindex + sitemap + counts), `_render_and_write` flips `noindex` off for any other protected page type (city/state/specialty/guide), and protected paths are force-added to the sitemap. To refresh: re-export GSC Pages and regenerate the file (one path per line; `#` comments and blank lines ignored). Edit by hand to add/remove protections.
+
 ### After ANY Airtable data refresh
 
 Re-run the remediation so new/changed listings get the same treatment, then rebuild:
@@ -78,7 +80,7 @@ python3 scripts/website_descriptions.py --limit 0 --apply  # write (backs up fir
 DATA_SOURCE=airtable python3 generate_site.py              # rebuild and verify dist/ before deploy
 ```
 
-(If a Search Console export later becomes available, add a protected-URLs grandfather step here so already-ranking pages can't be noindexed by a future gate change — not yet built.)
+After a data refresh, also re-check the protected-URLs grandfather list (`data/protected_urls.txt`) against a fresh GSC export so newly-ranking pages keep their protection.
 
 ## Authorship & Medical Review (E-E-A-T)
 
