@@ -14,8 +14,14 @@
     {% if post.published_date %}"dateModified": "{{ post.published_date[:10] }}",{% endif %}
     "author": {
         "@type": "Person",
-        "name": "{{ post.author or 'Holistic Vet Directory' }}"
+        "name": "{{ post.author or 'Holistic Vet Directory' }}"{% if post.author_slug in authors %},
+        "url": "{{ config.site_url }}/author/{{ post.author_slug }}/"{% endif %}
     },
+    {% if post.reviewer %}"reviewedBy": {
+        "@type": "Person",
+        "name": "{{ post.reviewer }}"{% if post.reviewer_credentials %},
+        "jobTitle": "{{ post.reviewer_credentials }}"{% endif %}
+    },{% endif %}
     "publisher": {
         "@type": "Organization",
         "name": "Holistic Vet Directory",
@@ -49,7 +55,12 @@
                     <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z" fill="currentColor"/>
                     </svg>
-                    {{ post.author }}
+                    {% if post.author_slug in authors %}<a href="/author/{{ post.author_slug }}/">{{ post.author }}</a>{% else %}{{ post.author }}{% endif %}
+                </span>
+                {% endif %}
+                {% if post.reviewer %}
+                <span class="blog-post__reviewer">
+                    Medically reviewed by {{ post.reviewer }}{% if post.reviewer_credentials %}, {{ post.reviewer_credentials }}{% endif %}
                 </span>
                 {% endif %}
                 {% if post.published_date_formatted %}
@@ -114,6 +125,18 @@
                         Back to Blog
                     </a>
                 </footer>
+
+                {% if post.author_slug in authors %}
+                {% set author = authors[post.author_slug] %}
+                <aside class="author-box">
+                    <h2 class="author-box__heading">About the author</h2>
+                    <p class="author-box__name">
+                        <a href="/author/{{ author.slug }}/">{{ author.name }}</a>
+                        <span class="author-box__role">{{ author.role }}</span>
+                    </p>
+                    <p class="author-box__bio">{{ author.short_bio }}</p>
+                </aside>
+                {% endif %}
 
                 {% if related_posts %}
                 <section class="related-posts">

@@ -80,6 +80,13 @@ DATA_SOURCE=airtable python3 generate_site.py              # rebuild and verify 
 
 (If a Search Console export later becomes available, add a protected-URLs grandfather step here so already-ranking pages can't be noindexed by a future gate change — not yet built.)
 
+## Authorship & Medical Review (E-E-A-T)
+
+YMYL site, so authorship/review signals matter. Two pieces, both in `generate_site.py`:
+
+- **Author registry** — `SiteGenerator.AUTHORS` (keyed by `author_slug`). Each entry renders an `/author/{slug}/` page (`templates/author.html`, ProfilePage + Person schema). Blog bylines link to the author page and inject `author.url` into BlogPosting schema **only when** the post's `author_slug` is in `AUTHORS`, so legacy/unknown author names never make a 404 link. **Only add real people** — fabricated authors are a trust risk in manual review. Blog posts currently all credit "Kevin Collins" (Founder & Editor, not a vet).
+- **Medical reviewer hook** — `BlogPost.reviewer` / `reviewer_credentials` (read from the `Reviewer` / `Reviewer Credentials` Airtable/CSV/markdown fields, default empty). When set, `blog_detail.html` renders a visible "Medically reviewed by …" line and a `reviewedBy` Person in the schema. Left empty until a **real licensed DVM** reviews the content — do not populate with a placeholder.
+
 ## Deployment
 
 Hosted on Netlify. Push to `main` triggers automatic deploy. Config in `netlify.toml` includes redirects (including 301s for fixed blog slug typos), security headers, and cache rules. The `dist/` directory is gitignored.

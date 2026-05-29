@@ -549,6 +549,8 @@ class DataLoader:
                     status=ap.status,
                     slug=ap.slug,
                     featured=ap.featured,
+                    reviewer=getattr(ap, 'reviewer', ''),
+                    reviewer_credentials=getattr(ap, 'reviewer_credentials', ''),
                 )
                 posts.append(post)
             return posts
@@ -575,6 +577,8 @@ class DataLoader:
                             meta_description=row.get('Meta Description', ''),
                             status=row.get('Status', 'Draft'),
                             slug=row.get('Slug', ''),
+                            reviewer=row.get('Reviewer', ''),
+                            reviewer_credentials=row.get('Reviewer Credentials', ''),
                         )
                         posts.append(post)
             return posts
@@ -618,6 +622,8 @@ class DataLoader:
                     meta_description=meta.get('Meta Description', ''),
                     status=meta.get('Status', 'Draft'),
                     slug=meta.get('Slug', '') or slugify(meta.get('Title', md_file.stem)),
+                    reviewer=meta.get('Reviewer', ''),
+                    reviewer_credentials=meta.get('Reviewer Credentials', ''),
                 )
                 posts.append(post)
             except Exception as e:
@@ -640,10 +646,15 @@ class BlogPost:
     status: str = "Draft"
     slug: str = ""
     featured: bool = False
-    
+    reviewer: str = ""
+    reviewer_credentials: str = ""
+    author_slug: str = ""
+
     def __post_init__(self):
         if not self.slug:
             self.slug = slugify(self.title)
+        if self.author and not self.author_slug:
+            self.author_slug = slugify(self.author)
         # Convert markdown content to HTML
         if self.content and not self.content_html:
             self.content_html = markdown.markdown(
@@ -826,7 +837,41 @@ class SiteGenerator:
         'how-to-find-best-holistic-vet-near-you',
         'how-much-does-holistic-vet-care-cost',
     })
-    
+
+    # Real, named authors with a published bio. Keyed by author_slug. The byline
+    # only links to an author page when the post's author_slug is in this map, so
+    # unknown/legacy author names never produce a 404 link. Do not add a person
+    # here unless they are a real contributor — fabricated authors are a trust risk.
+    AUTHORS = {
+        'kevin-collins': {
+            'name': 'Kevin Collins',
+            'slug': 'kevin-collins',
+            'role': 'Founder & Editor',
+            'short_bio': (
+                'Kevin Collins is the founder and editor of Holistic Vet Directory. '
+                'He is not a veterinarian; his role is editorial and the directory is built '
+                'from public sources, practice information, and submissions.'
+            ),
+            'bio_html': [
+                'Kevin Collins is the founder and editor of Holistic Vet Directory. He started '
+                'the site after he and his wife adopted a rescue dog named Zoe — one day before '
+                'she was scheduled to be euthanized — and spent months searching for veterinarians '
+                'who could help with her chronic scratching, sneezing, and coughing when conventional '
+                'treatment alone fell short.',
+                'That search led the family to integrative and holistic veterinary care, and to a '
+                'frustrating realization: there was no single, easy place for pet owners to find '
+                'holistic and integrative veterinarians. With a background in IT, Kevin built '
+                'Holistic Vet Directory to close that gap and make the search free for pet owners.',
+                'Kevin is not a veterinarian, and nothing on this site is veterinary advice. His role '
+                'is editorial — researching and organizing listings, writing and editing the pet-owner '
+                'guides on the blog, and maintaining the directory’s accuracy and corrections process. '
+                'Educational articles are written for general information and are not presented as a '
+                'veterinary-reviewed medical resource. Always consult a licensed veterinarian who has '
+                'examined your pet before making care decisions.',
+            ],
+        },
+    }
+
     def __init__(self, config: SiteConfig, processor: DataProcessor, output_dir: Path):
         self.config = config
         self.processor = processor
@@ -856,6 +901,7 @@ class SiteGenerator:
             'specialties': sorted([s for s in processor.specialties if s.vet_count > 0], key=lambda s: s.name),
             'blog_posts': indexable_blog_posts[:3],
             'has_blog': len(indexable_blog_posts) > 0,
+            'authors': self.AUTHORS,
         }
 
     def _is_indexable_vet(self, vet: Veterinarian) -> bool:
@@ -2148,6 +2194,20 @@ class SiteGenerator:
             'ads_allowed': False,
         })
         
+        for slug, author in self.AUTHORS.items():
+            authored = [
+                p for p in self.processor.blog_posts
+                if p.author_slug == slug and p.status == 'Published'
+            ]
+            authored.sort(key=lambda p: p.published_date or '', reverse=True)
+            self._render_and_write('author.html', f'author/{slug}/index.html', {
+                'page_title': f'{author["name"]} — {author["role"]} | Holistic Vet Directory',
+                'page_description': author['short_bio'],
+                'author': author,
+                'authored_posts': authored,
+                'ads_allowed': False,
+            })
+
         self._render_and_write('submit.html', 'submit/index.html', {
             'page_title': 'Submit Your Practice',
             'page_description': 'Submit your holistic veterinary practice to our directory.',
@@ -2202,6 +2262,9 @@ class SiteGenerator:
             {'loc': '/about/', 'priority': '0.5', 'changefreq': 'monthly'},
             {'loc': '/submit/', 'priority': '0.5', 'changefreq': 'monthly'},
         ]
+
+        for slug in self.AUTHORS:
+            urls.append({'loc': f'/author/{slug}/', 'priority': '0.4', 'changefreq': 'monthly'})
         
         # Add state pages
         for state in self.processor.states:

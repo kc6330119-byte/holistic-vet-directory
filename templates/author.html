@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block body_class %}page-author{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+        "@type": "Person",
+        "name": "{{ author.name | safe }}",
+        "jobTitle": "{{ author.role | safe }}",
+        "description": "{{ author.short_bio | replace('"', '\\"') | safe }}",
+        "url": "{{ config.site_url }}/author/{{ author.slug }}/",
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Holistic Vet Directory",
+            "url": "{{ config.site_url }}"
+        },
+        "knowsAbout": ["Holistic veterinary medicine", "Integrative pet care", "Pet wellness"]
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">{{ author.name }}</h1>
+        <p class="page-header__subtitle">{{ author.role }}, Holistic Vet Directory</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content-layout">
+        <main class="content-main">
+            <article class="prose author-bio">
+                {% for para in author.bio_html %}
+                <p>{{ para }}</p>
+                {% endfor %}
+            </article>
+
+            {% if authored_posts %}
+            <section class="author-articles">
+                <h2>Articles by {{ author.name }}</h2>
+                <ul class="author-articles__list">
+                    {% for post in authored_posts %}
+                    <li>
+                        <a href="/blog/{{ post.slug }}/">{{ post.title }}</a>
+                        {% if post.published_date_formatted %}
+                        <time datetime="{{ post.published_date[:10] }}">{{ post.published_date_formatted }}</time>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+            {% endif %}
+        </main>
+
+        <aside class="content-sidebar">
+            <div class="sidebar-card">
+                <h3>About This Directory</h3>
+                <p>Learn how listings are compiled and verified, and read our editorial standards.</p>
+                <a href="/about/#editorial-standards" class="btn btn--primary btn--block">Editorial Standards</a>
+            </div>
+
+            <div class="sidebar-card">
+                <h3>Quick Links</h3>
+                <ul class="sidebar-links">
+                    <li><a href="/vets/">Find a Vet</a></li>
+                    <li><a href="/blog/">Read Our Blog</a></li>
+                    <li><a href="/contact/">Contact Us</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
