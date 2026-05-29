@@ -77,6 +77,16 @@ Both scripts: dry-run by default, `--apply` to write, `--limit N` to sample. The
 
 (Slug-based first pass; confirm by reading each post before re-indexing. To reactivate one: add its slug to `INDEXABLE_BLOG_SLUGS` — that re-lists it, indexes it, and adds it to the sitemap in one step.)
 
+### Remediation status (verified 2026-05-29, live on Netlify)
+
+The description pipeline and index gate are deployed. Current verified state:
+- **Indexed surface:** ~1,807 of 3,226 vet pages indexed (~56%); the rest are noindexed and ad-free.
+- **Description provenance:** ~76% of listings carry original, website-derived Haiku copy; ~24% use the Phase 1 fact composer (the fallback).
+- **Latest gate change (commit `29fe6a3`):** pure GBP-restatement listings (Phase 1 template + single specialty + year only, non-protected) now noindex — net −21 pages vs. the prior gate. See **Index gate** above.
+- **Playwright evaluated and rejected:** JS rendering does not help the thin fallback set — the content is already in the plain HTML, so the bottleneck is `trafilatura` precision extraction, not rendering. The deferred cheap win is a `favor_recall` fallback in `_extract`. See **Thin-fallback set** above.
+
+Open items: confirm GSC → Manual Actions is clean; after AdSense approval, reactivate the 37 parked blog posts in waves; set a blog `Reviewer` only once a real DVM reviews the content; re-check `data/protected_urls.txt` against a fresh GSC export on the next data refresh.
+
 ### After ANY Airtable data refresh
 
 Re-run the remediation so new/changed listings get the same treatment, then rebuild:
