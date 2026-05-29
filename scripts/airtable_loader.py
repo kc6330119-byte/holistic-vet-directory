@@ -323,7 +323,7 @@ class AirtableDataLoader:
                 content=fields.get("Content", ""),
                 excerpt=fields.get("Excerpt", ""),
                 author=fields.get("Author", ""),
-                published_date=fields.get("Published Date", ""),
+                published_date=fields.get("Publish Date") or fields.get("Published Date", ""),
                 featured_image=fields.get("Featured Image", ""),
                 meta_description=fields.get("Meta Description", ""),
                 status=fields.get("Status", "Draft"),
