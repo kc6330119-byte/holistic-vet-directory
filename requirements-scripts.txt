@@ -1,0 +1,8 @@
+# Dependencies for offline maintenance scripts (NOT the Netlify site build).
+# The site build uses requirements.txt only. Install both into your venv when
+# running the data pipeline:
+#   pip install -r requirements.txt -r requirements-scripts.txt
+#
+# Phase 2 website-enrichment crawler (scripts/website_descriptions.py):
+anthropic>=0.40.0      # Claude Haiku — extract facts + write original descriptions
+trafilatura>=1.12.0    # main-text extraction from crawled HTML

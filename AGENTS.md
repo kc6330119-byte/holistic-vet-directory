@@ -52,6 +52,32 @@ Helper scripts in `scripts/`:
 - `scrape_emails.py` / `send_outreach_emails.py` / `update_airtable_emails.py` — outreach pipeline
 - `validate_animal_practices.py` — validate listing data
 
+## Listing Description Remediation
+
+Listing descriptions are remediated for Google's "scaled content abuse" / AdSense "Low Value Content" signal. The old hash-seeded spintax generator was removed from the build (`generate_site.Veterinarian` now only classifies descriptions for the index gate; it does not synthesize copy). Descriptions are written to Airtable offline by two scripts, in order:
+
+1. `scripts/generate_fact_descriptions.py` — **Phase 1, fallback layer.** Composes each description from ONLY-TRUE Airtable facts (specialties, species, credentials, year, Google rating). Variation comes from real differing facts, never synonym shuffling. No length padding — sub-gate descriptions stay short and get noindexed on purpose.
+2. `scripts/website_descriptions.py` — **Phase 2, primary value layer.** Crawls each practice's own website (homepage + an about/services page, trafilatura extraction), has Claude Haiku write an ORIGINAL fact-grounded description, and **falls back to the Phase 1 composer** when a site is dead/JS-rendered/boilerplate. Caches every crawl and LLM response under `data/site_cache/`. Never copies site prose verbatim; never invents facts. ~76% of listings yield website-derived copy; full-corpus Haiku cost is ~$5–7.
+
+Both scripts: dry-run by default, `--apply` to write, `--limit N` to sample. They **only update existing records, never insert**, and dump a timestamped `data/practice_description_backup_*.json` before the first write.
+
+**Deps:** Phase 2 needs `anthropic` + `trafilatura`, kept in `requirements-scripts.txt` (NOT `requirements.txt`, so Netlify builds stay lean). Install with `pip install -r requirements.txt -r requirements-scripts.txt`. Requires a valid `ANTHROPIC_API_KEY` in `.env` (scripts `load_dotenv(override=True)` and guard against empty shell-exported keys).
+
+**Index gate** (in `generate_site.py`): a vet page is indexed only if `has_real_description AND quality_score >= VET_NOINDEX_THRESHOLD (7) AND has_differentiating_facts`. Listings below the gate are noindexed and their ads suppressed, deliberately shrinking the indexed surface to genuinely fact-rich pages (~56% indexed).
+
+### After ANY Airtable data refresh
+
+Re-run the remediation so new/changed listings get the same treatment, then rebuild:
+
+```bash
+source venv/bin/activate
+python3 scripts/website_descriptions.py --limit 0          # dry run: check website/fallback split + cost
+python3 scripts/website_descriptions.py --limit 0 --apply  # write (backs up first; Phase 1 is the built-in fallback)
+DATA_SOURCE=airtable python3 generate_site.py              # rebuild and verify dist/ before deploy
+```
+
+(If a Search Console export later becomes available, add a protected-URLs grandfather step here so already-ranking pages can't be noindexed by a future gate change — not yet built.)
+
 ## Deployment
 
 Hosted on Netlify. Push to `main` triggers automatic deploy. Config in `netlify.toml` includes redirects (including 301s for fixed blog slug typos), security headers, and cache rules. The `dist/` directory is gitignored.

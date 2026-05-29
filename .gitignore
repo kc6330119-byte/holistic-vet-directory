@@ -75,3 +75,11 @@ ADSENSE_RESUBMISSION_PREP.md
 
 # Airtable CSV exports (root-level, contain personal data)
 Veterinarians-*.csv
+
+# Description remediation artifacts (generated; cache is large, backups are local)
+data/site_cache/
+data/practice_description_backup_*.json
+data/fact_descriptions_sample.md
+
+# Sister-site reference material (not part of this repo's build)
+DGL Files/
