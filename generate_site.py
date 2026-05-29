@@ -245,6 +245,24 @@ class Veterinarian:
         'CVA', 'CVCH', 'CVFT', 'DACVSMR', 'CCRT', 'CCRP',
     })
 
+    def _distinct_specialties(self) -> set:
+        """Lowercased distinct specialties. Free-text delimiters are inconsistent
+        (|, comma), so split on both."""
+        specs = set()
+        for raw in self.specialties:
+            for part in re.split(r'[|,]', raw):
+                p = part.strip().strip('.').lower()
+                if p:
+                    specs.add(p)
+        return specs
+
+    def _has_holistic_credential(self) -> bool:
+        for raw in self.certification_bodies:
+            for part in re.split(r'[|,]', raw):
+                if part.strip().upper() in self._HOLISTIC_CREDENTIALS:
+                    return True
+        return False
+
     @property
     def has_differentiating_facts(self) -> bool:
         """True when the listing carries facts beyond the Google-profile minimum.
@@ -253,24 +271,33 @@ class Veterinarian:
         not indexed on its own; it waits for website-derived Phase 2 content.
         Indexing requires genuinely differentiating facts: two or more distinct
         specialties, a recognized holistic credential, or a year established.
-        Delimiters in these free-text fields are inconsistent (|, comma), so we
-        split on both.
         """
-        specs = set()
-        for raw in self.specialties:
-            for part in re.split(r'[|,]', raw):
-                p = part.strip().strip('.').lower()
-                if p:
-                    specs.add(p)
-        if len(specs) >= 2:
+        if len(self._distinct_specialties()) >= 2:
             return True
         if self.year_established:
             return True
-        for raw in self.certification_bodies:
-            for part in re.split(r'[|,]', raw):
-                if part.strip().upper() in self._HOLISTIC_CREDENTIALS:
-                    return True
-        return False
+        return self._has_holistic_credential()
+
+    @property
+    def has_strong_differentiating_facts(self) -> bool:
+        """Stricter bar than has_differentiating_facts, used to gate Phase-1
+        templated (GBP-restatement) descriptions: require real modality breadth
+        (2+ specialties) or a recognized holistic credential. A single specialty
+        plus a year established is essentially Google-profile-equivalent and does
+        not qualify here.
+        """
+        return len(self._distinct_specialties()) >= 2 or self._has_holistic_credential()
+
+    # Signature opening emitted by scripts/generate_fact_descriptions.compose() for
+    # the Phase 1 fact-templated fallback. When the stored description still leads
+    # with it, the listing has only restated structured data — no original
+    # website-derived prose — so it is held to has_strong_differentiating_facts.
+    _GBP_TEMPLATE_MARKER = 'is a holistic and integrative veterinary practice'
+
+    @property
+    def is_gbp_restatement(self) -> bool:
+        norm = re.sub(r'\s+', ' ', (self.practice_description or '')).lower()
+        return self._GBP_TEMPLATE_MARKER in norm
 
     @property
     def maps_url(self) -> str:
@@ -932,11 +959,19 @@ class SiteGenerator:
         return bool(path) and path in self.protected_paths
 
     def _is_indexable_vet(self, vet: Veterinarian) -> bool:
-        return self._is_protected(f'/vet/{vet.slug}/') or (
-            vet.has_real_description
-            and vet.quality_score >= self.VET_NOINDEX_THRESHOLD
-            and vet.has_differentiating_facts
-        )
+        # Pages with proven Search traction stay indexable regardless of the gate.
+        if self._is_protected(f'/vet/{vet.slug}/'):
+            return True
+        if not (vet.has_real_description
+                and vet.quality_score >= self.VET_NOINDEX_THRESHOLD
+                and vet.has_differentiating_facts):
+            return False
+        # A Phase-1 fact-templated description restates the Google Business Profile
+        # and adds no original prose; index it only when the underlying facts are
+        # themselves strongly differentiating. Website-derived copy is unaffected.
+        if vet.is_gbp_restatement and not vet.has_strong_differentiating_facts:
+            return False
+        return True
 
     def _quality_vet_count(self, vets: List[Veterinarian]) -> int:
         return sum(1 for vet in vets if self._is_indexable_vet(vet))

@@ -326,6 +326,9 @@ def project_index(f: dict, new_desc: str) -> tuple[bool, int]:
         vet.has_real_description
         and vet.quality_score >= VET_NOINDEX_THRESHOLD
         and vet.has_differentiating_facts
+        # Mirror the build gate: GBP-restatement (Phase 1 templated) copy needs
+        # strongly differentiating facts, not a single specialty + year alone.
+        and not (vet.is_gbp_restatement and not vet.has_strong_differentiating_facts)
     )
     return indexed, vet.quality_score
 
