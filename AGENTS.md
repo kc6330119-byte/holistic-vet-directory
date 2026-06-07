@@ -109,6 +109,8 @@ YMYL site, so authorship/review signals matter. Two pieces, both in `generate_si
 
 Hosted on Netlify. Push to `main` triggers automatic deploy. Config in `netlify.toml` includes redirects (including 301s for fixed blog slug typos), security headers, and cache rules. The `dist/` directory is gitignored.
 
+**Bot/scraper geo-fence:** `netlify/edge-functions/geo-guard.ts` (Netlify Edge Function, runs on `/*` except `/static/*`) returns 403 to traffic from datacenter regions listed in its `BLOCKED_COUNTRIES` set — currently `SG` only, after GA showed a Singapore scraper was ~75% of all "users" (~1 hit per listing page, direct/no-referrer). Legitimate search crawlers (Googlebot/Bingbot/DuckDuckBot/Applebot/etc., matched by user-agent) are always allowed through so indexing is never harmed, and the function fails open when `context.geo` is absent (local dev). Edit `BLOCKED_COUNTRIES` to add/remove regions; blocks are logged to the Netlify edge-function logs. For heavier abuse, the more robust option is Cloudflare in front (managed bot challenges), which needs a DNS change.
+
 ## SEO Considerations
 
 This is an AdSense-monetized directory site. SEO is critical:
