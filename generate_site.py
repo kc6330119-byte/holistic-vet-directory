@@ -347,7 +347,12 @@ class Veterinarian:
             latitude=parse_float(row.get('Latitude', '')),
             longitude=parse_float(row.get('Longitude', '')),
             slug=row.get('Slug', ''),
-            google_rating=parse_float(row.get('Google Rating', '')),
+            image_url=row.get('Image URL', ''),
+            logo_image_url=row.get('Logo Image URL', ''),
+            # Whole-number ratings render as "5" (not "5.0"), matching how the
+            # Airtable API delivered them (JSON integers) so output is identical.
+            google_rating=(lambda f: int(f) if f is not None and f == int(f) else f)(
+                parse_float(row.get('Google Rating', ''))),
             google_reviews=parse_int(row.get('Google Reviews', '')) or 0,
             google_place_id=row.get('Google Place ID', ''),
             google_maps_url=row.get('Google Maps URL', ''),
@@ -482,7 +487,9 @@ class DataLoader:
             return []
         
         vets = []
-        with open(csv_path, 'r', encoding='utf-8') as f:
+        # utf-8-sig: tolerate the BOM that Airtable/Excel CSV exports prepend
+        # (a plain utf-8 read corrupts the first header and drops every row).
+        with open(csv_path, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 if row.get('Practice Name'):
@@ -503,7 +510,9 @@ class DataLoader:
             return []
         
         specialties = []
-        with open(csv_path, 'r', encoding='utf-8') as f:
+        # utf-8-sig: tolerate the BOM that Airtable/Excel CSV exports prepend
+        # (a plain utf-8 read corrupts the first header and drops every row).
+        with open(csv_path, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 if row.get('Specialty Name'):
@@ -539,7 +548,9 @@ class DataLoader:
             return []
         
         states = []
-        with open(csv_path, 'r', encoding='utf-8') as f:
+        # utf-8-sig: tolerate the BOM that Airtable/Excel CSV exports prepend
+        # (a plain utf-8 read corrupts the first header and drops every row).
+        with open(csv_path, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 if row.get('State Name'):
@@ -590,7 +601,9 @@ class DataLoader:
         csv_path = self.data_dir / 'blog_posts.csv'
         if csv_path.exists():
             posts = []
-            with open(csv_path, 'r', encoding='utf-8') as f:
+            # utf-8-sig: tolerate the BOM that Airtable/Excel CSV exports prepend
+            # (a plain utf-8 read corrupts the first header and drops every row).
+            with open(csv_path, 'r', encoding='utf-8-sig') as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     if row.get('Title') and row.get('Status', '').lower() == 'published':
@@ -604,6 +617,7 @@ class DataLoader:
                             meta_description=row.get('Meta Description', ''),
                             status=row.get('Status', 'Draft'),
                             slug=row.get('Slug', ''),
+                            featured=row.get('Featured', '').lower() in ('true', 'yes', '1', 'x'),
                             reviewer=row.get('Reviewer', ''),
                             reviewer_credentials=row.get('Reviewer Credentials', ''),
                         )

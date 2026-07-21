@@ -20,14 +20,15 @@ The Netlify build command is: `pip install -r requirements.txt && python generat
 
 ## Data Source
 
-Set `DATA_SOURCE=csv` (default) or `DATA_SOURCE=airtable` in `.env`. CSV mode reads from `data/` directory; Airtable mode fetches via API. See `.env.example` for all config options.
+**CSV files in `data/` are the source of truth** (`DATA_SOURCE=csv`, the default, also pinned in `netlify.toml [build.environment]`). Airtable was retired as the build source on 2026-07-20 (paid plan dropped; Veterinarians table data deleted). The Airtable code path (`DATA_SOURCE=airtable`) still exists but must not be used — the table is empty and a build against it would generate an empty site.
 
-Key CSV files in `data/`:
-- `veterinarians.csv` — main directory listings (pipe-delimited multi-select fields)
-- `specialties.csv` — specialty reference data
+Key CSV files in `data/` (all committed — Netlify builds from them):
+- `veterinarians.csv` — main directory listings, 3,226 records exported from the Airtable API at full precision, **including every remediated Practice Description** (pipe-delimited multi-select fields; row order preserved from Airtable and load-bearing for "first N" listing widgets — append new rows, don't re-sort)
+- `blog_posts.csv` — all 40 blog posts (consolidated authorship, Published Date, Featured flag, empty Reviewer fields), sorted date-desc; takes priority over the stale `content/blog/*.md` markdown fallback
+- `specialties.csv` — specialty reference data (was already CSV-authoritative in both modes)
 - `states.csv` — US states with regions
 
-Blog posts are loaded in priority order: Airtable → `data/blog_posts.csv` → fallback to `content/blog/*.md` (numbered Markdown files with YAML frontmatter). In CSV mode with no `blog_posts.csv`, the Markdown files are the source of truth.
+The CSV→build path was verified byte-identical to the final Airtable build (5,276/5,277 files; the one diff is the search-index zip field serialized as string vs number, which renders identically). CSV readers use `utf-8-sig` so BOM-prefixed exports (Airtable/Excel) load correctly. A raw Airtable grid export plus the API-derived CSVs and timestamped description backups exist locally (gitignored) as belt-and-braces.
 
 ## Architecture
 
@@ -87,18 +88,14 @@ The description pipeline and index gate are deployed. Current verified state:
 
 Open items: confirm GSC → Manual Actions is clean; after AdSense approval, reactivate the 37 parked blog posts in waves; set a blog `Reviewer` only once a real DVM reviews the content; re-check `data/protected_urls.txt` against a fresh GSC export on the next data refresh.
 
-### After ANY Airtable data refresh
+### Updating listing data (post-Airtable)
 
-Re-run the remediation so new/changed listings get the same treatment, then rebuild:
+Listing data now lives in `data/veterinarians.csv` — edit it directly (or append rows) and rebuild with `python generate_site.py`. Notes:
 
-```bash
-source venv/bin/activate
-python3 scripts/website_descriptions.py --limit 0          # dry run: check website/fallback split + cost
-python3 scripts/website_descriptions.py --limit 0 --apply  # write (backs up first; Phase 1 is the built-in fallback)
-DATA_SOURCE=airtable python3 generate_site.py              # rebuild and verify dist/ before deploy
-```
-
-After a data refresh, also re-check the protected-URLs grandfather list (`data/protected_urls.txt`) against a fresh GSC export so newly-ranking pages keep their protection.
+- **The remediated descriptions exist ONLY in this CSV** (and the local gitignored backups). Do not regenerate or overwrite the `Practice Description` column wholesale.
+- The description scripts (`generate_fact_descriptions.py`, `website_descriptions.py`) still read/write **Airtable** and are inoperable against the emptied table. If a batch of new listings ever needs descriptions, the scripts' compose/crawl logic is reusable but their I/O must be repointed at the CSV first.
+- New rows: append at the end (row order feeds "first N" widgets), give each a unique `Slug`, and leave `Practice Description` empty rather than pasting website text — an empty description simply noindexes the page via the gate.
+- After any data change, re-check the protected-URLs grandfather list (`data/protected_urls.txt`) against a fresh GSC export so newly-ranking pages keep their protection.
 
 ## Authorship & Medical Review (E-E-A-T)
 

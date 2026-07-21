@@ -4,6 +4,11 @@
 
 [build.environment]
   PYTHON_VERSION = "3.9"
+  # Build from the committed CSVs in data/ — Airtable was retired as the build
+  # source (2026-07-20) when the paid plan was dropped and the Veterinarians
+  # table data was deleted. This toml value overrides any dashboard env var,
+  # so a stale DATA_SOURCE=airtable in the Netlify UI can never wipe the site.
+  DATA_SOURCE = "csv"
 
 [[redirects]]
   from = "/search"
